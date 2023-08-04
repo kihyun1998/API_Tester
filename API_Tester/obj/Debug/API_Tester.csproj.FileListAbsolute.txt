@@ -1,0 +1,10 @@
+C:\Users\User\source\repos\API_Tester\API_Tester\bin\Debug\API_Tester.exe.config
+C:\Users\User\source\repos\API_Tester\API_Tester\bin\Debug\API_Tester.exe
+C:\Users\User\source\repos\API_Tester\API_Tester\bin\Debug\API_Tester.pdb
+C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.Form1.resources
+C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.Properties.Resources.resources
+C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.csproj.GenerateResource.cache
+C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.exe
+C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.pdb
