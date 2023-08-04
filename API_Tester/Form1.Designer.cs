@@ -58,6 +58,7 @@ namespace API_Tester
             // 
             // cBoxMethod
             // 
+            this.cBoxMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cBoxMethod.FormattingEnabled = true;
             this.cBoxMethod.Location = new System.Drawing.Point(140, 180);
             this.cBoxMethod.Name = "cBoxMethod";
