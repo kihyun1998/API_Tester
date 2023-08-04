@@ -19,7 +19,7 @@ namespace API_Tester
             InitializeComponent();
         }
         
-
+        
         private void Form1_Load(object sender, EventArgs e)
         {
             string[] method = { "GET", "POST", "PUT", "DELETE" };
