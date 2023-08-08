@@ -28,27 +28,76 @@ namespace API_Tester
             cBoxMethod.SelectedIndex = 0;
         }
 
-        private void btnRequest_Click(object sender, EventArgs e)
+        private async void btnRequest_Click(object sender, EventArgs e)
         {
-            lBoxRst.Items.Clear();
+            tBoxRst.Text = "";
             btnRequest.Enabled = false;
             cBoxMethod.Enabled = false;
 
             Communication call = new Communication();
 
-
-            string sMethod = cBoxMethod.SelectedItem.ToString();
             string sUrl = tBoxURL.Text.ToString();
+            string sMethod = cBoxMethod.SelectedItem.ToString();
             call.cookie = tBoxCookie.Text.ToString();
 
-            string[] args = new string[] { sUrl, sMethod,  call.cookie };
-            backgroundWorker1.RunWorkerAsync(args);
-            
+            if(sMethod == "GET")
+            {
+                string[] rst = await call.Request(sUrl, sMethod, call.cookie);
+                string resText = rst[0];
+
+                tBoxRst.Text = resText;
+
+                string err = rst[1];
+                if (err.Length != 0)
+                {
+                    ErrMsg(err);
+                }
+            }else if (sMethod == "POST" || sMethod == "PUT" || sMethod == "DELETE")
+            {
+                String sPostData = tBoxMsg.Text.ToString();
+                string[] rst = await call.Request(sUrl, sMethod, call.cookie, sPostData);
+                string resText = rst[0];
+                tBoxRst.Text = resText;
+
+                string err = rst[1];
+                if (err.Length != 0)
+                {
+                    ErrMsg(err);
+                }
+            }
+
+            btnRequest.Enabled = true;
+            cBoxMethod.Enabled = true;
+        }
+
+        private void ErrMsg(string err)
+        {
+            if (err.Length != 0)
+            {
+                MessageBox.Show(err);
+                if (err.Contains("404"))
+                {
+                    tBoxURL.Text = "";
+                    tBoxMsg.Text = "";
+                    tBoxURL.Focus();
+                }
+                else if (err.Contains("401"))
+                {
+                    tBoxCookie.Text = "";
+                    tBoxCookie.Focus();
+                }
+                else if (err.Contains("URI"))
+                {
+                    tBoxURL.Text = "";
+                    tBoxURL.Focus();
+                }
+                tBoxRst.Text = "";
+            }
         }
 
         private void cBoxMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(cBoxMethod.Text == "POST" || cBoxMethod.Text == "PUT" || cBoxMethod.Text == "DELETE")
+            if (cBoxMethod.Text == "POST" || cBoxMethod.Text == "PUT" || cBoxMethod.Text == "DELETE")
             {
                 tBoxMsg.Visible = true;
                 lblMsg.Visible = true;
@@ -60,141 +109,6 @@ namespace API_Tester
             }
         }
 
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
-        {
-            Communication call = new Communication();
-            BackgroundWorker worker = sender as BackgroundWorker;
 
-            string[] args = e.Argument as string[];
-
-
-            if (args[1] == "GET")
-            {
-                string[] resLines = call.Request(args[0], args[1], call.cookie, out string err);
-                add_lines(resLines);
-                if (err.Length != 0)
-                {
-                    MessageBox.Show(err);
-                    if (err.Contains("404"))
-                    {
-                        tBoxURL.Text = "";
-                        tBoxURL.Focus();
-                    }
-                    else if (err.Contains("401"))
-                    {
-                        tBoxCookie.Text = "";
-                        tBoxCookie.Focus();
-                    }
-                    else if (err.Contains("URI"))
-                    {
-                        tBoxURL.Text = "";
-                        tBoxURL.Focus();
-                    }
-                    lBoxRst.Items.Clear();
-                }
-            }
-            else if (args[1] == "POST" || args[1] == "PUT" || args[1] == "DELETE")
-            {
-                String sPostData = tBoxMsg.Text.ToString();
-                string[] resLines = call.Request(args[0], args[1], call.cookie, sPostData, out string err);
-                
-                add_lines(resLines);
-                if (err.Length != 0)
-                {
-                    MessageBox.Show(err);
-                    if (err.Contains("404"))
-                    {
-                        tBoxURL.Text = "";
-                        tBoxMsg.Text = "";
-                        tBoxURL.Focus();
-                    }
-                    else if (err.Contains("401"))
-                    {
-                        tBoxCookie.Text = "";
-                        tBoxCookie.Focus();
-                    }
-                    else if (err.Contains("URI"))
-                    {
-                        tBoxURL.Text = "";
-                        tBoxURL.Focus();
-                    }
-                    lBoxRst.Items.Clear();
-                }
-            }
-        }
-
-        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-
-        }
-
-        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            btnRequest.Enabled = true;
-            cBoxMethod.Enabled = true;
-        }
-
-
-
-        private string get_URL()
-        {
-            string sUrl="";
-            if (tBoxURL.InvokeRequired == true)
-            {
-                tBoxURL.Invoke((MethodInvoker)delegate
-                {
-                    sUrl = tBoxURL.Text.ToString();
-                });
-            }
-            else
-            {
-                sUrl = tBoxURL.Text.ToString();
-                return sUrl;
-            }
-            return sUrl;
-        }
-
-        private string get_Method()
-        {
-            string sMethod = "";
-            if (cBoxMethod.InvokeRequired == true)
-            {
-                cBoxMethod.Invoke((MethodInvoker)delegate
-                {
-                    sMethod = cBoxMethod.SelectedItem.ToString();
-                });
-            }
-            else
-            {
-                sMethod = cBoxMethod.SelectedItem.ToString();
-            }
-            return sMethod;
-        }
-
-        private void add_lines(string[] resLines)
-        {
-            if (lBoxRst.InvokeRequired == true)
-            {
-                lBoxRst.Invoke((MethodInvoker)delegate
-                {
-                    foreach (string line in resLines)
-                    {
-                        lBoxRst.Items.Add(string.Format("{0},", line as string));
-                        Thread.Sleep(100);
-                    }
-                });
-            }
-            else
-            {
-                foreach (string line in resLines)
-                {
-                    lBoxRst.Items.Add(string.Format("{0},", line as string));
-                    Thread.Sleep(100);
-                }
-            }
-            
-        }
-
-        
     }
 }

@@ -13,9 +13,10 @@ namespace API_Tester
         public string cookie = "sessionID=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJzb24iOnsiSUQiOiJhcGFkbWluIiwiTmFtZSI6IiIsIlR5cGUiOiJBUElUb2tlbiJ9LCJDb25zb2xlVHlwZSI6ImFwaXRva2VuIiwiSVAiOiIxOTIuMTY4LjEzNy4xIiwianRpIjoiY2QyZTkzMDViZjg5NDc0NWIyNWFkM2I2MjA0ODFlZWEifQ.ZOYB1XjH502-JrZiFgz71smlJLBj0w_dM3LBMhkiZkg";
         
 
-        public string[] Request(string url, string method, string cookie, out string err)
+        public async Task<string[]> Request(string url, string method, string cookie)
         {
-            string[] lines;
+            string err;
+            string[] rst;
 
             try 
             {
@@ -23,31 +24,29 @@ namespace API_Tester
                 req.Method = method;
                 req.Headers.Add("Cookie", cookie);
 
-                HttpWebResponse res = (HttpWebResponse)req.GetResponse();
-                using (Stream dataStream = res.GetResponseStream())
+                using (WebResponse res = await req.GetResponseAsync())
                 {
-                    StreamReader reader = new StreamReader(dataStream);
-                    string readRes = reader.ReadToEnd();
-
-                    lines = readRes.Split(new[] { "," }, StringSplitOptions.None);
-                    err = "";
-                    return lines;
+                    using (StreamReader reader = new StreamReader(res.GetResponseStream()))
+                    {
+                        string resText = await reader.ReadToEndAsync();
+                        err = "";
+                        rst = new string[] { resText, err };
+                        return rst;
+                    }
                 }
-
-                res.Close();
-                return lines;
             }
             catch(Exception e)
             {
                 err = e.Message;
-                lines = new string[]{ "" };
-                return lines;
+                rst = new string[]{ "",err };
+                return rst;
             }   
         }
 
-        public string[] Request(string url, string method, string cookie, string postData, out string err)
+        public async Task<string[]> Request(string url, string method, string cookie, string postData)
         {
-            string[] lines;
+            string err;
+            string[] rst;
 
             try
             {
@@ -66,29 +65,26 @@ namespace API_Tester
                     reqStream.Write(data, 0, data.Length);
                 }
 
-                HttpWebResponse res = (HttpWebResponse)req.GetResponse();
-
-                using (Stream dataStream = res.GetResponseStream())
+                using (WebResponse res = await req.GetResponseAsync())
                 {
-                    StreamReader reader = new StreamReader(dataStream);
-                    string readRes = reader.ReadToEnd();
-
-                    lines = readRes.Split(new[] { "," }, StringSplitOptions.None);
-
+                    using (StreamReader reader = new StreamReader(res.GetResponseStream()))
+                    {
+                        string resText = await reader.ReadToEndAsync();
+                        err = "";
+                        rst = new string[] { resText, err };
+                        return rst;
+                    }
                 }
-                res.Close();
-                err = "";
-                return lines;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 err = e.Message;
-                lines = new string[] { "" };
-                return lines;
+                rst = new string[] { "", err };
+                return rst;
             }
 
 
-           
+
         }
     }
 }

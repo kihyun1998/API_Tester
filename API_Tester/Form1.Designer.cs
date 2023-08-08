@@ -35,14 +35,13 @@ namespace API_Tester
             this.URL = new System.Windows.Forms.Label();
             this.tBoxURL = new System.Windows.Forms.TextBox();
             this.btnRequest = new System.Windows.Forms.Button();
-            this.lBoxRst = new System.Windows.Forms.ListBox();
             this.tBoxMsg = new System.Windows.Forms.TextBox();
             this.lblMsg = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.tBoxCookie = new System.Windows.Forms.TextBox();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.tBoxRst = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -108,18 +107,6 @@ namespace API_Tester
             this.btnRequest.UseVisualStyleBackColor = true;
             this.btnRequest.Click += new System.EventHandler(this.btnRequest_Click);
             // 
-            // lBoxRst
-            // 
-            this.lBoxRst.Font = new System.Drawing.Font("궁서체", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lBoxRst.FormattingEnabled = true;
-            this.lBoxRst.HorizontalScrollbar = true;
-            this.lBoxRst.ItemHeight = 15;
-            this.lBoxRst.Location = new System.Drawing.Point(52, 386);
-            this.lBoxRst.Name = "lBoxRst";
-            this.lBoxRst.ScrollAlwaysVisible = true;
-            this.lBoxRst.Size = new System.Drawing.Size(1074, 199);
-            this.lBoxRst.TabIndex = 6;
-            // 
             // tBoxMsg
             // 
             this.tBoxMsg.Location = new System.Drawing.Point(140, 268);
@@ -172,11 +159,14 @@ namespace API_Tester
             this.tBoxCookie.Size = new System.Drawing.Size(756, 25);
             this.tBoxCookie.TabIndex = 11;
             // 
-            // backgroundWorker1
+            // tBoxRst
             // 
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
-            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            this.tBoxRst.Location = new System.Drawing.Point(49, 373);
+            this.tBoxRst.Multiline = true;
+            this.tBoxRst.Name = "tBoxRst";
+            this.tBoxRst.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tBoxRst.Size = new System.Drawing.Size(1084, 223);
+            this.tBoxRst.TabIndex = 13;
             // 
             // Form1
             // 
@@ -184,13 +174,13 @@ namespace API_Tester
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(1165, 647);
+            this.Controls.Add(this.tBoxRst);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.tBoxCookie);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.lblMsg);
             this.Controls.Add(this.tBoxMsg);
-            this.Controls.Add(this.lBoxRst);
             this.Controls.Add(this.btnRequest);
             this.Controls.Add(this.tBoxURL);
             this.Controls.Add(this.URL);
@@ -214,14 +204,13 @@ namespace API_Tester
         private System.Windows.Forms.Label URL;
         private System.Windows.Forms.TextBox tBoxURL;
         private System.Windows.Forms.Button btnRequest;
-        private System.Windows.Forms.ListBox lBoxRst;
         private System.Windows.Forms.TextBox tBoxMsg;
         private System.Windows.Forms.Label lblMsg;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tBoxCookie;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.TextBox tBoxRst;
     }
 }
 
