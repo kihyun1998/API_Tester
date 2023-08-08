@@ -110,5 +110,37 @@ namespace API_Tester
         }
 
 
+
+        ///////////////////
+        ///패널 이동
+
+        bool mouseDown;
+        int sizeX;
+        int sizeY;
+
+        private void titleBar_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouseDown = true;
+            sizeX = e.X+20;
+            sizeY = e.Y;
+        }
+
+        private void titleBar_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseDown == true)
+            {
+                this.SetDesktopLocation(MousePosition.X - sizeX, MousePosition.Y - sizeY);
+            }
+        }
+
+        private void titleBar_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouseDown = false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
