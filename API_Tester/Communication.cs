@@ -10,10 +10,10 @@ namespace API_Tester
 {
     class Communication
     {
-        public string cookie = "sessionID=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJzb24iOnsiSUQiOiJhcGFkbWluIiwiTmFtZSI6IiIsIlR5cGUiOiJBUElUb2tlbiJ9LCJDb25zb2xlVHlwZSI6ImFwaXRva2VuIiwiSVAiOiIxOTIuMTY4LjEzNy4xIiwianRpIjoiY2QyZTkzMDViZjg5NDc0NWIyNWFkM2I2MjA0ODFlZWEifQ.ZOYB1XjH502-JrZiFgz71smlJLBj0w_dM3LBMhkiZkg";
+        //public string cookie = "sessionID=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJzb24iOnsiSUQiOiJhcGFkbWluIiwiTmFtZSI6IiIsIlR5cGUiOiJBUElUb2tlbiJ9LCJDb25zb2xlVHlwZSI6ImFwaXRva2VuIiwiSVAiOiIxOTIuMTY4LjEzNy4xIiwianRpIjoiY2QyZTkzMDViZjg5NDc0NWIyNWFkM2I2MjA0ODFlZWEifQ.ZOYB1XjH502-JrZiFgz71smlJLBj0w_dM3LBMhkiZkg";
         
 
-        public async Task<string[]> Request(string url, string method, string cookie)
+        public string[] Request(string url, string method, string cookie)
         {
             string err;
             string[] rst;
@@ -24,11 +24,11 @@ namespace API_Tester
                 req.Method = method;
                 req.Headers.Add("Cookie", cookie);
 
-                using (WebResponse res = await req.GetResponseAsync())
+                using (WebResponse res = req.GetResponse())
                 {
                     using (StreamReader reader = new StreamReader(res.GetResponseStream()))
                     {
-                        string resText = await reader.ReadToEndAsync();
+                        string resText = reader.ReadToEnd();
                         err = "";
                         rst = new string[] { resText, err };
                         return rst;
@@ -43,7 +43,7 @@ namespace API_Tester
             }   
         }
 
-        public async Task<string[]> Request(string url, string method, string cookie, string postData)
+        public string[] Request(string url, string method, string cookie, string postData)
         {
             string err;
             string[] rst;
@@ -65,11 +65,11 @@ namespace API_Tester
                     reqStream.Write(data, 0, data.Length);
                 }
 
-                using (WebResponse res = await req.GetResponseAsync())
+                using (WebResponse res = req.GetResponse())
                 {
                     using (StreamReader reader = new StreamReader(res.GetResponseStream()))
                     {
-                        string resText = await reader.ReadToEndAsync();
+                        string resText = reader.ReadToEnd();
                         err = "";
                         rst = new string[] { resText, err };
                         return rst;

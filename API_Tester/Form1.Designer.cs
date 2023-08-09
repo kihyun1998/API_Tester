@@ -43,9 +43,10 @@ namespace API_Tester
             this.tBoxCookie = new System.Windows.Forms.TextBox();
             this.tBoxRst = new System.Windows.Forms.TextBox();
             this.titleBar = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.btnMax = new System.Windows.Forms.Button();
+            this.btnMin = new System.Windows.Forms.Button();
+            this.btnX = new System.Windows.Forms.Button();
+            this.btnNom = new System.Windows.Forms.Button();
             this.titleBar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -95,9 +96,10 @@ namespace API_Tester
             // 
             // tBoxURL
             // 
+            this.tBoxURL.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tBoxURL.Location = new System.Drawing.Point(484, 260);
             this.tBoxURL.Name = "tBoxURL";
-            this.tBoxURL.Size = new System.Drawing.Size(756, 25);
+            this.tBoxURL.Size = new System.Drawing.Size(756, 18);
             this.tBoxURL.TabIndex = 4;
             // 
             // btnRequest
@@ -176,65 +178,78 @@ namespace API_Tester
             // titleBar
             // 
             this.titleBar.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.titleBar.Controls.Add(this.button3);
-            this.titleBar.Controls.Add(this.button2);
-            this.titleBar.Controls.Add(this.button1);
+            this.titleBar.Controls.Add(this.btnNom);
+            this.titleBar.Controls.Add(this.btnMax);
+            this.titleBar.Controls.Add(this.btnMin);
+            this.titleBar.Controls.Add(this.btnX);
             this.titleBar.Location = new System.Drawing.Point(0, -2);
             this.titleBar.Name = "titleBar";
-            this.titleBar.Size = new System.Drawing.Size(1303, 39);
+            this.titleBar.Size = new System.Drawing.Size(1303, 49);
             this.titleBar.TabIndex = 14;
             this.titleBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.titleBar_MouseDown);
             this.titleBar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.titleBar_MouseMove);
             this.titleBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.titleBar_MouseUp);
             // 
-            // button1
+            // btnMax
             // 
-            this.button1.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button1.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(1259, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(41, 37);
-            this.button1.TabIndex = 15;
-            this.button1.Text = "X";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnMax.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnMax.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnMax.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnMax.ForeColor = System.Drawing.Color.White;
+            this.btnMax.Location = new System.Drawing.Point(1216, 2);
+            this.btnMax.Name = "btnMax";
+            this.btnMax.Size = new System.Drawing.Size(41, 37);
+            this.btnMax.TabIndex = 15;
+            this.btnMax.Text = "ㅁ";
+            this.btnMax.UseVisualStyleBackColor = false;
+            this.btnMax.Click += new System.EventHandler(this.btnMax_Click);
             // 
-            // button2
+            // btnMin
             // 
-            this.button2.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button2.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(1173, 2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(41, 37);
-            this.button2.TabIndex = 15;
-            this.button2.Text = "ㅡ";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button1_Click);
+            this.btnMin.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnMin.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnMin.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnMin.ForeColor = System.Drawing.Color.White;
+            this.btnMin.Location = new System.Drawing.Point(1173, 2);
+            this.btnMin.Name = "btnMin";
+            this.btnMin.Size = new System.Drawing.Size(41, 37);
+            this.btnMin.TabIndex = 15;
+            this.btnMin.Text = "ㅡ";
+            this.btnMin.UseVisualStyleBackColor = false;
             // 
-            // button3
+            // btnX
             // 
-            this.button3.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button3.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(1216, 2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(41, 37);
-            this.button3.TabIndex = 15;
-            this.button3.Text = "ㅁ";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.button1_Click);
+            this.btnX.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnX.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnX.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnX.ForeColor = System.Drawing.Color.White;
+            this.btnX.Location = new System.Drawing.Point(1259, 2);
+            this.btnX.Name = "btnX";
+            this.btnX.Size = new System.Drawing.Size(41, 37);
+            this.btnX.TabIndex = 15;
+            this.btnX.Text = "X";
+            this.btnX.UseVisualStyleBackColor = false;
+            this.btnX.Click += new System.EventHandler(this.btnX_Click);
+            // 
+            // btnNom
+            // 
+            this.btnNom.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnNom.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnNom.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnNom.ForeColor = System.Drawing.Color.White;
+            this.btnNom.Location = new System.Drawing.Point(1216, 2);
+            this.btnNom.Name = "btnNom";
+            this.btnNom.Size = new System.Drawing.Size(41, 37);
+            this.btnNom.TabIndex = 18;
+            this.btnNom.Text = "+";
+            this.btnNom.UseVisualStyleBackColor = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(1301, 750);
+            this.ClientSize = new System.Drawing.Size(1303, 743);
             this.Controls.Add(this.titleBar);
             this.Controls.Add(this.tBoxRst);
             this.Controls.Add(this.label3);
@@ -276,9 +291,10 @@ namespace API_Tester
         private System.Windows.Forms.TextBox tBoxCookie;
         private System.Windows.Forms.TextBox tBoxRst;
         private System.Windows.Forms.Panel titleBar;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btnX;
+        private System.Windows.Forms.Button btnMin;
+        private System.Windows.Forms.Button btnMax;
+        private System.Windows.Forms.Button btnNom;
     }
 }
 

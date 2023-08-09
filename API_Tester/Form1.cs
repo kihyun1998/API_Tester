@@ -15,6 +15,7 @@ namespace API_Tester
 {
     public partial class Form1 : Form
     {
+
         public Form1()
         {
             InitializeComponent();
@@ -26,48 +27,59 @@ namespace API_Tester
             string[] method = { "GET", "POST", "PUT", "DELETE" };
             cBoxMethod.Items.AddRange(method);
             cBoxMethod.SelectedIndex = 0;
+            tBoxRst.Enabled = false;
         }
 
-        private async void btnRequest_Click(object sender, EventArgs e)
+        private void btnRequest_Click(object sender, EventArgs e)
         {
             tBoxRst.Text = "";
             btnRequest.Enabled = false;
             cBoxMethod.Enabled = false;
 
-            Communication call = new Communication();
 
             string sUrl = tBoxURL.Text.ToString();
             string sMethod = cBoxMethod.SelectedItem.ToString();
-            call.cookie = tBoxCookie.Text.ToString();
+            string sCookie = tBoxCookie.Text.ToString();
+            string sPostData = tBoxMsg.Text.ToString();
 
-            if(sMethod == "GET")
+
+            Request r1;
+
+            if (sMethod == "GET")
             {
-                string[] rst = await call.Request(sUrl, sMethod, call.cookie);
-                string resText = rst[0];
-
-                tBoxRst.Text = resText;
-
-                string err = rst[1];
-                if (err.Length != 0)
-                {
-                    ErrMsg(err);
-                }
-            }else if (sMethod == "POST" || sMethod == "PUT" || sMethod == "DELETE")
-            {
-                String sPostData = tBoxMsg.Text.ToString();
-                string[] rst = await call.Request(sUrl, sMethod, call.cookie, sPostData);
-                string resText = rst[0];
-                tBoxRst.Text = resText;
-
-                string err = rst[1];
-                if (err.Length != 0)
-                {
-                    ErrMsg(err);
-                }
+                r1 = new Request(sUrl, sMethod, sCookie);
+                
             }
+            else // (sMethod == "POST" || sMethod == "PUT" || sMethod == "DELETE")
+            {
+                r1 = new Request(sUrl, sMethod, sCookie, sPostData);
+            }
+
+            r1.returnMsg += R1_returnMasg;
+            r1.RequestThreadStart();
+
+            
 
             btnRequest.Enabled = true;
             cBoxMethod.Enabled = true;
+        }
+
+        private void R1_returnMasg(object sender, string[] rst)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(delegate ()
+                {
+                    string resText = rst[0];
+                    tBoxRst.Text = resText;
+
+                    string err = rst[1];
+                    if (err.Length != 0)
+                    {
+                        ErrMsg(err);
+                    }
+                }));
+            }
         }
 
         private void ErrMsg(string err)
@@ -138,9 +150,28 @@ namespace API_Tester
             mouseDown = false;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnX_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnMax_Click(object sender, EventArgs e)
+        {
+            btnNom.Visible = true;
+            btnMax.Visible = false;
+            this.WindowState = FormWindowState.Maximized;
+        }
+
+        private void btnNom_Click(object sender, EventArgs e)
+        {
+            btnNom.Visible = false;
+            btnMax.Visible = true;
+            this.WindowState = FormWindowState.Normal;
+        }
+
+        private void btnMin_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
         }
     }
 }
