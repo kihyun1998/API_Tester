@@ -34,63 +34,46 @@ namespace API_Tester
             btnNom.Visible = false;
         }
 
-        private void btnRequest_Click(object sender, EventArgs e)
+        private async void btnRequest_Click(object sender, EventArgs e)
         {
+            string[] rst;
             tBoxRst.Text = "";
             btnRequest.Enabled = false;
             cBoxMethod.Enabled = false;
 
+            Communication call = new Communication();
 
             string sUrl = tBoxURL.Text.ToString();
             string sMethod = cBoxMethod.SelectedItem.ToString();
-            string sCookie = tBoxCookie.Text.ToString();
-            string sPostData = tBoxMsg.Text.ToString();
-
-
-            Request r1;
+            string sCookie= tBoxCookie.Text.ToString();
 
             if (sMethod == "GET")
             {
-                r1 = new Request(sUrl, sMethod, sCookie);
-                
+                rst = await call.Request(sUrl, sMethod, sCookie);
             }
             else // (sMethod == "POST" || sMethod == "PUT" || sMethod == "DELETE")
             {
-                r1 = new Request(sUrl, sMethod, sCookie, sPostData);
+                string sPostData = tBoxMsg.Text.ToString();
+                rst = await call.Request(sUrl, sMethod, sCookie, sPostData);
             }
+            string resText = rst[0];
 
-            r1.returnMsg += R1_returnMasg;
-            r1.RequestThreadStart();
+            tBoxRst.Text = resText;
 
-            
+            string err = rst[1];
+            if (err.Length != 0)
+            {
+                ErrMsg(err);
+            }
 
             btnRequest.Enabled = true;
             cBoxMethod.Enabled = true;
-        }
-
-        private void R1_returnMasg(object sender, string[] rst)
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new Action(delegate ()
-                {
-                    string resText = rst[0];
-                    tBoxRst.Text = resText;
-
-                    string err = rst[1];
-                    if (err.Length != 0)
-                    {
-                        ErrMsg(err);
-                    }
-                }));
-            }
         }
 
         private void ErrMsg(string err)
         {
             if (err.Length != 0)
             {
-                MessageBox.Show(tBoxURL.Text);
                 MessageBox.Show(err);
                 if (err.Contains("404"))
                 {
@@ -128,9 +111,9 @@ namespace API_Tester
 
 
 
-        ///////////////////
-        ///패널 이동
-
+        /////////////////
+        ///패널 이동////
+        ///////////////
         bool mouseDown;
         int sizeX;
         int sizeY;
