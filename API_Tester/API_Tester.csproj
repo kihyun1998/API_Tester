@@ -47,6 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Communication.cs" />
+    <Compile Include="Custom\CustomTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Custom\CustomTextBox.Designer.cs">
+      <DependentUpon>CustomTextBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -61,6 +67,9 @@
     <Compile Include="Request.Designer.cs">
       <DependentUpon>Request.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Custom\CustomTextBox.resx">
+      <DependentUpon>CustomTextBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

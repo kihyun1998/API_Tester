@@ -33,20 +33,20 @@ namespace API_Tester
             this.cBoxMethod = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.URL = new System.Windows.Forms.Label();
-            this.tBoxURL = new System.Windows.Forms.TextBox();
             this.btnRequest = new System.Windows.Forms.Button();
-            this.tBoxMsg = new System.Windows.Forms.TextBox();
             this.lblMsg = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
-            this.tBoxCookie = new System.Windows.Forms.TextBox();
             this.tBoxRst = new System.Windows.Forms.TextBox();
             this.titleBar = new System.Windows.Forms.Panel();
+            this.btnNom = new System.Windows.Forms.Button();
             this.btnMax = new System.Windows.Forms.Button();
             this.btnMin = new System.Windows.Forms.Button();
             this.btnX = new System.Windows.Forms.Button();
-            this.btnNom = new System.Windows.Forms.Button();
+            this.tBoxMsg = new API_Tester.Custom.CustomTextBox();
+            this.tBoxCookie = new API_Tester.Custom.CustomTextBox();
+            this.tBoxURL = new API_Tester.Custom.CustomTextBox();
             this.titleBar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -88,19 +88,11 @@ namespace API_Tester
             this.URL.AutoSize = true;
             this.URL.Font = new System.Drawing.Font("궁서체", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.URL.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.URL.Location = new System.Drawing.Point(423, 261);
+            this.URL.Location = new System.Drawing.Point(440, 261);
             this.URL.Name = "URL";
             this.URL.Size = new System.Drawing.Size(39, 19);
             this.URL.TabIndex = 3;
             this.URL.Text = "URL";
-            // 
-            // tBoxURL
-            // 
-            this.tBoxURL.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tBoxURL.Location = new System.Drawing.Point(484, 260);
-            this.tBoxURL.Name = "tBoxURL";
-            this.tBoxURL.Size = new System.Drawing.Size(756, 18);
-            this.tBoxURL.TabIndex = 4;
             // 
             // btnRequest
             // 
@@ -114,19 +106,12 @@ namespace API_Tester
             this.btnRequest.UseVisualStyleBackColor = true;
             this.btnRequest.Click += new System.EventHandler(this.btnRequest_Click);
             // 
-            // tBoxMsg
-            // 
-            this.tBoxMsg.Location = new System.Drawing.Point(238, 348);
-            this.tBoxMsg.Name = "tBoxMsg";
-            this.tBoxMsg.Size = new System.Drawing.Size(756, 25);
-            this.tBoxMsg.TabIndex = 7;
-            // 
             // lblMsg
             // 
             this.lblMsg.AutoSize = true;
             this.lblMsg.Font = new System.Drawing.Font("궁서체", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lblMsg.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblMsg.Location = new System.Drawing.Point(151, 348);
+            this.lblMsg.Location = new System.Drawing.Point(151, 354);
             this.lblMsg.Name = "lblMsg";
             this.lblMsg.Size = new System.Drawing.Size(59, 19);
             this.lblMsg.TabIndex = 8;
@@ -159,13 +144,6 @@ namespace API_Tester
             this.label3.TabIndex = 12;
             this.label3.Text = "Cookie =";
             // 
-            // tBoxCookie
-            // 
-            this.tBoxCookie.Location = new System.Drawing.Point(238, 309);
-            this.tBoxCookie.Name = "tBoxCookie";
-            this.tBoxCookie.Size = new System.Drawing.Size(756, 25);
-            this.tBoxCookie.TabIndex = 11;
-            // 
             // tBoxRst
             // 
             this.tBoxRst.Location = new System.Drawing.Point(147, 453);
@@ -177,6 +155,8 @@ namespace API_Tester
             // 
             // titleBar
             // 
+            this.titleBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.titleBar.BackColor = System.Drawing.SystemColors.HotTrack;
             this.titleBar.Controls.Add(this.btnNom);
             this.titleBar.Controls.Add(this.btnMax);
@@ -184,19 +164,35 @@ namespace API_Tester
             this.titleBar.Controls.Add(this.btnX);
             this.titleBar.Location = new System.Drawing.Point(0, -2);
             this.titleBar.Name = "titleBar";
-            this.titleBar.Size = new System.Drawing.Size(1303, 49);
+            this.titleBar.Size = new System.Drawing.Size(1311, 45);
             this.titleBar.TabIndex = 14;
             this.titleBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.titleBar_MouseDown);
             this.titleBar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.titleBar_MouseMove);
             this.titleBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.titleBar_MouseUp);
             // 
+            // btnNom
+            // 
+            this.btnNom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnNom.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnNom.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnNom.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnNom.ForeColor = System.Drawing.Color.White;
+            this.btnNom.Location = new System.Drawing.Point(1216, 3);
+            this.btnNom.Name = "btnNom";
+            this.btnNom.Size = new System.Drawing.Size(41, 37);
+            this.btnNom.TabIndex = 18;
+            this.btnNom.Text = "+";
+            this.btnNom.UseVisualStyleBackColor = false;
+            this.btnNom.Click += new System.EventHandler(this.btnNom_Click);
+            // 
             // btnMax
             // 
+            this.btnMax.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMax.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnMax.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnMax.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btnMax.ForeColor = System.Drawing.Color.White;
-            this.btnMax.Location = new System.Drawing.Point(1216, 2);
+            this.btnMax.Location = new System.Drawing.Point(1216, 3);
             this.btnMax.Name = "btnMax";
             this.btnMax.Size = new System.Drawing.Size(41, 37);
             this.btnMax.TabIndex = 15;
@@ -206,24 +202,27 @@ namespace API_Tester
             // 
             // btnMin
             // 
+            this.btnMin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMin.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnMin.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnMin.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btnMin.ForeColor = System.Drawing.Color.White;
-            this.btnMin.Location = new System.Drawing.Point(1173, 2);
+            this.btnMin.Location = new System.Drawing.Point(1173, 3);
             this.btnMin.Name = "btnMin";
             this.btnMin.Size = new System.Drawing.Size(41, 37);
             this.btnMin.TabIndex = 15;
             this.btnMin.Text = "ㅡ";
             this.btnMin.UseVisualStyleBackColor = false;
+            this.btnMin.Click += new System.EventHandler(this.btnMin_Click);
             // 
             // btnX
             // 
+            this.btnX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnX.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnX.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnX.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btnX.ForeColor = System.Drawing.Color.White;
-            this.btnX.Location = new System.Drawing.Point(1259, 2);
+            this.btnX.Location = new System.Drawing.Point(1259, 3);
             this.btnX.Name = "btnX";
             this.btnX.Size = new System.Drawing.Size(41, 37);
             this.btnX.TabIndex = 15;
@@ -231,35 +230,64 @@ namespace API_Tester
             this.btnX.UseVisualStyleBackColor = false;
             this.btnX.Click += new System.EventHandler(this.btnX_Click);
             // 
-            // btnNom
+            // tBoxMsg
             // 
-            this.btnNom.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.btnNom.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnNom.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnNom.ForeColor = System.Drawing.Color.White;
-            this.btnNom.Location = new System.Drawing.Point(1216, 2);
-            this.btnNom.Name = "btnNom";
-            this.btnNom.Size = new System.Drawing.Size(41, 37);
-            this.btnNom.TabIndex = 18;
-            this.btnNom.Text = "+";
-            this.btnNom.UseVisualStyleBackColor = false;
+            this.tBoxMsg.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.tBoxMsg.BorderColor = System.Drawing.Color.Gray;
+            this.tBoxMsg.BorderSize = 2;
+            this.tBoxMsg.Location = new System.Drawing.Point(238, 354);
+            this.tBoxMsg.Multiline = false;
+            this.tBoxMsg.Name = "tBoxMsg";
+            this.tBoxMsg.Padding = new System.Windows.Forms.Padding(7);
+            this.tBoxMsg.PasswordChar = false;
+            this.tBoxMsg.Size = new System.Drawing.Size(777, 32);
+            this.tBoxMsg.TabIndex = 18;
+            this.tBoxMsg.UnderlinedStyle = true;
+            // 
+            // tBoxCookie
+            // 
+            this.tBoxCookie.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.tBoxCookie.BorderColor = System.Drawing.Color.Gray;
+            this.tBoxCookie.BorderSize = 2;
+            this.tBoxCookie.Location = new System.Drawing.Point(238, 309);
+            this.tBoxCookie.Multiline = false;
+            this.tBoxCookie.Name = "tBoxCookie";
+            this.tBoxCookie.Padding = new System.Windows.Forms.Padding(7);
+            this.tBoxCookie.PasswordChar = false;
+            this.tBoxCookie.Size = new System.Drawing.Size(777, 32);
+            this.tBoxCookie.TabIndex = 17;
+            this.tBoxCookie.UnderlinedStyle = true;
+            // 
+            // tBoxURL
+            // 
+            this.tBoxURL.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.tBoxURL.BorderColor = System.Drawing.Color.Gray;
+            this.tBoxURL.BorderSize = 2;
+            this.tBoxURL.Location = new System.Drawing.Point(506, 260);
+            this.tBoxURL.Multiline = false;
+            this.tBoxURL.Name = "tBoxURL";
+            this.tBoxURL.Padding = new System.Windows.Forms.Padding(7);
+            this.tBoxURL.PasswordChar = false;
+            this.tBoxURL.Size = new System.Drawing.Size(734, 32);
+            this.tBoxURL.TabIndex = 16;
+            this.tBoxURL.UnderlinedStyle = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(1303, 743);
+            this.ClientSize = new System.Drawing.Size(1305, 743);
+            this.Controls.Add(this.tBoxMsg);
+            this.Controls.Add(this.tBoxCookie);
+            this.Controls.Add(this.tBoxURL);
             this.Controls.Add(this.titleBar);
             this.Controls.Add(this.tBoxRst);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.tBoxCookie);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.lblMsg);
-            this.Controls.Add(this.tBoxMsg);
             this.Controls.Add(this.btnRequest);
-            this.Controls.Add(this.tBoxURL);
             this.Controls.Add(this.URL);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cBoxMethod);
@@ -281,20 +309,20 @@ namespace API_Tester
         private System.Windows.Forms.ComboBox cBoxMethod;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label URL;
-        private System.Windows.Forms.TextBox tBoxURL;
         private System.Windows.Forms.Button btnRequest;
-        private System.Windows.Forms.TextBox tBoxMsg;
         private System.Windows.Forms.Label lblMsg;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox tBoxCookie;
         private System.Windows.Forms.TextBox tBoxRst;
         private System.Windows.Forms.Panel titleBar;
         private System.Windows.Forms.Button btnX;
         private System.Windows.Forms.Button btnMin;
         private System.Windows.Forms.Button btnMax;
         private System.Windows.Forms.Button btnNom;
+        private Custom.CustomTextBox tBoxURL;
+        private Custom.CustomTextBox tBoxCookie;
+        private Custom.CustomTextBox tBoxMsg;
     }
 }
 

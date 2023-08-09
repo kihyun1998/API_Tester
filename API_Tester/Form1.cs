@@ -15,19 +15,23 @@ namespace API_Tester
 {
     public partial class Form1 : Form
     {
+        
+
 
         public Form1()
         {
             InitializeComponent();
         }
+
         
-        
+
         private void Form1_Load(object sender, EventArgs e)
         {
             string[] method = { "GET", "POST", "PUT", "DELETE" };
             cBoxMethod.Items.AddRange(method);
             cBoxMethod.SelectedIndex = 0;
             tBoxRst.Enabled = false;
+            btnNom.Visible = false;
         }
 
         private void btnRequest_Click(object sender, EventArgs e)
@@ -86,6 +90,7 @@ namespace API_Tester
         {
             if (err.Length != 0)
             {
+                MessageBox.Show(tBoxURL.Text);
                 MessageBox.Show(err);
                 if (err.Contains("404"))
                 {
@@ -129,6 +134,8 @@ namespace API_Tester
         bool mouseDown;
         int sizeX;
         int sizeY;
+
+        
 
         private void titleBar_MouseDown(object sender, MouseEventArgs e)
         {
