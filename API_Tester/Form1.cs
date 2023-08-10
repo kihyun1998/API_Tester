@@ -15,7 +15,13 @@ namespace API_Tester
 {
     public partial class Form1 : Form
     {
+        string _url = string.Empty;
+        string _method = string.Empty;
+        string _cookie = string.Empty;
+        string _postData = string.Empty;
+        string _err = string.Empty;
 
+        Thread _threadRequest = null;
 
 
         public Form1()
@@ -32,44 +38,58 @@ namespace API_Tester
             string[] method = { "GET", "POST", "PUT", "DELETE" };
             cBoxMethod.Items.AddRange(method);
             cBoxMethod.SelectedIndex = 0;
-            tBoxRst.Enabled = false;
             btnNom.Visible = false;
         }
 
         private async void btnRequest_Click(object sender, EventArgs e)
         {
             string[] rst;
-            tBoxRst.Text = "";
+            tBoxRst.Text = string.Empty;
             btnRequest.Enabled = false;
             cBoxMethod.Enabled = false;
 
             Communication call = new Communication();
 
-            string sUrl = tBoxURL.Text.ToString();
-            string sMethod = cBoxMethod.SelectedItem.ToString();
-            string sCookie = tBoxCookie.Text.ToString();
+            _url = tBoxURL.Text.ToString();
+            _method = cBoxMethod.SelectedItem.ToString();
+            _cookie = tBoxCookie.Text.ToString();
+            _postData = tBoxMsg.Text.ToString();
 
-            if (sMethod == "GET")
-            {
-                rst = await call.Request(sUrl, sMethod, sCookie);
-            }
-            else // (sMethod == "POST" || sMethod == "PUT" || sMethod == "DELETE")
-            {
-                string sPostData = tBoxMsg.Text.ToString();
-                rst = await call.Request(sUrl, sMethod, sCookie, sPostData);
-            }
-            string resText = rst[0];
-
-            tBoxRst.Text = resText;
-
-            string err = rst[1];
-            if (err.Length != 0)
-            {
-                ErrMsg(err);
-            }
+            _threadRequest = new Thread(new ThreadStart(Request));
+            _threadRequest.Start();
 
             btnRequest.Enabled = true;
             cBoxMethod.Enabled = true;
+        }
+
+        private void Request()
+        {
+            Communication call = new Communication();
+            Communication.Result rst;
+
+            if (_method == "GET")
+            {
+                rst = call.Request(_url, _method, _cookie);
+            }
+            else // (_method == "POST" || _method == "PUT" || _method == "DELETE")
+            { 
+                rst = call.Request(_url, _method, _cookie, _postData);
+            }
+
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(delegate ()
+                {
+                    string resText = rst.ResultText;
+                    tBoxRst.Text = resText;
+
+                    string err = rst.Err;
+                    if (err.Length != 0)
+                    {
+                        ErrMsg(err);
+                    }
+                }));
+            }
         }
 
         private void ErrMsg(string err)
@@ -93,7 +113,7 @@ namespace API_Tester
                     tBoxURL.Text = "";
                     tBoxURL.Focus();
                 }
-                tBoxRst.Text = "";
+                tBoxRst.Text = string.Empty;
             }
         }
 
@@ -143,6 +163,11 @@ namespace API_Tester
 
         private void btnX_Click(object sender, EventArgs e)
         {
+            if (_threadRequest.IsAlive)
+            {
+                _threadRequest.Join(100);
+                _threadRequest.Interrupt();
+            }
             this.Close();
         }
 
@@ -165,6 +190,7 @@ namespace API_Tester
             this.WindowState = FormWindowState.Minimized;
         }
         ////////////////////////////////////////////////////////////
+
 
 
         ////////////////////

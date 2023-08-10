@@ -9,3 +9,4 @@ C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.csproj.Cor
 C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.exe
 C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.pdb
 C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.Custom.CustomTextBox.resources
+C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.Repository.resources

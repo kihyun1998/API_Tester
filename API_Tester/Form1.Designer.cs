@@ -38,7 +38,6 @@ namespace API_Tester
             this.lblMsg = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
-            this.tBoxRst = new System.Windows.Forms.TextBox();
             this.titleBar = new System.Windows.Forms.Panel();
             this.btnNom = new System.Windows.Forms.Button();
             this.btnMax = new System.Windows.Forms.Button();
@@ -49,6 +48,7 @@ namespace API_Tester
             this.tBoxURL = new API_Tester.Custom.CustomTextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.tBoxRst = new System.Windows.Forms.TextBox();
             this.titleBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -144,16 +144,6 @@ namespace API_Tester
             this.label3.TabIndex = 12;
             this.label3.Text = "Cookie =";
             // 
-            // tBoxRst
-            // 
-            this.tBoxRst.Location = new System.Drawing.Point(35, 332);
-            this.tBoxRst.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tBoxRst.Multiline = true;
-            this.tBoxRst.Name = "tBoxRst";
-            this.tBoxRst.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tBoxRst.Size = new System.Drawing.Size(961, 198);
-            this.tBoxRst.TabIndex = 13;
-            // 
             // titleBar
             // 
             this.titleBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -184,6 +174,7 @@ namespace API_Tester
             this.btnNom.Name = "btnNom";
             this.btnNom.Size = new System.Drawing.Size(36, 30);
             this.btnNom.TabIndex = 18;
+            this.btnNom.TabStop = false;
             this.btnNom.Text = "+";
             this.btnNom.UseVisualStyleBackColor = false;
             this.btnNom.Click += new System.EventHandler(this.btnNom_Click);
@@ -200,6 +191,7 @@ namespace API_Tester
             this.btnMax.Name = "btnMax";
             this.btnMax.Size = new System.Drawing.Size(36, 30);
             this.btnMax.TabIndex = 15;
+            this.btnMax.TabStop = false;
             this.btnMax.Text = "ㅁ";
             this.btnMax.UseVisualStyleBackColor = false;
             this.btnMax.Click += new System.EventHandler(this.btnMax_Click);
@@ -216,6 +208,7 @@ namespace API_Tester
             this.btnMin.Name = "btnMin";
             this.btnMin.Size = new System.Drawing.Size(36, 30);
             this.btnMin.TabIndex = 15;
+            this.btnMin.TabStop = false;
             this.btnMin.Text = "ㅡ";
             this.btnMin.UseVisualStyleBackColor = false;
             this.btnMin.Click += new System.EventHandler(this.btnMin_Click);
@@ -232,6 +225,7 @@ namespace API_Tester
             this.btnX.Name = "btnX";
             this.btnX.Size = new System.Drawing.Size(36, 30);
             this.btnX.TabIndex = 15;
+            this.btnX.TabStop = false;
             this.btnX.Text = "X";
             this.btnX.UseVisualStyleBackColor = false;
             this.btnX.Click += new System.EventHandler(this.btnX_Click);
@@ -301,19 +295,29 @@ namespace API_Tester
             this.pictureBox1.TabIndex = 20;
             this.pictureBox1.TabStop = false;
             // 
+            // tBoxRst
+            // 
+            this.tBoxRst.Enabled = false;
+            this.tBoxRst.Location = new System.Drawing.Point(37, 333);
+            this.tBoxRst.Multiline = true;
+            this.tBoxRst.Name = "tBoxRst";
+            this.tBoxRst.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tBoxRst.Size = new System.Drawing.Size(957, 192);
+            this.tBoxRst.TabIndex = 21;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(1020, 560);
+            this.Controls.Add(this.tBoxRst);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tBoxMsg);
             this.Controls.Add(this.tBoxCookie);
             this.Controls.Add(this.tBoxURL);
             this.Controls.Add(this.titleBar);
-            this.Controls.Add(this.tBoxRst);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.lblMsg);
@@ -346,7 +350,6 @@ namespace API_Tester
         private System.Windows.Forms.Label lblMsg;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox tBoxRst;
         private System.Windows.Forms.Panel titleBar;
         private System.Windows.Forms.Button btnX;
         private System.Windows.Forms.Button btnMin;
@@ -357,6 +360,7 @@ namespace API_Tester
         private Custom.CustomTextBox tBoxMsg;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.TextBox tBoxRst;
     }
 }
 
