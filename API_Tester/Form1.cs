@@ -22,6 +22,10 @@ namespace API_Tester
         string _err = string.Empty;
 
         Thread _threadRequest = null;
+        Repository _rt = null;
+
+        int _lx = 0;
+        int _ly = 0;
 
 
         public Form1()
@@ -29,9 +33,10 @@ namespace API_Tester
             InitializeComponent();
             this.DoubleBuffered = true;
             this.SetStyle(ControlStyles.ResizeRedraw, true);
+
+            _lx = this.Location.X;
+            _ly = this.Location.Y;
         }
-
-
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -41,9 +46,44 @@ namespace API_Tester
             btnNom.Visible = false;
         }
 
-        private async void btnRequest_Click(object sender, EventArgs e)
+
+        private void btnLeft_Click(object sender, EventArgs e)
         {
-            string[] rst;
+            btnRight.Visible = true;
+            btnLeft.Visible = false;
+
+            _lx = this.Location.X;
+            _ly = this.Location.Y;
+
+            _rt = new Repository();
+            _rt.StartPosition = FormStartPosition.Manual;
+            _rt.Location = new Point(_lx - _rt.Width, _ly);
+            _rt.Show(this);
+        }
+
+        private void btnRight_Click(object sender, EventArgs e)
+        {
+            btnRight.Visible = false;
+            btnLeft.Visible = true;
+            _rt.Close();
+        }
+
+        private void Form1_Move(object sender, EventArgs e)
+        {
+
+            if (_rt != null)
+            {
+                _lx = this.Location.X;
+                _ly = this.Location.Y;
+                _rt.Location = new Point(_lx - _rt.Width, _ly);
+            }
+        }
+
+
+        ////////////////
+        ///HTTP Request
+        private void btnRequest_Click(object sender, EventArgs e)
+        {
             tBoxRst.Text = string.Empty;
             btnRequest.Enabled = false;
             cBoxMethod.Enabled = false;
@@ -163,11 +203,6 @@ namespace API_Tester
 
         private void btnX_Click(object sender, EventArgs e)
         {
-            if (_threadRequest.IsAlive)
-            {
-                _threadRequest.Join(100);
-                _threadRequest.Interrupt();
-            }
             this.Close();
         }
 
@@ -208,21 +243,25 @@ namespace API_Tester
 
         const int ten = 10;
 
+
+
+
+
         //Rectangle Top { get { return new Rectangle(0, 0, this.ClientSize.Width, ten); } }
-        //Rectangle Left { get { return new Rectangle(0, 0, ten, this.ClientSize.Height); } }
+        Rectangle Left { get { return new Rectangle(0, 0, ten, this.ClientSize.Height); } }
         Rectangle Bottom { get { return new Rectangle(0, this.ClientSize.Height - ten, this.ClientSize.Width, ten); } }
         Rectangle Right { get { return new Rectangle(this.ClientSize.Width - ten, 0, ten, this.ClientSize.Height); } }
 
         //Rectangle TopLeft { get { return new Rectangle(0, 0, ten, ten); } }
         //Rectangle TopRight { get { return new Rectangle(this.ClientSize.Width - ten, 0, ten, ten); } }
-        //Rectangle BottomLeft { get { return new Rectangle(0, this.ClientSize.Height - ten, ten, ten); } }
+        Rectangle BottomLeft { get { return new Rectangle(0, this.ClientSize.Height - ten, ten, ten); } }
         Rectangle BottomRight { get { return new Rectangle(this.ClientSize.Width - ten, this.ClientSize.Height - ten, ten, ten); } }
 
         // 창 변환 구간 함수
         protected override void OnPaint(PaintEventArgs e) // you can safely omit this method if you want
         {
             //e.Graphics.FillRectangle(Brushes.White, Top);
-            //e.Graphics.FillRectangle(Brushes.White, Left);
+            e.Graphics.FillRectangle(Brushes.White, Left);
             e.Graphics.FillRectangle(Brushes.White, Right);
             e.Graphics.FillRectangle(Brushes.White, Bottom);
         }
@@ -238,11 +277,11 @@ namespace API_Tester
 
                 //if (TopLeft.Contains(cursor)) message.Result = (IntPtr)HTTOPLEFT;
                 //else if (TopRight.Contains(cursor)) message.Result = (IntPtr)HTTOPRIGHT;
-                //if (BottomLeft.Contains(cursor)) message.Result = (IntPtr)HTBOTTOMLEFT;
-                if (BottomRight.Contains(cursor)) message.Result = (IntPtr)HTBOTTOMRIGHT;
+                if (BottomLeft.Contains(cursor)) message.Result = (IntPtr)HTBOTTOMLEFT;
+                else if (BottomRight.Contains(cursor)) message.Result = (IntPtr)HTBOTTOMRIGHT;
 
                 //else if (Top.Contains(cursor)) message.Result = (IntPtr)HTTOP;
-                //else if (Left.Contains(cursor)) message.Result = (IntPtr)HTLEFT;
+                else if (Left.Contains(cursor)) message.Result = (IntPtr)HTLEFT;
                 else if (Right.Contains(cursor)) message.Result = (IntPtr)HTRIGHT;
                 else if (Bottom.Contains(cursor)) message.Result = (IntPtr)HTBOTTOM;
             }

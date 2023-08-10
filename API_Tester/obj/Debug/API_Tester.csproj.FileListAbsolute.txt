@@ -10,3 +10,15 @@ C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.exe
 C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.pdb
 C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.Custom.CustomTextBox.resources
 C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.Repository.resources
+C:\API_Tester\API_Tester\bin\Debug\API_Tester.exe.config
+C:\API_Tester\API_Tester\bin\Debug\API_Tester.exe
+C:\API_Tester\API_Tester\bin\Debug\API_Tester.pdb
+C:\API_Tester\API_Tester\obj\Debug\API_Tester.csproj.AssemblyReference.cache
+C:\API_Tester\API_Tester\obj\Debug\API_Tester.Custom.CustomTextBox.resources
+C:\API_Tester\API_Tester\obj\Debug\API_Tester.Form1.resources
+C:\API_Tester\API_Tester\obj\Debug\API_Tester.Properties.Resources.resources
+C:\API_Tester\API_Tester\obj\Debug\API_Tester.Repository.resources
+C:\API_Tester\API_Tester\obj\Debug\API_Tester.csproj.GenerateResource.cache
+C:\API_Tester\API_Tester\obj\Debug\API_Tester.csproj.CoreCompileInputs.cache
+C:\API_Tester\API_Tester\obj\Debug\API_Tester.exe
+C:\API_Tester\API_Tester\obj\Debug\API_Tester.pdb
