@@ -10,7 +10,6 @@ namespace API_Tester
 {
     class Communication
     {
-        //public string cookie = "sessionID=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJzb24iOnsiSUQiOiJhcGFkbWluIiwiTmFtZSI6IiIsIlR5cGUiOiJBUElUb2tlbiJ9LCJDb25zb2xlVHlwZSI6ImFwaXRva2VuIiwiSVAiOiIxOTIuMTY4LjEzNy4xIiwianRpIjoiY2QyZTkzMDViZjg5NDc0NWIyNWFkM2I2MjA0ODFlZWEifQ.ZOYB1XjH502-JrZiFgz71smlJLBj0w_dM3LBMhkiZkg";
         public struct Result
         {
             public string ResultText;

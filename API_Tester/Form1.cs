@@ -46,28 +46,8 @@ namespace API_Tester
             btnNom.Visible = false;
         }
 
-
-        private void btnLeft_Click(object sender, EventArgs e)
-        {
-            btnRight.Visible = true;
-            btnLeft.Visible = false;
-
-            _lx = this.Location.X;
-            _ly = this.Location.Y;
-
-            _rt = new Repository();
-            _rt.StartPosition = FormStartPosition.Manual;
-            _rt.Location = new Point(_lx - _rt.Width, _ly);
-            _rt.Show(this);
-        }
-
-        private void btnRight_Click(object sender, EventArgs e)
-        {
-            btnRight.Visible = false;
-            btnLeft.Visible = true;
-            _rt.Close();
-        }
-
+        ///////
+        /// 사이드 창 같이 움직이기
         private void Form1_Move(object sender, EventArgs e)
         {
 
@@ -77,6 +57,31 @@ namespace API_Tester
                 _ly = this.Location.Y;
                 _rt.Location = new Point(_lx - _rt.Width, _ly);
             }
+        }
+
+
+        ///////
+        ///트리 뷰 조작
+
+        private void btnLeft_Click(object sender, EventArgs e)
+        {
+            btnRight.Visible = true;
+            btnLeft.Visible = false;
+
+            _lx = this.Location.X;
+            _ly = this.Location.Y;
+
+            _rt = new Repository(this);
+            _rt.StartPosition = FormStartPosition.Manual;
+            _rt.Location = new Point(_lx - _rt.Width, _ly);
+            _rt.Show();
+        }
+
+        private void btnRight_Click(object sender, EventArgs e)
+        {
+            btnRight.Visible = false;
+            btnLeft.Visible = true;
+            _rt.Close();
         }
 
 
@@ -170,6 +175,37 @@ namespace API_Tester
                 lblMsg.Visible = false;
             }
         }
+        //////////////////////////////////////
+
+
+        ////////////////
+        /// 파일 저장
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            if(_rt != null)
+            {
+                var sNode = _rt.treeView1.SelectedNode;
+                string selectPath = string.Format("..\\{0}\\{1}", sNode.FullPath, "save_file");
+                
+
+                List<string> writeList = new List<string>();
+                writeList.Add(cBoxMethod.Text);
+                writeList.Add(tBoxURL.Text);
+                writeList.Add(tBoxCookie.Text);
+                writeList.Add(tBoxMsg.Text);
+
+                string[] writeArr = writeList.ToArray();
+
+                System.IO.File.WriteAllLines(selectPath, writeArr);
+                MessageBox.Show("저장이 완료됐습니다!");
+            }
+            else
+            {
+                MessageBox.Show("파일 저장 버그!");
+            }
+        }
+
+
 
 
 
@@ -244,9 +280,6 @@ namespace API_Tester
         const int ten = 10;
 
 
-
-
-
         //Rectangle Top { get { return new Rectangle(0, 0, this.ClientSize.Width, ten); } }
         Rectangle Left { get { return new Rectangle(0, 0, ten, this.ClientSize.Height); } }
         Rectangle Bottom { get { return new Rectangle(0, this.ClientSize.Height - ten, this.ClientSize.Width, ten); } }
@@ -261,9 +294,9 @@ namespace API_Tester
         protected override void OnPaint(PaintEventArgs e) // you can safely omit this method if you want
         {
             //e.Graphics.FillRectangle(Brushes.White, Top);
-            e.Graphics.FillRectangle(Brushes.White, Left);
-            e.Graphics.FillRectangle(Brushes.White, Right);
-            e.Graphics.FillRectangle(Brushes.White, Bottom);
+            e.Graphics.FillRectangle(Brushes.WhiteSmoke, Left);
+            e.Graphics.FillRectangle(Brushes.WhiteSmoke, Right);
+            e.Graphics.FillRectangle(Brushes.WhiteSmoke, Bottom);
         }
 
         // 커서 변경 함수
@@ -286,5 +319,6 @@ namespace API_Tester
                 else if (Bottom.Contains(cursor)) message.Result = (IntPtr)HTBOTTOM;
             }
         }
+        /////////////////////////////
     }
 }
