@@ -103,18 +103,24 @@ namespace API_Tester
             }
         }
 
+
+
         private void btnMinus_Click(object sender, EventArgs e)  //삭제 고치기 위처럼 path 고치면됨
         {
             var sNode = treeView1.SelectedNode;
 
             if (sNode != null && sNode.Parent != null)
             {
-                string selectPath = string.Format("..\\{0}", sNode.FullPath);
-                Directory.Delete(selectPath, recursive: true);
-                treeView1.Nodes.Remove(sNode);
+                if (MessageBox.Show("폴더를 삭제하시겠습니까?", "삭제", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    string selectPath = string.Format("..\\{0}", sNode.FullPath);
+                    Directory.Delete(selectPath, recursive: true);
+                    treeView1.Nodes.Remove(sNode);
 
-                MessageBox.Show(string.Format("{0}이(가) 삭제됐습니다 !",sNode.Text));
-                tBoxFolderName.Text = string.Empty;
+                    MessageBox.Show(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text));
+                    tBoxFolderName.Text = string.Empty;
+                }
+                
             }
         }
 
@@ -132,27 +138,29 @@ namespace API_Tester
 
             if (sNode != null)
             {
-                if (nLevel > 0)
+                _f1._selectedNode = sNode;
+                if (nLevel > 0) // 레벨 1 이상
                 {
                     btnAdd.Visible = false;
                     tBoxFolderName.Visible = false;
 
                     btnDelete.Visible = true;
-                    _f1.btnSave.Visible = true;
+                    //_f1.btnSave.Visible = true;
                 }
-                else
+                else // 레벨 0 
                 {
                     btnAdd.Visible = true;
                     tBoxFolderName.Visible = true;
 
                     btnDelete.Visible = false;
-                    _f1.btnSave.Visible = false;
+                    //_f1.btnSave.Visible = false;
                 }
                 tBoxFolderName.Enabled = true;
                 //_isSelected = true;
             }
             else
             {
+                _f1._selectedNode = null;
                 tBoxFolderName.Enabled = false;
                 _f1.btnSave.Visible = false;
                 _f1.lblTitle.Visible = false;
