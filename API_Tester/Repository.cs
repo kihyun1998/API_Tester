@@ -172,44 +172,49 @@ namespace API_Tester
         ///더블 클릭 시 이벤트 (값 불러오기)
         private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+
             var sNode = treeView1.SelectedNode;
-            if (sNode.Level > 0)
+            _f1.btnSave.Visible = false;
+            _f1._selectedNode = sNode;
+            if (sNode != null)
             {
-                try
+                if (sNode.Level > 0)
                 {
-                    string selectPath = string.Format("..\\{0}\\{1}", sNode.FullPath, "save_file");
-                    string[] saveData = System.IO.File.ReadAllLines(selectPath);
-                    _f1.lblTitle.Visible = true;
-                    _f1.lblTitle.Text = sNode.Text;
-                    _f1.cBoxMethod.Text = saveData[0];
-                    _f1.tBoxURL.Text = saveData[1];
-                    _f1.tBoxCookie.Text = saveData[2];
-                    _f1.tBoxMsg.Text = saveData[3];
+                    string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, "save_file");
+                    FileInfo saved = new FileInfo(savePath);
+                    if (saved.Exists)
+                    {
+                        string[] saveData = System.IO.File.ReadAllLines(savePath);
+                        _f1.isUse();
+                        _f1.lblTitle.Visible = true;
+                        _f1.lblTitle.Text = sNode.Text;
+                        _f1.cBoxMethod.Text = saveData[0];
+                        _f1.tBoxURL.Text = saveData[1];
+                        _f1.tBoxCookie.Text = saveData[2];
+                        _f1.tBoxMsg.Text = saveData[3];
+                    }
+                    else
+                    {
+                        _f1.isUse();
+                        _f1.lblTitle.Visible = true;
+                        _f1.lblTitle.Text = sNode.Text;
+                        _f1.cBoxMethod.Text = string.Empty;
+                        _f1.tBoxURL.Text = string.Empty;
+                        _f1.tBoxCookie.Text = string.Empty;
+                        _f1.tBoxMsg.Text = string.Empty;
+                    }
                 }
-                catch(FileNotFoundException fnex)
+                else
                 {
-                    _f1.lblTitle.Visible = true;
-                    _f1.lblTitle.Text = sNode.Text;
-                    _f1.cBoxMethod.Text = string.Empty;
+                    _f1.lblTitle.Visible = false;
+                    _f1.cBoxMethod.Text = "GET";
                     _f1.tBoxURL.Text = string.Empty;
                     _f1.tBoxCookie.Text = string.Empty;
                     _f1.tBoxMsg.Text = string.Empty;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
-                }
-            }
-            else
-            {
-                _f1.lblTitle.Visible = false;
-                _f1.lblTitle.Text = sNode.Text;
-                _f1.cBoxMethod.Text = string.Empty;
-                _f1.tBoxURL.Text = string.Empty;
-                _f1.tBoxCookie.Text = string.Empty;
-                _f1.tBoxMsg.Text = string.Empty;
-            }
 
+                    _f1.notUse();
+                }
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ namespace API_Tester
         string _cookie = string.Empty;
         string _postData = string.Empty;
         string _err = string.Empty;
+        public TreeNode _selectedNode = null;
 
         Thread _threadRequest = null;
         Repository _rt = null;
@@ -79,10 +80,121 @@ namespace API_Tester
 
         private void btnRight_Click(object sender, EventArgs e)
         {
+            
+
             btnRight.Visible = false;
             btnLeft.Visible = true;
+
+            if (_selectedNode != null)
+            {
+                string savePath = getSavePath();
+                FileInfo saved = new FileInfo(savePath);
+                if (saved.Exists)
+                {
+                    string[] saveData = System.IO.File.ReadAllLines(savePath);
+                    if (IsChanged(saveData))
+                    {
+                        questionSave(savePath);
+                    }
+                }
+                else
+                {
+                    string[] data = new string[] { "GET", "", "", ""};
+                    if (IsChanged(data))
+                    {
+                        questionSave(savePath);
+                    }
+                }
+            }
+            
             _rt.Close();
+            _rt = null;
+            _selectedNode = null;
+            lblTitle.Visible = false;
+            btnSave.Visible = false;
+            cBoxMethod.Text = "GET";
+            tBoxURL.Text = string.Empty;
+            tBoxCookie.Text = string.Empty;
+            tBoxMsg.Text = string.Empty;
+            isUse();
         }
+
+        /////////////////
+        /// 잡다한 함수
+        private void questionSave(string savePath)
+        {
+            if (MessageBox.Show("변경내용이 있습니다.\n저장 하시겠습니까?", "Save", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                List<string> writeList = new List<string>();
+                writeList.Add(cBoxMethod.Text);
+                writeList.Add(tBoxURL.Text);
+                writeList.Add(tBoxCookie.Text);
+                writeList.Add(tBoxMsg.Text);
+
+                string[] writeArr = writeList.ToArray();
+
+                System.IO.File.WriteAllLines(savePath, writeArr);
+                MessageBox.Show("저장되었습니다.");
+            }
+            else
+            {
+                cBoxMethod.Text = "GET";
+                tBoxURL.Text = string.Empty;
+                tBoxCookie.Text = string.Empty;
+                tBoxMsg.Text = string.Empty;
+            }
+        }
+
+
+        private string getSavePath()
+        {
+            try
+            {
+                string savePath = string.Format("..\\{0}\\{1}", _selectedNode.FullPath, "save_file");
+                return savePath;
+            }
+            catch
+            {
+                MessageBox.Show("노드 선택 여부 검사 안함");
+                return "";
+            }   
+        }
+
+        private bool IsChanged(string[] read)
+        {
+            if (cBoxMethod.Text == read[0] && tBoxURL.Text == read[1] && tBoxCookie.Text == read[2] && tBoxMsg.Text == read[3])
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public void notUse()
+        {
+            tBoxURL.BackColor = Color.Gray;
+            tBoxCookie.BackColor = Color.Gray;
+            tBoxMsg.BackColor = Color.Gray;
+            cBoxMethod.Enabled = false;
+            tBoxURL.Enabled = false;
+            tBoxCookie.Enabled = false;
+            tBoxMsg.Enabled = false;
+        }
+
+        public void isUse()
+        {
+            tBoxURL.BackColor = Color.WhiteSmoke;
+            tBoxCookie.BackColor = Color.WhiteSmoke;
+            tBoxMsg.BackColor = Color.WhiteSmoke;
+            cBoxMethod.Enabled = false;
+            tBoxURL.Enabled = false;
+            tBoxCookie.Enabled = false;
+            tBoxMsg.Enabled = false;
+        }
+
+        /////////////////////////////
 
 
         ////////////////
@@ -182,7 +294,8 @@ namespace API_Tester
         /// 파일 저장
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if(_rt != null)
+            
+            if (_rt != null)
             {
                 var sNode = _rt.treeView1.SelectedNode;
                 string selectPath = string.Format("..\\{0}\\{1}", sNode.FullPath, "save_file");
@@ -203,6 +316,44 @@ namespace API_Tester
             {
                 MessageBox.Show("파일 저장 버그!");
             }
+        }
+
+
+        //////////////////
+        ///텍스트 변경 시
+        public void TextBox_TextChanged(Object sender, EventArgs e) {
+
+
+            if (_rt != null)
+            {
+                string savePath = getSavePath();
+                FileInfo save = new FileInfo(savePath);
+                if (save.Exists)
+                {
+                    string[] saveData = System.IO.File.ReadAllLines(savePath);
+                    if (IsChanged(saveData))
+                    {
+                        btnSave.Visible = true;
+                    }
+                    else
+                    {
+                        btnSave.Visible = false;
+                    }
+                }
+                else
+                {
+                    string[] data = new string[] { "GET", "", "", "" };
+                    if (IsChanged(data))
+                    {
+                        btnSave.Visible = true;
+                    }
+                    else
+                    {
+                        btnSave.Visible = false;
+                    }
+                }
+            }
+
         }
 
 
@@ -282,6 +433,8 @@ namespace API_Tester
 
         //Rectangle Top { get { return new Rectangle(0, 0, this.ClientSize.Width, ten); } }
         Rectangle Left { get { return new Rectangle(0, 0, ten, this.ClientSize.Height); } }
+
+
         Rectangle Bottom { get { return new Rectangle(0, this.ClientSize.Height - ten, this.ClientSize.Width, ten); } }
         Rectangle Right { get { return new Rectangle(this.ClientSize.Width - ten, 0, ten, this.ClientSize.Height); } }
 

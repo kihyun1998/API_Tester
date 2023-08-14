@@ -40,6 +40,7 @@ namespace API_Tester
             this.titleBar = new System.Windows.Forms.Panel();
             this.btnRight = new System.Windows.Forms.PictureBox();
             this.btnLeft = new System.Windows.Forms.PictureBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.btnNom = new System.Windows.Forms.Button();
             this.btnMax = new System.Windows.Forms.Button();
             this.btnMin = new System.Windows.Forms.Button();
@@ -49,7 +50,6 @@ namespace API_Tester
             this.tBoxMsg = new API_Tester.Custom.CustomTextBox();
             this.tBoxCookie = new API_Tester.Custom.CustomTextBox();
             this.tBoxURL = new API_Tester.Custom.CustomTextBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
             this.titleBar.SuspendLayout();
@@ -183,6 +183,17 @@ namespace API_Tester
             this.btnLeft.TabStop = false;
             this.btnLeft.Click += new System.EventHandler(this.btnLeft_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.label4.Font = new System.Drawing.Font("궁서", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label4.Location = new System.Drawing.Point(50, 4);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(256, 40);
+            this.label4.TabIndex = 23;
+            this.label4.Text = "API Tester";
+            // 
             // btnNom
             // 
             this.btnNom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -285,6 +296,7 @@ namespace API_Tester
             this.tBoxMsg.Size = new System.Drawing.Size(812, 34);
             this.tBoxMsg.TabIndex = 18;
             this.tBoxMsg.UnderlinedStyle = true;
+            this.tBoxMsg.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
             // tBoxCookie
             // 
@@ -300,6 +312,7 @@ namespace API_Tester
             this.tBoxCookie.Size = new System.Drawing.Size(812, 34);
             this.tBoxCookie.TabIndex = 17;
             this.tBoxCookie.UnderlinedStyle = true;
+            this.tBoxCookie.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
             // tBoxURL
             // 
@@ -315,17 +328,7 @@ namespace API_Tester
             this.tBoxURL.Size = new System.Drawing.Size(810, 34);
             this.tBoxURL.TabIndex = 16;
             this.tBoxURL.UnderlinedStyle = true;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.label4.Font = new System.Drawing.Font("궁서", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label4.Location = new System.Drawing.Point(50, 4);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(256, 40);
-            this.label4.TabIndex = 23;
-            this.label4.Text = "API Tester";
+            this.tBoxURL.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
             // btnSave
             // 

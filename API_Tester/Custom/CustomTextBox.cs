@@ -15,10 +15,12 @@ namespace API_Tester.Custom
         private Color borderColor = Color.Gray;
         private int borderSize = 2;
         private bool underlinedStyle = true;
+        
 
         public CustomTextBox()
         {
             InitializeComponent();
+            this.textBox1.TextChanged += new System.EventHandler(textBox1_TextChanged);
         }
 
         ///////////////
@@ -129,11 +131,27 @@ namespace API_Tester.Custom
         public override string Text
         {
             get { return textBox1.Text; }
-            set { textBox1.Text = value; }
+            set { 
+                if(textBox1.Text != value)
+                {
+                    textBox1.Text = value;
+                    if (TextChanged != null)
+                    {
+                        TextChanged(this, EventArgs.Empty);
+                    }
+                }
+
+            }
         }
 
+        [Browsable(true)]
+        [Category("Custom Action")]
+        public event EventHandler TextChanged;
 
-
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            TextChanged?.Invoke(sender, e);
+        }
 
 
 
