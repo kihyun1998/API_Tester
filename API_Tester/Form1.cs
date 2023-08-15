@@ -21,6 +21,7 @@ namespace API_Tester
         string _postData = string.Empty;
         string _err = string.Empty;
         public TreeNode _selectedNode = null;
+        public string[] _methods = { "GET", "POST", "PUT", "DELETE" };
 
         Thread _threadRequest = null;
         Repository _rt = null;
@@ -41,8 +42,7 @@ namespace API_Tester
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string[] method = { "GET", "POST", "PUT", "DELETE" };
-            cBoxMethod.Items.AddRange(method);
+            cBoxMethod.Items.AddRange(_methods);
             cBoxMethod.SelectedIndex = 0;
             btnNom.Visible = false;
         }
@@ -99,7 +99,7 @@ namespace API_Tester
                 }
                 else
                 {
-                    string[] data = new string[] { "GET", "", "", ""};
+                    string[] data = new string[] { _methods[0], "", "", "" };
                     if (IsChanged(data))
                     {
                         questionSave(savePath);
@@ -112,7 +112,7 @@ namespace API_Tester
             _selectedNode = null;
             lblTitle.Visible = false;
             btnSave.Visible = false;
-            cBoxMethod.Text = "GET";
+            cBoxMethod.Text = _methods[0];
             tBoxURL.Text = string.Empty;
             tBoxCookie.Text = string.Empty;
             tBoxMsg.Text = string.Empty;
@@ -138,7 +138,7 @@ namespace API_Tester
             }
             else
             {
-                cBoxMethod.Text = "GET";
+                cBoxMethod.Text = _methods[0];
                 tBoxURL.Text = string.Empty;
                 tBoxCookie.Text = string.Empty;
                 tBoxMsg.Text = string.Empty;
@@ -342,7 +342,7 @@ namespace API_Tester
                 }
                 else
                 {
-                    string[] data = new string[] { "GET", "", "", "" };
+                    string[] data = new string[] { _methods[0], "", "", "" };
                     if (IsChanged(data))
                     {
                         btnSave.Visible = true;

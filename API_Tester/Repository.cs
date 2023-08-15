@@ -198,7 +198,7 @@ namespace API_Tester
                         _f1.isUse();
                         _f1.lblTitle.Visible = true;
                         _f1.lblTitle.Text = sNode.Text;
-                        _f1.cBoxMethod.Text = string.Empty;
+                        _f1.cBoxMethod.Text = _f1._methods[0];
                         _f1.tBoxURL.Text = string.Empty;
                         _f1.tBoxCookie.Text = string.Empty;
                         _f1.tBoxMsg.Text = string.Empty;
@@ -207,7 +207,7 @@ namespace API_Tester
                 else
                 {
                     _f1.lblTitle.Visible = false;
-                    _f1.cBoxMethod.Text = "GET";
+                    _f1.cBoxMethod.Text = _f1._methods[0];
                     _f1.tBoxURL.Text = string.Empty;
                     _f1.tBoxCookie.Text = string.Empty;
                     _f1.tBoxMsg.Text = string.Empty;
