@@ -188,10 +188,10 @@ namespace API_Tester
             tBoxURL.BackColor = Color.WhiteSmoke;
             tBoxCookie.BackColor = Color.WhiteSmoke;
             tBoxMsg.BackColor = Color.WhiteSmoke;
-            cBoxMethod.Enabled = false;
-            tBoxURL.Enabled = false;
-            tBoxCookie.Enabled = false;
-            tBoxMsg.Enabled = false;
+            cBoxMethod.Enabled = true;
+            tBoxURL.Enabled = true;
+            tBoxCookie.Enabled = true;
+            tBoxMsg.Enabled = true;
         }
 
         /////////////////////////////
