@@ -145,7 +145,7 @@ namespace API_Tester
                     tBoxFolderName.Visible = false;
 
                     btnDelete.Visible = true;
-                    //_f1.btnSave.Visible = true;
+
                 }
                 else // 레벨 0 
                 {
@@ -153,7 +153,7 @@ namespace API_Tester
                     tBoxFolderName.Visible = true;
 
                     btnDelete.Visible = false;
-                    //_f1.btnSave.Visible = false;
+
                 }
                 tBoxFolderName.Enabled = true;
                 //_isSelected = true;
