@@ -10,11 +10,22 @@ using System.Windows.Forms;
 using System.Net;
 using System.IO;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace API_Tester
 {
     public partial class Form1 : Form
     {
+        [DllImport("request.dll")]
+        public static extern IntPtr RequestGet(byte[] url, byte[] cookie);
+
+        [DllImport("request.dll")]
+        public static extern IntPtr RequestPPD(byte[] method, byte[] url, byte[] cookie, byte[] msg);
+
+        [DllImport("request.dll")]
+        public static extern void Free();
+
+
         string _url = string.Empty;
         string _method = string.Empty;
         string _cookie = string.Empty;
@@ -205,8 +216,6 @@ namespace API_Tester
             btnRequest.Enabled = false;
             cBoxMethod.Enabled = false;
 
-            Communication call = new Communication();
-
             _url = tBoxURL.Text.ToString();
             _method = cBoxMethod.SelectedItem.ToString();
             _cookie = tBoxCookie.Text.ToString();
@@ -221,32 +230,51 @@ namespace API_Tester
 
         private void Request()
         {
-            Communication call = new Communication();
-            Communication.Result rst;
+            IntPtr pRst;
 
             if (_method == "GET")
             {
-                rst = call.Request(_url, _method, _cookie);
+                pRst = RequestGet(
+                    Encoding.UTF8.GetBytes(_url),
+                    Encoding.UTF8.GetBytes(_cookie));
+                
             }
             else // (_method == "POST" || _method == "PUT" || _method == "DELETE")
-            { 
-                rst = call.Request(_url, _method, _cookie, _postData);
+            {
+                pRst = RequestPPD(
+                    Encoding.UTF8.GetBytes(_method),
+                    Encoding.UTF8.GetBytes(_url),
+                    Encoding.UTF8.GetBytes(_cookie),
+                    Encoding.UTF8.GetBytes(_postData));
             }
+            Free();
 
             if (this.InvokeRequired)
             {
                 this.Invoke(new Action(delegate ()
                 {
-                    string resText = rst.ResultText;
-                    tBoxRst.Text = resText;
+                    string resText = MarshalUtf8ToUnicode(pRst);
+                    
 
-                    string err = rst.Err;
-                    if (err.Length != 0)
+                    if (resText.StartsWith("[Error]"))
                     {
-                        ErrMsg(err);
+                        ErrMsg(resText);
+                    }
+                    else
+                    {
+                        tBoxRst.Text = resText;
                     }
                 }));
             }
+        }
+
+        static unsafe string MarshalUtf8ToUnicode(IntPtr pStringUtf82)
+        {
+            var pStringUtf8 = (byte*)pStringUtf82;
+            var len = 0;
+            while (pStringUtf8[len] != 0)
+                len++;
+            return Encoding.UTF8.GetString(pStringUtf8, len);
         }
 
         private void ErrMsg(string err)
