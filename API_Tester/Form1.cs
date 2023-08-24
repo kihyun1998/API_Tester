@@ -25,7 +25,7 @@ namespace API_Tester
         public static extern IntPtr RequestPPD(byte[] method, byte[] url, byte[] cookie, byte[] msg);
 
         [DllImport("request.dll")]
-        public static extern void Free();
+        public static extern void Free(IntPtr p);
 
 
         string _url = string.Empty;
@@ -377,7 +377,6 @@ namespace API_Tester
                     Encoding.UTF8.GetBytes(_cookie),
                     Encoding.UTF8.GetBytes(_postData));
             }
-            Free();
 
             if (this.InvokeRequired)
             {
@@ -396,6 +395,8 @@ namespace API_Tester
                     }
                 }));
             }
+            Free(pRst);
+
         }
 
         static unsafe string MarshalUtf8ToUnicode(IntPtr pStringUtf82)

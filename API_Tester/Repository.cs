@@ -70,6 +70,8 @@ namespace API_Tester
         //    MessageBox.Show("start");
         //}
 
+        ////////////
+        /// 폴더 추가
         private void btnAdd_Click(object sender, EventArgs e)
         {
             var sNode = treeView1.SelectedNode;
@@ -104,8 +106,9 @@ namespace API_Tester
         }
 
 
-
-        private void btnMinus_Click(object sender, EventArgs e)  //삭제 고치기 위처럼 path 고치면됨
+        ///////////
+        // 폴더 삭제
+        private void btnMinus_Click(object sender, EventArgs e)  
         {
             var sNode = treeView1.SelectedNode;
 
