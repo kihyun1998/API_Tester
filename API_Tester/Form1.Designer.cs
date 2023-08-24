@@ -273,11 +273,11 @@ namespace API_Tester
             // 
             // tBoxRst
             // 
-            this.tBoxRst.Enabled = false;
             this.tBoxRst.Location = new System.Drawing.Point(42, 416);
             this.tBoxRst.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tBoxRst.Multiline = true;
             this.tBoxRst.Name = "tBoxRst";
+            this.tBoxRst.ReadOnly = true;
             this.tBoxRst.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tBoxRst.Size = new System.Drawing.Size(1093, 239);
             this.tBoxRst.TabIndex = 21;

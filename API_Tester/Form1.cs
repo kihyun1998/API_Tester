@@ -11,6 +11,8 @@ using System.Net;
 using System.IO;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.Xml;
+using System.Reflection;
 
 namespace API_Tester
 {
@@ -89,6 +91,8 @@ namespace API_Tester
             _rt.Show();
         }
 
+        ///////
+        /// 좌츨 repository 창 닫기
         private void btnRight_Click(object sender, EventArgs e)
         {
             
@@ -98,14 +102,15 @@ namespace API_Tester
 
             if (_selectedNode != null)
             {
-                string savePath = getSavePath();
+                string savePath = GetSavePath();
                 FileInfo saved = new FileInfo(savePath);
                 if (saved.Exists)
                 {
-                    string[] saveData = System.IO.File.ReadAllLines(savePath);
+                    string [] saveData = Load_XML(savePath);
+
                     if (IsChanged(saveData))
                     {
-                        questionSave(savePath);
+                        QuestionToSave(savePath);
                     }
                 }
                 else
@@ -113,7 +118,7 @@ namespace API_Tester
                     string[] data = new string[] { _methods[0], "", "", "" };
                     if (IsChanged(data))
                     {
-                        questionSave(savePath);
+                        QuestionToSave(savePath);
                     }
                 }
             }
@@ -127,24 +132,24 @@ namespace API_Tester
             tBoxURL.Text = string.Empty;
             tBoxCookie.Text = string.Empty;
             tBoxMsg.Text = string.Empty;
+            tBoxRst.Text = string.Empty;
             isUse();
         }
 
         /////////////////
         /// 잡다한 함수
-        private void questionSave(string savePath)
+        private void QuestionToSave(string savePath)
         {
             if (MessageBox.Show("변경내용이 있습니다.\n저장 하시겠습니까?", "Save", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                List<string> writeList = new List<string>();
-                writeList.Add(cBoxMethod.Text);
-                writeList.Add(tBoxURL.Text);
-                writeList.Add(tBoxCookie.Text);
-                writeList.Add(tBoxMsg.Text);
+                RequestXML requestXML = new RequestXML();
 
-                string[] writeArr = writeList.ToArray();
+                requestXML._METHOD = cBoxMethod.Text;
+                requestXML._URL = tBoxURL.Text;
+                requestXML._COOKIE = tBoxCookie.Text;
+                requestXML._MSG = tBoxMsg.Text;
 
-                System.IO.File.WriteAllLines(savePath, writeArr);
+                Save_XML(requestXML, savePath);
                 MessageBox.Show("저장되었습니다.");
             }
             else
@@ -153,15 +158,140 @@ namespace API_Tester
                 tBoxURL.Text = string.Empty;
                 tBoxCookie.Text = string.Empty;
                 tBoxMsg.Text = string.Empty;
+                tBoxRst.Text = string.Empty;
             }
         }
 
+        ////////////////
+        /// 파일 저장
+        private void btnSave_Click(object sender, EventArgs e)
+        {
 
-        private string getSavePath()
+            if (_rt != null)
+            {
+                var sNode = _rt.treeView1.SelectedNode;
+                string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, "save_file.xml");
+
+                RequestXML requestXML = new RequestXML();
+
+                requestXML._METHOD = cBoxMethod.Text;
+                requestXML._URL = tBoxURL.Text;
+                requestXML._COOKIE = tBoxCookie.Text;
+                requestXML._MSG = tBoxMsg.Text;
+
+                Save_XML(requestXML, savePath);
+
+                MessageBox.Show("저장이 완료됐습니다!");
+                btnSave.Visible = false;
+            }
+            else
+            {
+                MessageBox.Show("파일 저장 버그!");
+            }
+        }
+
+        private void Save_XML(RequestXML requestXML, string savePath)
+        {
+            XmlDocument xdoc = new XmlDocument();
+
+            XmlNode root = xdoc.CreateElement("Request");
+            xdoc.AppendChild(root);
+
+            XmlNode xData = xdoc.CreateElement("Request-Data");
+
+            XmlNode xMethod = xdoc.CreateElement("Method");
+            xMethod.InnerText = requestXML._METHOD;
+            xData.AppendChild(xMethod);
+
+            XmlNode xUrl = xdoc.CreateElement("URL");
+            xUrl.InnerText = requestXML._URL;
+            xData.AppendChild(xUrl);
+
+            XmlNode xCookie = xdoc.CreateElement("Cookie");
+            xCookie.InnerText = requestXML._COOKIE;
+            xData.AppendChild(xCookie);
+
+            XmlNode xMsg = xdoc.CreateElement("Msg");
+            xMsg.InnerText = requestXML._MSG;
+            xData.AppendChild(xMsg);
+
+            root.AppendChild(xData);
+
+            xdoc.Save(savePath);
+        }
+
+        public string[] Load_XML(string loadPath)
+        {
+            List<string> returnList = new List<string> { };
+
+            XmlDocument xdoc = new XmlDocument();
+
+            xdoc.Load(loadPath);
+
+            XmlNodeList nodes = xdoc.SelectNodes("/Request/Request-Data");
+
+            foreach (XmlNode data in nodes)
+            {
+                string sMethod = data.SelectSingleNode("Method").InnerText;
+                string sURL = data.SelectSingleNode("URL").InnerText;
+                string sCookie = data.SelectSingleNode("Cookie").InnerText;
+                string sMsg = data.SelectSingleNode("Msg").InnerText;
+
+                returnList.Add(sMethod);
+                returnList.Add(sURL);
+                returnList.Add(sCookie);
+                returnList.Add(sMsg);
+
+                return returnList.ToArray();
+            }
+            return returnList.ToArray();
+        }
+
+
+        //////////////////
+        ///텍스트 변경 시 저장버튼 visible
+        public void TextBox_TextChanged(Object sender, EventArgs e)
+        {
+
+
+            if (_rt != null)
+            {
+                string savePath = GetSavePath();
+                FileInfo save = new FileInfo(savePath);
+                if (save.Exists)
+                {
+                    string[] saveData = Load_XML(savePath);
+                    if (IsChanged(saveData))
+                    {
+                        btnSave.Visible = true;
+                    }
+                    else
+                    {
+                        btnSave.Visible = false;
+                    }
+                }
+                else
+                {
+                    string[] data = new string[] { _methods[0], "", "", "" };
+                    if (IsChanged(data))
+                    {
+                        btnSave.Visible = true;
+                    }
+                    else
+                    {
+                        btnSave.Visible = false;
+                    }
+                }
+            }
+
+        }
+
+
+        private string GetSavePath()
         {
             try
             {
-                string savePath = string.Format("..\\{0}\\{1}", _selectedNode.FullPath, "save_file");
+                string savePath = string.Format("..\\{0}\\{1}", _selectedNode.FullPath, "save_file.xml");
                 return savePath;
             }
             catch
@@ -318,71 +448,7 @@ namespace API_Tester
         //////////////////////////////////////
 
 
-        ////////////////
-        /// 파일 저장
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            
-            if (_rt != null)
-            {
-                var sNode = _rt.treeView1.SelectedNode;
-                string selectPath = string.Format("..\\{0}\\{1}", sNode.FullPath, "save_file");
-                
-
-                List<string> writeList = new List<string>();
-                writeList.Add(cBoxMethod.Text);
-                writeList.Add(tBoxURL.Text);
-                writeList.Add(tBoxCookie.Text);
-                writeList.Add(tBoxMsg.Text);
-
-                string[] writeArr = writeList.ToArray();
-
-                System.IO.File.WriteAllLines(selectPath, writeArr);
-                MessageBox.Show("저장이 완료됐습니다!");
-            }
-            else
-            {
-                MessageBox.Show("파일 저장 버그!");
-            }
-        }
-
-
-        //////////////////
-        ///텍스트 변경 시
-        public void TextBox_TextChanged(Object sender, EventArgs e) {
-
-
-            if (_rt != null)
-            {
-                string savePath = getSavePath();
-                FileInfo save = new FileInfo(savePath);
-                if (save.Exists)
-                {
-                    string[] saveData = System.IO.File.ReadAllLines(savePath);
-                    if (IsChanged(saveData))
-                    {
-                        btnSave.Visible = true;
-                    }
-                    else
-                    {
-                        btnSave.Visible = false;
-                    }
-                }
-                else
-                {
-                    string[] data = new string[] { _methods[0], "", "", "" };
-                    if (IsChanged(data))
-                    {
-                        btnSave.Visible = true;
-                    }
-                    else
-                    {
-                        btnSave.Visible = false;
-                    }
-                }
-            }
-
-        }
+        
 
 
 

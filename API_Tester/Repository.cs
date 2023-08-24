@@ -180,11 +180,11 @@ namespace API_Tester
             {
                 if (sNode.Level > 0)
                 {
-                    string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, "save_file");
+                    string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, "save_file.xml");
                     FileInfo saved = new FileInfo(savePath);
                     if (saved.Exists)
                     {
-                        string[] saveData = System.IO.File.ReadAllLines(savePath);
+                        string[] saveData = _f1.Load_XML(savePath);
                         _f1.isUse();
                         _f1.lblTitle.Visible = true;
                         _f1.lblTitle.Text = sNode.Text;
