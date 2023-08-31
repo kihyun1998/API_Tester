@@ -92,7 +92,7 @@ namespace API_Tester
         }
 
         ///////
-        /// 좌츨 repository 창 닫기
+        /// 좌측 repository 창 닫기
         private void btnRight_Click(object sender, EventArgs e)
         {
             
@@ -286,7 +286,7 @@ namespace API_Tester
 
         }
 
-
+        //파일 저장 경로 얻는 함수
         private string GetSavePath()
         {
             try
@@ -301,6 +301,7 @@ namespace API_Tester
             }   
         }
 
+        // 내용 변경 확인 함수
         private bool IsChanged(string[] read)
         {
             if (cBoxMethod.Text == read[0] && tBoxURL.Text == read[1] && tBoxCookie.Text == read[2] && tBoxMsg.Text == read[3])
@@ -313,6 +314,7 @@ namespace API_Tester
             }
         }
 
+        //사용하지 않을 때 색 변경
         public void notUse()
         {
             tBoxURL.BackColor = Color.Gray;
@@ -324,6 +326,7 @@ namespace API_Tester
             tBoxMsg.Enabled = false;
         }
 
+        //사용할 때 색 변경
         public void isUse()
         {
             tBoxURL.BackColor = Color.WhiteSmoke;
@@ -449,7 +452,7 @@ namespace API_Tester
         //////////////////////////////////////
 
 
-        
+
 
 
 
@@ -457,24 +460,30 @@ namespace API_Tester
 
         ///////////////////////
         ///패널 이동 + 상단바
-        bool mouseDown;
-        int sizeX;
-        int sizeY;
+        private Boolean mouseDown = false;
+        private Point startPos;
+        private Point endPos;
 
 
 
         private void titleBar_MouseDown(object sender, MouseEventArgs e)
         {
             mouseDown = true;
-            sizeX = e.X + 20;
-            sizeY = e.Y;
+            startPos = ((Control)sender).PointToScreen(new Point(e.X, e.Y));
         }
 
         private void titleBar_MouseMove(object sender, MouseEventArgs e)
         {
-            if (mouseDown == true)
+            if (mouseDown)
             {
-                this.SetDesktopLocation(MousePosition.X - sizeX, MousePosition.Y - sizeY);
+                endPos = ((Control)sender).PointToScreen(new Point(e.X, e.Y));
+                Point pLoc = new Point( ( this.Location.X + (endPos.X - startPos.X) ), ( this.Location.Y + (endPos.Y - startPos.Y) ) );
+                startPos = endPos;
+                this.Location = pLoc;
+            }
+            else
+            {
+                return;
             }
         }
 
