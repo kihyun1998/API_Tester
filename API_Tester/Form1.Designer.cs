@@ -32,7 +32,6 @@ namespace API_Tester
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.cBoxMethod = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.URL = new System.Windows.Forms.Label();
             this.btnRequest = new System.Windows.Forms.Button();
             this.lblMsg = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -47,11 +46,12 @@ namespace API_Tester
             this.btnX = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tBoxRst = new System.Windows.Forms.TextBox();
+            this.btnSave = new System.Windows.Forms.PictureBox();
+            this.lblTitle = new System.Windows.Forms.Label();
             this.tBoxMsg = new API_Tester.Custom.CustomTextBox();
             this.tBoxCookie = new API_Tester.Custom.CustomTextBox();
             this.tBoxURL = new API_Tester.Custom.CustomTextBox();
-            this.btnSave = new System.Windows.Forms.PictureBox();
-            this.lblTitle = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.titleBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnRight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnLeft)).BeginInit();
@@ -63,7 +63,9 @@ namespace API_Tester
             this.cBoxMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cBoxMethod.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.cBoxMethod.FormattingEnabled = true;
-            this.cBoxMethod.Location = new System.Drawing.Point(128, 196);
+            this.cBoxMethod.IntegralHeight = false;
+            this.cBoxMethod.ItemHeight = 15;
+            this.cBoxMethod.Location = new System.Drawing.Point(128, 197);
             this.cBoxMethod.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cBoxMethod.Name = "cBoxMethod";
             this.cBoxMethod.Size = new System.Drawing.Size(121, 23);
@@ -76,22 +78,11 @@ namespace API_Tester
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("궁서체", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label2.Location = new System.Drawing.Point(43, 198);
+            this.label2.Location = new System.Drawing.Point(39, 198);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(69, 19);
+            this.label2.Size = new System.Drawing.Size(111, 24);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Method";
-            // 
-            // URL
-            // 
-            this.URL.AutoSize = true;
-            this.URL.Font = new System.Drawing.Font("궁서체", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.URL.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.URL.Location = new System.Drawing.Point(269, 196);
-            this.URL.Name = "URL";
-            this.URL.Size = new System.Drawing.Size(39, 19);
-            this.URL.TabIndex = 3;
-            this.URL.Text = "URL";
+            this.label2.Text = "Method :";
             // 
             // btnRequest
             // 
@@ -111,11 +102,11 @@ namespace API_Tester
             this.lblMsg.AutoSize = true;
             this.lblMsg.Font = new System.Drawing.Font("궁서체", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lblMsg.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblMsg.Location = new System.Drawing.Point(53, 314);
+            this.lblMsg.Location = new System.Drawing.Point(58, 314);
             this.lblMsg.Name = "lblMsg";
-            this.lblMsg.Size = new System.Drawing.Size(59, 19);
+            this.lblMsg.Size = new System.Drawing.Size(69, 19);
             this.lblMsg.TabIndex = 8;
-            this.lblMsg.Text = "msg =";
+            this.lblMsg.Text = "Body :";
             // 
             // panel2
             // 
@@ -131,11 +122,11 @@ namespace API_Tester
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("궁서체", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label3.Location = new System.Drawing.Point(25, 258);
+            this.label3.Location = new System.Drawing.Point(40, 258);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(89, 19);
             this.label3.TabIndex = 12;
-            this.label3.Text = "Cookie =";
+            this.label3.Text = "Cookie :";
             // 
             // titleBar
             // 
@@ -282,6 +273,32 @@ namespace API_Tester
             this.tBoxRst.Size = new System.Drawing.Size(1093, 239);
             this.tBoxRst.TabIndex = 21;
             // 
+            // btnSave
+            // 
+            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSave.Image = ((System.Drawing.Image)(resources.GetObject("btnSave.Image")));
+            this.btnSave.Location = new System.Drawing.Point(1103, 62);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(33, 33);
+            this.btnSave.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnSave.TabIndex = 24;
+            this.btnSave.TabStop = false;
+            this.btnSave.Visible = false;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.lblTitle.Font = new System.Drawing.Font("궁서체", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lblTitle.Location = new System.Drawing.Point(37, 80);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(93, 30);
+            this.lblTitle.TabIndex = 25;
+            this.lblTitle.Text = "Title";
+            this.lblTitle.Visible = false;
+            // 
             // tBoxMsg
             // 
             this.tBoxMsg.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -319,42 +336,27 @@ namespace API_Tester
             this.tBoxURL.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tBoxURL.BorderColor = System.Drawing.Color.Gray;
             this.tBoxURL.BorderSize = 2;
-            this.tBoxURL.Location = new System.Drawing.Point(326, 198);
+            this.tBoxURL.Location = new System.Drawing.Point(338, 197);
             this.tBoxURL.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tBoxURL.Multiline = false;
             this.tBoxURL.Name = "tBoxURL";
             this.tBoxURL.Padding = new System.Windows.Forms.Padding(7, 8, 7, 8);
             this.tBoxURL.PasswordChar = false;
-            this.tBoxURL.Size = new System.Drawing.Size(810, 34);
+            this.tBoxURL.Size = new System.Drawing.Size(797, 34);
             this.tBoxURL.TabIndex = 16;
             this.tBoxURL.UnderlinedStyle = true;
             this.tBoxURL.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
-            // btnSave
+            // label1
             // 
-            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Image = ((System.Drawing.Image)(resources.GetObject("btnSave.Image")));
-            this.btnSave.Location = new System.Drawing.Point(1103, 62);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(33, 33);
-            this.btnSave.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnSave.TabIndex = 24;
-            this.btnSave.TabStop = false;
-            this.btnSave.Visible = false;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // lblTitle
-            // 
-            this.lblTitle.AutoSize = true;
-            this.lblTitle.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.lblTitle.Font = new System.Drawing.Font("궁서체", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lblTitle.Location = new System.Drawing.Point(37, 80);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(93, 30);
-            this.lblTitle.TabIndex = 25;
-            this.lblTitle.Text = "Title";
-            this.lblTitle.Visible = false;
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("궁서체", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label1.Location = new System.Drawing.Point(283, 198);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(59, 19);
+            this.label1.TabIndex = 26;
+            this.label1.Text = "URL :";
             // 
             // Form1
             // 
@@ -362,6 +364,7 @@ namespace API_Tester
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(1184, 725);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.tBoxRst);
@@ -374,7 +377,6 @@ namespace API_Tester
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.lblMsg);
             this.Controls.Add(this.btnRequest);
-            this.Controls.Add(this.URL);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cBoxMethod);
             this.ForeColor = System.Drawing.SystemColors.ControlLightLight;
@@ -397,7 +399,6 @@ namespace API_Tester
 
         #endregion
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label URL;
         private System.Windows.Forms.Button btnRequest;
         private System.Windows.Forms.Label lblMsg;
         private System.Windows.Forms.Panel panel2;
@@ -418,6 +419,7 @@ namespace API_Tester
         public Custom.CustomTextBox tBoxURL;
         public System.Windows.Forms.PictureBox btnSave;
         public System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label label1;
     }
 }
 
