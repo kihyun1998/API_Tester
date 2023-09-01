@@ -48,27 +48,15 @@ namespace API_Tester
             {
                 directoryNode.Nodes.Add(CreateDirectoryNode(directory));
             }
-            // 파일도 tree view에 등록
-            //foreach (var file in directoryInfo.GetFiles())
-            //{
-            //    directoryNode.Nodes.Add(new TreeNode(file.Name));
-            //}
+            //파일도 tree view에 등록
+            foreach (var file in directoryInfo.GetFiles())
+            {
+                directoryNode.Nodes.Add(new TreeNode(file.Name));
+            }
 
             return directoryNode;
         }
 
-
-
-        //public void LoadTree()
-        //{
-        //    _thread = new Thread(new ThreadStart(Run));
-        //    _thread.Start();
-        //}
-
-        //private void Run()
-        //{
-        //    MessageBox.Show("start");
-        //}
 
         ////////////
         /// 폴더 추가
