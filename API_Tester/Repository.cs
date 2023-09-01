@@ -293,6 +293,16 @@ namespace API_Tester
             }
         }
 
-
+        private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            
+            if (e.Button == MouseButtons.Right)
+            {
+                // 우클릭 시 행동 작성해야함
+                // 좌표 가져오는게 안됨
+                // PointToClient를 사용해야할 것 같은데 감이 안잡힘
+            }
+            
+        }
     }
 }

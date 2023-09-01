@@ -29,20 +29,25 @@ namespace API_Tester
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Repository));
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.titleBar = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnDelFile = new System.Windows.Forms.PictureBox();
+            this.btnAddFile = new System.Windows.Forms.PictureBox();
             this.tBoxName = new System.Windows.Forms.TextBox();
             this.btnDelete = new System.Windows.Forms.PictureBox();
             this.btnAdd = new System.Windows.Forms.PictureBox();
-            this.btnAddFile = new System.Windows.Forms.PictureBox();
-            this.btnDelFile = new System.Windows.Forms.PictureBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.btnDelFile)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnAddFile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnDelete)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnAdd)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnAddFile)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnDelFile)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // treeView1
@@ -55,6 +60,7 @@ namespace API_Tester
             this.treeView1.TabIndex = 1;
             this.treeView1.TabStop = false;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
             this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
             // 
             // titleBar
@@ -83,6 +89,34 @@ namespace API_Tester
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(356, 44);
             this.panel1.TabIndex = 16;
+            // 
+            // btnDelFile
+            // 
+            this.btnDelFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDelFile.Image = ((System.Drawing.Image)(resources.GetObject("btnDelFile.Image")));
+            this.btnDelFile.Location = new System.Drawing.Point(369, 16);
+            this.btnDelFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnDelFile.Name = "btnDelFile";
+            this.btnDelFile.Size = new System.Drawing.Size(33, 33);
+            this.btnDelFile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnDelFile.TabIndex = 4;
+            this.btnDelFile.TabStop = false;
+            this.btnDelFile.Visible = false;
+            this.btnDelFile.Click += new System.EventHandler(this.btnDelFile_Click);
+            // 
+            // btnAddFile
+            // 
+            this.btnAddFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAddFile.Image = ((System.Drawing.Image)(resources.GetObject("btnAddFile.Image")));
+            this.btnAddFile.Location = new System.Drawing.Point(296, 5);
+            this.btnAddFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnAddFile.Name = "btnAddFile";
+            this.btnAddFile.Size = new System.Drawing.Size(33, 33);
+            this.btnAddFile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnAddFile.TabIndex = 3;
+            this.btnAddFile.TabStop = false;
+            this.btnAddFile.Visible = false;
+            this.btnAddFile.Click += new System.EventHandler(this.btnAddFile_Click);
             // 
             // tBoxName
             // 
@@ -126,33 +160,26 @@ namespace API_Tester
             this.btnAdd.Visible = false;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // btnAddFile
+            // contextMenuStrip1
             // 
-            this.btnAddFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddFile.Image = ((System.Drawing.Image)(resources.GetObject("btnAddFile.Image")));
-            this.btnAddFile.Location = new System.Drawing.Point(296, 5);
-            this.btnAddFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnAddFile.Name = "btnAddFile";
-            this.btnAddFile.Size = new System.Drawing.Size(33, 33);
-            this.btnAddFile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnAddFile.TabIndex = 3;
-            this.btnAddFile.TabStop = false;
-            this.btnAddFile.Visible = false;
-            this.btnAddFile.Click += new System.EventHandler(this.btnAddFile_Click);
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.toolStripMenuItem2});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(87, 52);
             // 
-            // btnDelFile
+            // toolStripMenuItem1
             // 
-            this.btnDelFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDelFile.Image = ((System.Drawing.Image)(resources.GetObject("btnDelFile.Image")));
-            this.btnDelFile.Location = new System.Drawing.Point(297, 5);
-            this.btnDelFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnDelFile.Name = "btnDelFile";
-            this.btnDelFile.Size = new System.Drawing.Size(33, 33);
-            this.btnDelFile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnDelFile.TabIndex = 4;
-            this.btnDelFile.TabStop = false;
-            this.btnDelFile.Visible = false;
-            this.btnDelFile.Click += new System.EventHandler(this.btnDelFile_Click);
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(86, 24);
+            this.toolStripMenuItem1.Text = "1";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(86, 24);
+            this.toolStripMenuItem2.Text = "2";
             // 
             // Repository
             // 
@@ -169,10 +196,11 @@ namespace API_Tester
             this.Text = "Repository";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.btnDelFile)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnAddFile)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnDelete)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnAdd)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnAddFile)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnDelFile)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -186,5 +214,8 @@ namespace API_Tester
         public System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.PictureBox btnDelFile;
         private System.Windows.Forms.PictureBox btnAddFile;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
     }
 }
