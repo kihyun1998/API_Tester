@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace API_Tester
 {
-    class RequestXML
+    public class RequestXML
     {
         public string _METHOD;
         public string _URL;

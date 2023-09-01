@@ -76,7 +76,6 @@ namespace API_Tester
 
         ///////
         ///트리 뷰 조작
-
         private void btnLeft_Click(object sender, EventArgs e)
         {
             btnRight.Visible = true;
@@ -190,7 +189,7 @@ namespace API_Tester
             }
         }
 
-        private void Save_XML(RequestXML requestXML, string savePath)
+        public void Save_XML(RequestXML requestXML, string savePath)
         {
             XmlDocument xdoc = new XmlDocument();
 

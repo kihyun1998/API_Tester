@@ -33,12 +33,16 @@ namespace API_Tester
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.titleBar = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.tBoxFolderName = new System.Windows.Forms.TextBox();
+            this.tBoxName = new System.Windows.Forms.TextBox();
             this.btnDelete = new System.Windows.Forms.PictureBox();
             this.btnAdd = new System.Windows.Forms.PictureBox();
+            this.btnAddFile = new System.Windows.Forms.PictureBox();
+            this.btnDelFile = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnDelete)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnAdd)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnAddFile)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnDelFile)).BeginInit();
             this.SuspendLayout();
             // 
             // treeView1
@@ -69,7 +73,9 @@ namespace API_Tester
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.panel1.Controls.Add(this.tBoxFolderName);
+            this.panel1.Controls.Add(this.btnDelFile);
+            this.panel1.Controls.Add(this.btnAddFile);
+            this.panel1.Controls.Add(this.tBoxName);
             this.panel1.Controls.Add(this.btnDelete);
             this.panel1.Controls.Add(this.btnAdd);
             this.panel1.Location = new System.Drawing.Point(-1, 657);
@@ -78,19 +84,19 @@ namespace API_Tester
             this.panel1.Size = new System.Drawing.Size(356, 44);
             this.panel1.TabIndex = 16;
             // 
-            // tBoxFolderName
+            // tBoxName
             // 
-            this.tBoxFolderName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.tBoxName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tBoxFolderName.Enabled = false;
-            this.tBoxFolderName.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.tBoxFolderName.Location = new System.Drawing.Point(13, 4);
-            this.tBoxFolderName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tBoxFolderName.Name = "tBoxFolderName";
-            this.tBoxFolderName.Size = new System.Drawing.Size(225, 30);
-            this.tBoxFolderName.TabIndex = 2;
-            this.tBoxFolderName.TabStop = false;
-            this.tBoxFolderName.Visible = false;
+            this.tBoxName.Enabled = false;
+            this.tBoxName.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.tBoxName.Location = new System.Drawing.Point(13, 4);
+            this.tBoxName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tBoxName.Name = "tBoxName";
+            this.tBoxName.Size = new System.Drawing.Size(225, 30);
+            this.tBoxName.TabIndex = 2;
+            this.tBoxName.TabStop = false;
+            this.tBoxName.Visible = false;
             // 
             // btnDelete
             // 
@@ -104,7 +110,7 @@ namespace API_Tester
             this.btnDelete.TabIndex = 1;
             this.btnDelete.TabStop = false;
             this.btnDelete.Visible = false;
-            this.btnDelete.Click += new System.EventHandler(this.btnMinus_Click);
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // btnAdd
             // 
@@ -119,6 +125,34 @@ namespace API_Tester
             this.btnAdd.TabStop = false;
             this.btnAdd.Visible = false;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
+            // btnAddFile
+            // 
+            this.btnAddFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAddFile.Image = ((System.Drawing.Image)(resources.GetObject("btnAddFile.Image")));
+            this.btnAddFile.Location = new System.Drawing.Point(296, 5);
+            this.btnAddFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnAddFile.Name = "btnAddFile";
+            this.btnAddFile.Size = new System.Drawing.Size(33, 33);
+            this.btnAddFile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnAddFile.TabIndex = 3;
+            this.btnAddFile.TabStop = false;
+            this.btnAddFile.Visible = false;
+            this.btnAddFile.Click += new System.EventHandler(this.btnAddFile_Click);
+            // 
+            // btnDelFile
+            // 
+            this.btnDelFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDelFile.Image = ((System.Drawing.Image)(resources.GetObject("btnDelFile.Image")));
+            this.btnDelFile.Location = new System.Drawing.Point(297, 5);
+            this.btnDelFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnDelFile.Name = "btnDelFile";
+            this.btnDelFile.Size = new System.Drawing.Size(33, 33);
+            this.btnDelFile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnDelFile.TabIndex = 4;
+            this.btnDelFile.TabStop = false;
+            this.btnDelFile.Visible = false;
+            this.btnDelFile.Click += new System.EventHandler(this.btnDelFile_Click);
             // 
             // Repository
             // 
@@ -137,6 +171,8 @@ namespace API_Tester
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnDelete)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnAdd)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnAddFile)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnDelFile)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -146,7 +182,9 @@ namespace API_Tester
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox btnDelete;
         private System.Windows.Forms.PictureBox btnAdd;
-        private System.Windows.Forms.TextBox tBoxFolderName;
+        private System.Windows.Forms.TextBox tBoxName;
         public System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.PictureBox btnDelFile;
+        private System.Windows.Forms.PictureBox btnAddFile;
     }
 }
