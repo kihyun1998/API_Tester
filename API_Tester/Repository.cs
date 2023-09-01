@@ -189,11 +189,13 @@ namespace API_Tester
             private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             var sNode = treeView1.SelectedNode;
-            int nLevel = sNode.Level;
+            _f1._selectedNode = sNode;
 
+            int nLevel = sNode.Level;
+           
             if (sNode != null)
             {
-                _f1._selectedNode = sNode;
+
                 switch (nLevel)
                 {
                     case 0:
@@ -236,49 +238,57 @@ namespace API_Tester
 
         /////////////
         ///더블 클릭 시 이벤트 (값 불러오기)
+        /// 추후에 notUse()로 막혀있는 화면은 다른 화면으로 대체할 예정
         private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
 
             var sNode = treeView1.SelectedNode;
-            _f1.btnSave.Visible = false;
             _f1._selectedNode = sNode;
+
+            int nLevel = sNode.Level;
+
+            // 일단 저장 버튼 숨기기
+            _f1.btnSave.Visible = false;
+            
             if (sNode != null)
             {
-                if (sNode.Level > 0)
+                switch (nLevel)
                 {
-                    string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, "save_file.xml");
-                    FileInfo saved = new FileInfo(savePath);
-                    if (saved.Exists)
-                    {
-                        string[] saveData = _f1.Load_XML(savePath);
-                        _f1.isUse();
-                        _f1.lblTitle.Visible = true;
-                        _f1.lblTitle.Text = sNode.Text;
-                        _f1.cBoxMethod.Text = saveData[0];
-                        _f1.tBoxURL.Text = saveData[1];
-                        _f1.tBoxCookie.Text = saveData[2];
-                        _f1.tBoxMsg.Text = saveData[3];
-                    }
-                    else
-                    {
-                        _f1.isUse();
-                        _f1.lblTitle.Visible = true;
-                        _f1.lblTitle.Text = sNode.Text;
+                    case 0:
+                        _f1.lblTitle.Visible = false;
                         _f1.cBoxMethod.Text = _f1._methods[0];
                         _f1.tBoxURL.Text = string.Empty;
                         _f1.tBoxCookie.Text = string.Empty;
                         _f1.tBoxMsg.Text = string.Empty;
-                    }
-                }
-                else
-                {
-                    _f1.lblTitle.Visible = false;
-                    _f1.cBoxMethod.Text = _f1._methods[0];
-                    _f1.tBoxURL.Text = string.Empty;
-                    _f1.tBoxCookie.Text = string.Empty;
-                    _f1.tBoxMsg.Text = string.Empty;
-
-                    _f1.notUse();
+                        _f1.tBoxRst.Text = string.Empty;
+                        _f1.notUse();
+                        break;
+                    case 1:
+                        _f1.lblTitle.Visible = false;
+                        _f1.cBoxMethod.Text = _f1._methods[0];
+                        _f1.tBoxURL.Text = string.Empty;
+                        _f1.tBoxCookie.Text = string.Empty;
+                        _f1.tBoxMsg.Text = string.Empty;
+                        _f1.tBoxRst.Text = string.Empty;
+                        _f1.notUse();
+                        break;
+                    case 2:
+                        string savePath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".xml"));
+                        FileInfo saveFile = new FileInfo(savePath);
+                        if (saveFile.Exists)
+                        {
+                            string[] saveData = _f1.Load_XML(savePath);
+                            _f1.isUse();
+                            _f1.lblTitle.Visible = true;
+                            _f1.lblTitle.Text = sNode.Text;
+                            _f1.cBoxMethod.Text = saveData[0];
+                            _f1.tBoxURL.Text = saveData[1];
+                            _f1.tBoxCookie.Text = saveData[2];
+                            _f1.tBoxMsg.Text = saveData[3];
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
         }

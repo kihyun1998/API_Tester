@@ -80,7 +80,7 @@ namespace API_Tester
             this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label2.Location = new System.Drawing.Point(39, 198);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(111, 24);
+            this.label2.Size = new System.Drawing.Size(89, 19);
             this.label2.TabIndex = 2;
             this.label2.Text = "Method :";
             // 
@@ -409,7 +409,6 @@ namespace API_Tester
         private System.Windows.Forms.Button btnMax;
         private System.Windows.Forms.Button btnNom;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TextBox tBoxRst;
         private System.Windows.Forms.PictureBox btnLeft;
         private System.Windows.Forms.PictureBox btnRight;
         private System.Windows.Forms.Label label4;
@@ -420,6 +419,7 @@ namespace API_Tester
         public System.Windows.Forms.PictureBox btnSave;
         public System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.TextBox tBoxRst;
     }
 }
 
