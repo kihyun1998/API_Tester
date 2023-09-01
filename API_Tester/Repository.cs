@@ -161,17 +161,32 @@ namespace API_Tester
         /// 파일 삭제
         private void btnDelFile_Click(object sender, EventArgs e)
         {
+            var sNode = treeView1.SelectedNode;
 
+            if (sNode != null && sNode.Parent != null)
+            {
+                if (MessageBox.Show("폴더를 삭제하시겠습니까?", "삭제", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    string deletePath = string.Format("..\\{0}", string.Format(sNode.FullPath+".xml"));
+
+                    File.Delete(deletePath);
+                    treeView1.Nodes.Remove(sNode);
+
+                    MessageBox.Show(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text));
+                    tBoxName.Text = string.Empty;
+                }
+
+            }
         }
 
 
 
 
 
-        //////////
-        ////선택한 노드가 있나 없나 체크
-        ///그리고 버튼 보여줄지 말지
-        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+            //////////
+            ////선택한 노드가 있나 없나 체크
+            ///그리고 버튼 보여줄지 말지
+            private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             var sNode = treeView1.SelectedNode;
             int nLevel = sNode.Level;
