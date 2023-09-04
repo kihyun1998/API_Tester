@@ -298,11 +298,19 @@ namespace API_Tester
             
             if (e.Button == MouseButtons.Right)
             {
-                // 우클릭 시 행동 작성해야함
-                // 좌표 가져오는게 안됨
-                // PointToClient를 사용해야할 것 같은데 감이 안잡힘
+                // 우클릭 해도 노드 선택되도록
+                treeView1.SelectedNode = e.Node;
+                var sNode = treeView1.SelectedNode;
+
+                Point ClickPoint = new Point(e.X, e.Y);
+                TreeNode ClickNode = treeView1.GetNodeAt(ClickPoint);
+                if (ClickNode == null) return;
+
+                Point ScreenPoint = treeView1.PointToScreen(ClickPoint);
+                Point FormPoint = this.PointToClient(ScreenPoint);
+
+                cMenu.Show(this, FormPoint);
             }
-            
         }
     }
 }

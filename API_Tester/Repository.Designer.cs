@@ -39,7 +39,7 @@ namespace API_Tester
             this.tBoxName = new System.Windows.Forms.TextBox();
             this.btnDelete = new System.Windows.Forms.PictureBox();
             this.btnAdd = new System.Windows.Forms.PictureBox();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
@@ -47,7 +47,7 @@ namespace API_Tester
             ((System.ComponentModel.ISupportInitialize)(this.btnAddFile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnDelete)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnAdd)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
+            this.cMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // treeView1
@@ -160,25 +160,25 @@ namespace API_Tester
             this.btnAdd.Visible = false;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // contextMenuStrip1
+            // cMenu
             // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.cMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
             this.toolStripMenuItem2});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(87, 52);
+            this.cMenu.Name = "contextMenuStrip1";
+            this.cMenu.Size = new System.Drawing.Size(211, 80);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(86, 24);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(210, 24);
             this.toolStripMenuItem1.Text = "1";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(86, 24);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(210, 24);
             this.toolStripMenuItem2.Text = "2";
             // 
             // Repository
@@ -200,7 +200,7 @@ namespace API_Tester
             ((System.ComponentModel.ISupportInitialize)(this.btnAddFile)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnDelete)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnAdd)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.cMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -214,7 +214,7 @@ namespace API_Tester
         public System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.PictureBox btnDelFile;
         private System.Windows.Forms.PictureBox btnAddFile;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip cMenu;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
     }
