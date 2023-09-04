@@ -293,14 +293,19 @@ namespace API_Tester
             }
         }
 
+
+        //////////////
+        /// 우클릭 시 Context Menu에 대한 정의
         private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            
             if (e.Button == MouseButtons.Right)
             {
                 // 우클릭 해도 노드 선택되도록
                 treeView1.SelectedNode = e.Node;
                 var sNode = treeView1.SelectedNode;
+                _f1._selectedNode = sNode;
+
+                int nLevel = sNode.Level;
 
                 Point ClickPoint = new Point(e.X, e.Y);
                 TreeNode ClickNode = treeView1.GetNodeAt(ClickPoint);
@@ -308,6 +313,45 @@ namespace API_Tester
 
                 Point ScreenPoint = treeView1.PointToScreen(ClickPoint);
                 Point FormPoint = this.PointToClient(ScreenPoint);
+
+                ContextMenuStrip cMenu = new ContextMenuStrip();
+
+                if (sNode != null)
+                {
+                    // Form 하나 추가해서 입력 받는 칸 만들어야 할 듯
+                    switch (nLevel)
+                    {
+                        case 0:
+                            ToolStripMenuItem itemAddService = new ToolStripMenuItem("Add a Service");
+
+                            itemAddService.Click += btnAdd_Click;
+                            
+                            cMenu.Items.Add(itemAddService);
+                            break;
+                        case 1:
+                            ToolStripMenuItem itemAddRequest = new ToolStripMenuItem("Add a Request");
+                            ToolStripMenuItem itemRemoveFolder = new ToolStripMenuItem("Remove");
+
+                            itemAddRequest.Click += btnAddFile_Click;
+                            itemRemoveFolder.Click += btnDelete_Click;
+
+                            cMenu.Items.Add(itemAddRequest);
+                            cMenu.Items.Add(itemRemoveFolder);
+                            break;
+                        case 2:
+                            ToolStripMenuItem itemRemoveFile = new ToolStripMenuItem("Remove");
+
+                            itemRemoveFile.Click += btnDelFile_Click;
+                    
+                            cMenu.Items.Add(itemRemoveFile);
+                            break;
+                        default:
+                            break;
+
+                            // Form 추가해서 rename 기능 추가하기 로직은 밑에 처럼 or Text 해봐야 알듯
+                            // myTreeView.SelectedNode.Name = "NewNodeName";
+                    }
+                }
 
                 cMenu.Show(this, FormPoint);
             }
