@@ -16,7 +16,6 @@ namespace API_Tester
         string _title = string.Empty;
         public string _name = string.Empty;
         public string _type = string.Empty;
-        public string _action = string.Empty;
 
         public CustomInputForm()
         {
@@ -49,34 +48,11 @@ namespace API_Tester
 
             if(_type == TypeEnum.Type.Folder.ToString())
             {
-                if(_action == TypeEnum.Action.Add.ToString())
-                {
-                    _rt.AddFolder(sender, e);
-                }
-                else if(_action == TypeEnum.Action.Remove.ToString())
-                {
-                    _rt.RemoveFolder(sender, e);
-                }
-                else
-                {
-                    CustomMessageBox.ShowMessage("폴더 에러", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                
+                _rt.AddFolder(sender, e);
             }
             else if (_type == TypeEnum.Type.File.ToString())
             {
-                if (_action == TypeEnum.Action.Add.ToString())
-                {
-                    _rt.AddFile(sender, e);
-                }
-                else if (_action == TypeEnum.Action.Remove.ToString())
-                {
-                    _rt.RemoveFile(sender, e);
-                }
-                else
-                {
-                    CustomMessageBox.ShowMessage("파일 에러", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                _rt.AddFile(sender, e);
             }
             else
             {

@@ -51,7 +51,7 @@ namespace API_Tester
             this.treeView1.Location = new System.Drawing.Point(12, 48);
             this.treeView1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(321, 590);
+            this.treeView1.Size = new System.Drawing.Size(254, 450);
             this.treeView1.TabIndex = 1;
             this.treeView1.TabStop = false;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
@@ -66,7 +66,7 @@ namespace API_Tester
             this.titleBar.Location = new System.Drawing.Point(-1, -1);
             this.titleBar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.titleBar.Name = "titleBar";
-            this.titleBar.Size = new System.Drawing.Size(356, 43);
+            this.titleBar.Size = new System.Drawing.Size(286, 43);
             this.titleBar.TabIndex = 15;
             // 
             // panel1
@@ -74,22 +74,22 @@ namespace API_Tester
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.panel1.Controls.Add(this.btnDelFile);
-            this.panel1.Controls.Add(this.btnAddFile);
             this.panel1.Controls.Add(this.tBoxName);
+            this.panel1.Controls.Add(this.btnAddFile);
+            this.panel1.Controls.Add(this.btnDelFile);
             this.panel1.Controls.Add(this.btnDelete);
             this.panel1.Controls.Add(this.btnAdd);
-            this.panel1.Location = new System.Drawing.Point(-1, 657);
+            this.panel1.Location = new System.Drawing.Point(-1, 514);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(356, 44);
+            this.panel1.Size = new System.Drawing.Size(286, 45);
             this.panel1.TabIndex = 16;
             // 
             // btnDelFile
             // 
             this.btnDelFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDelFile.Image = ((System.Drawing.Image)(resources.GetObject("btnDelFile.Image")));
-            this.btnDelFile.Location = new System.Drawing.Point(369, 16);
+            this.btnDelFile.Location = new System.Drawing.Point(234, 4);
             this.btnDelFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDelFile.Name = "btnDelFile";
             this.btnDelFile.Size = new System.Drawing.Size(33, 33);
@@ -103,7 +103,7 @@ namespace API_Tester
             // 
             this.btnAddFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAddFile.Image = ((System.Drawing.Image)(resources.GetObject("btnAddFile.Image")));
-            this.btnAddFile.Location = new System.Drawing.Point(296, 5);
+            this.btnAddFile.Location = new System.Drawing.Point(234, 5);
             this.btnAddFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnAddFile.Name = "btnAddFile";
             this.btnAddFile.Size = new System.Drawing.Size(33, 33);
@@ -119,10 +119,10 @@ namespace API_Tester
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tBoxName.Enabled = false;
             this.tBoxName.Font = new System.Drawing.Font("나눔고딕", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.tBoxName.Location = new System.Drawing.Point(13, 4);
+            this.tBoxName.Location = new System.Drawing.Point(13, 7);
             this.tBoxName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tBoxName.Name = "tBoxName";
-            this.tBoxName.Size = new System.Drawing.Size(225, 30);
+            this.tBoxName.Size = new System.Drawing.Size(150, 30);
             this.tBoxName.TabIndex = 2;
             this.tBoxName.TabStop = false;
             this.tBoxName.Visible = false;
@@ -131,7 +131,7 @@ namespace API_Tester
             // 
             this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDelete.Image = ((System.Drawing.Image)(resources.GetObject("btnDelete.Image")));
-            this.btnDelete.Location = new System.Drawing.Point(252, 5);
+            this.btnDelete.Location = new System.Drawing.Point(195, 5);
             this.btnDelete.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(33, 33);
@@ -145,7 +145,7 @@ namespace API_Tester
             // 
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnAdd.Image")));
-            this.btnAdd.Location = new System.Drawing.Point(251, 5);
+            this.btnAdd.Location = new System.Drawing.Point(195, 6);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(33, 32);
@@ -160,7 +160,7 @@ namespace API_Tester
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(348, 697);
+            this.ClientSize = new System.Drawing.Size(278, 557);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.titleBar);
             this.Controls.Add(this.treeView1);

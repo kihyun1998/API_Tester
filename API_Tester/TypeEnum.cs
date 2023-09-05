@@ -13,11 +13,5 @@ namespace API_Tester
             Folder,
             File
         }
-
-        public enum Action
-        {
-            Add,
-            Remove
-        }
     }
 }

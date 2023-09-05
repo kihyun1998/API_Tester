@@ -71,7 +71,6 @@ namespace API_Tester
             _customInputForm.StartPosition = FormStartPosition.Manual;
             _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
             _customInputForm._type = TypeEnum.Type.Folder.ToString();
-            _customInputForm._action = TypeEnum.Action.Add.ToString();
             _customInputForm.Show();
         }
 
@@ -113,24 +112,23 @@ namespace API_Tester
         }
 
         //////////
-        // 폴더 삭제 창 띄우기
-        public void btnDelete_Click(object sender, EventArgs e)
-        {
-            _lx = _f1.Location.X;
-            _ly = _f1.Location.Y;
-            _customInputForm = new CustomInputForm(this);
-            _customInputForm.StartPosition = FormStartPosition.Manual;
-            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
-            _customInputForm._type = TypeEnum.Type.Folder.ToString();
-            _customInputForm._action = TypeEnum.Action.Remove.ToString();
-            _customInputForm.Show();
-        }
+        //// 폴더 삭제 창 띄우기
+        //public void btnDelete_Click(object sender, EventArgs e)
+        //{
+        //    _lx = _f1.Location.X;
+        //    _ly = _f1.Location.Y;
+        //    _customInputForm = new CustomInputForm(this);
+        //    _customInputForm.StartPosition = FormStartPosition.Manual;
+        //    _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
+        //    _customInputForm._type = TypeEnum.Type.Folder.ToString();
+        //    _customInputForm._action = TypeEnum.Action.Remove.ToString();
+        //    _customInputForm.Show();
+        //}
 
         ///////////
         // 폴더 삭제 동작 함수
-        public void RemoveFolder(object sender, EventArgs e)
+        public void btnDelete_Click(object sender, EventArgs e)
         {
-            _customInputForm.Close();
             var sNode = treeView1.SelectedNode;
 
             if (sNode != null && sNode.Parent != null)
@@ -160,7 +158,6 @@ namespace API_Tester
             _customInputForm.StartPosition = FormStartPosition.Manual;
             _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
             _customInputForm._type = TypeEnum.Type.File.ToString();
-            _customInputForm._action = TypeEnum.Action.Add.ToString();
             _customInputForm.Show();
         }
 
@@ -212,25 +209,24 @@ namespace API_Tester
 
 
 
-        /////////
-        /// 파일 삭제 창 띄우기
-        private void btnDelFile_Click(object sender, EventArgs e)
-        {
-            _lx = _f1.Location.X;
-            _ly = _f1.Location.Y;
-            _customInputForm = new CustomInputForm(this);
-            _customInputForm.StartPosition = FormStartPosition.Manual;
-            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
-            _customInputForm._type = TypeEnum.Type.File.ToString();
-            _customInputForm._action = TypeEnum.Action.Remove.ToString();
-            _customInputForm.Show();
-        }
+        ///////////
+        ///// 파일 삭제 창 띄우기
+        //private void btnDelFile_Click(object sender, EventArgs e)
+        //{
+        //    _lx = _f1.Location.X;
+        //    _ly = _f1.Location.Y;
+        //    _customInputForm = new CustomInputForm(this);
+        //    _customInputForm.StartPosition = FormStartPosition.Manual;
+        //    _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
+        //    _customInputForm._type = TypeEnum.Type.File.ToString();
+        //    _customInputForm._action = TypeEnum.Action.Remove.ToString();
+        //    _customInputForm.Show();
+        //}
         
         /////////
         /// 파일 삭제 동작 함수
-        public void RemoveFile(object sender, EventArgs e)
+        public void btnDelFile_Click(object sender, EventArgs e)
         {
-            _customInputForm.Close();
             var sNode = treeView1.SelectedNode;
 
             if (sNode != null && sNode.Parent != null)
