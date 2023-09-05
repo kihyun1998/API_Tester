@@ -41,13 +41,13 @@ namespace API_Tester
                         switch (icon)
                         {
                             case System.Windows.Forms.MessageBoxIcon.Information:
-                                customMBox.MessageIcon = API_Tester.Properties.Resources.info_blue;
+                                customYoNBox.MessageIcon = API_Tester.Properties.Resources.info_blue;
                                 break;
                             case System.Windows.Forms.MessageBoxIcon.Question:
-                                customMBox.MessageIcon = API_Tester.Properties.Resources.question_sky;
+                                customYoNBox.MessageIcon = API_Tester.Properties.Resources.question_sky;
                                 break;
                             case System.Windows.Forms.MessageBoxIcon.Warning:
-                                customMBox.MessageIcon = API_Tester.Properties.Resources.error;
+                                customYoNBox.MessageIcon = API_Tester.Properties.Resources.error;
                                 break;
                         }
                         dialogResult = customYoNBox.ShowDialog();

@@ -58,6 +58,11 @@
     <Compile Include="OKMessageBox.Designer.cs">
       <DependentUpon>OKMessageBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="YesOrNoMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,14 +114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="Repository.resx">
       <DependentUpon>Repository.cs</DependentUpon>
     </EmbeddedResource>
@@ -132,12 +132,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="img\info.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="img\question2.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="img\warning.png" />

@@ -56,7 +56,6 @@ namespace API_Tester
             // 
             // pBox
             // 
-            this.pBox.Image = global::API_Tester.Properties.Resources.question_sky;
             this.pBox.Location = new System.Drawing.Point(12, 12);
             this.pBox.Name = "pBox";
             this.pBox.Size = new System.Drawing.Size(151, 144);
