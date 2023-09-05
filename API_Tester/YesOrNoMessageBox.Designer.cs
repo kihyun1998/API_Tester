@@ -59,7 +59,7 @@ namespace API_Tester
             // 
             // pBox
             // 
-            this.pBox.Image = global::API_Tester.Properties.Resources.question2;
+            this.pBox.Image = global::API_Tester.Properties.Resources.question_sky;
             this.pBox.Location = new System.Drawing.Point(12, 12);
             this.pBox.Name = "pBox";
             this.pBox.Size = new System.Drawing.Size(151, 144);
@@ -78,7 +78,7 @@ namespace API_Tester
             this.btnNo.Text = "No";
             this.btnNo.UseVisualStyleBackColor = true;
             // 
-            // CustomYesOrNoBox
+            // YesOrNoMessageBox
             // 
             this.AcceptButton = this.btnYes;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -91,7 +91,7 @@ namespace API_Tester
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "CustomYesOrNoBox";
+            this.Name = "YesOrNoMessageBox";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

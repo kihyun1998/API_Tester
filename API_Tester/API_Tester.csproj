@@ -145,5 +145,17 @@
   <ItemGroup>
     <None Include="img\information.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="img\question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\info-blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\question-sky.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

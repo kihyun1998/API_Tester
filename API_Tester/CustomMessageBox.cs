@@ -21,13 +21,13 @@ namespace API_Tester
                         switch (icon)
                         {
                             case System.Windows.Forms.MessageBoxIcon.Information:
-                                customMBox.MessageIcon = API_Tester.Properties.Resources.information;
+                                customMBox.MessageIcon = API_Tester.Properties.Resources.info_blue;
                                 break;
                             case System.Windows.Forms.MessageBoxIcon.Question:
-                                customMBox.MessageIcon = API_Tester.Properties.Resources.question2;
+                                customMBox.MessageIcon = API_Tester.Properties.Resources.question_sky;
                                 break;
                             case System.Windows.Forms.MessageBoxIcon.Warning:
-                                customMBox.MessageIcon = API_Tester.Properties.Resources.warning;
+                                customMBox.MessageIcon = API_Tester.Properties.Resources.error;
                                 break;
                         }
                         dialogResult = customMBox.ShowDialog();
@@ -41,13 +41,13 @@ namespace API_Tester
                         switch (icon)
                         {
                             case System.Windows.Forms.MessageBoxIcon.Information:
-                                customYoNBox.MessageIcon = API_Tester.Properties.Resources.information;
+                                customMBox.MessageIcon = API_Tester.Properties.Resources.info_blue;
                                 break;
                             case System.Windows.Forms.MessageBoxIcon.Question:
-                                customYoNBox.MessageIcon = API_Tester.Properties.Resources.question2;
+                                customMBox.MessageIcon = API_Tester.Properties.Resources.question_sky;
                                 break;
                             case System.Windows.Forms.MessageBoxIcon.Warning:
-                                customYoNBox.MessageIcon = API_Tester.Properties.Resources.warning;
+                                customMBox.MessageIcon = API_Tester.Properties.Resources.error;
                                 break;
                         }
                         dialogResult = customYoNBox.ShowDialog();
