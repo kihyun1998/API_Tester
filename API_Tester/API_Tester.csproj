@@ -63,6 +63,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TypeEnum.cs" />
     <Compile Include="YesOrNoMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,11 +82,11 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="InputForm.cs">
+    <Compile Include="CustomInputForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InputForm.Designer.cs">
-      <DependentUpon>InputForm.cs</DependentUpon>
+    <Compile Include="CustomInputForm.Designer.cs">
+      <DependentUpon>CustomInputForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CustomMessageBox.cs" />
     <Compile Include="Program.cs" />
@@ -109,8 +110,8 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InputForm.resx">
-      <DependentUpon>InputForm.cs</DependentUpon>
+    <EmbeddedResource Include="CustomInputForm.resx">
+      <DependentUpon>CustomInputForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -13,27 +13,21 @@ using System.IO;
 namespace API_Tester
 {
     public partial class Repository : Form
-    {
+    { 
 
         string _rootPath = Path.GetFullPath(@"..\Repository");
-        //bool _isSelected = false;
-
-        //Thread _thread = null;
         Form1 _f1 = null;
 
-        InputForm _inputForm = null;
+        CustomInputForm _customInputForm = null;
+
+        int _lx = 0;
+        int _ly = 0;
 
         public Repository(Form1 form)
         {
             InitializeComponent();
             ListDirectory(treeView1, _rootPath);
             this._f1 = form;
-        }
-
-        public Repository(InputForm iputForm)
-        {
-            InitializeComponent();
-            this._inputForm = iputForm;
         }
 
         private void ListDirectory(TreeView treeView, string path)
@@ -68,74 +62,123 @@ namespace API_Tester
 
 
         ////////////
-        /// 폴더 추가
-        private void btnAdd_Click(object sender, EventArgs e)
+        /// 폴더 추가 창 띄우기
+        public void btnAdd_Click(object sender, EventArgs e)
         {
+            _lx = _f1.Location.X;
+            _ly = _f1.Location.Y;
+            _customInputForm = new CustomInputForm(this);
+            _customInputForm.StartPosition = FormStartPosition.Manual;
+            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
+            _customInputForm._type = TypeEnum.Type.Folder.ToString();
+            _customInputForm._action = TypeEnum.Action.Add.ToString();
+            _customInputForm.Show();
+        }
+
+        ////////////
+        /// 폴더 추가 동작 함수
+        public void AddFolder(object sender, EventArgs e)
+        {
+            _customInputForm.Close();
             var sNode = treeView1.SelectedNode;
-            string folderName = tBoxName.Text;
-       
+
+            string folderName = _customInputForm._name;
+
             if (folderName != "")
             {
                 if (sNode != null)
                 {
-                
                     string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, folderName);
+
 
                     DirectoryInfo createdDir = new DirectoryInfo(savePath);
                     if (!createdDir.Exists)
                     {
                         createdDir.Create();
                         sNode.Nodes.Add(new TreeNode(folderName));
-                        MessageBox.Show(string.Format("{0}이(가) 추가됐습니다 !", folderName));
+                        CustomMessageBox.ShowMessage(string.Format("{0}이(가) 추가됐습니다 !", folderName), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         tBoxName.Text = string.Empty;
                     }
                     else
                     {
-                        MessageBox.Show("중복된 폴더명입니다!");
+                        CustomMessageBox.ShowMessage("중복된 폴더명입니다!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
             }
             else
             {
-                MessageBox.Show("이름은 한 글자 이상 입력해주세요!");
+                CustomMessageBox.ShowMessage("이름은 한 글자 이상 입력해주세요!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 tBoxName.Text = string.Empty;
             }
         }
 
+        //////////
+        // 폴더 삭제 창 띄우기
+        public void btnDelete_Click(object sender, EventArgs e)
+        {
+            _lx = _f1.Location.X;
+            _ly = _f1.Location.Y;
+            _customInputForm = new CustomInputForm(this);
+            _customInputForm.StartPosition = FormStartPosition.Manual;
+            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
+            _customInputForm._type = TypeEnum.Type.Folder.ToString();
+            _customInputForm._action = TypeEnum.Action.Remove.ToString();
+            _customInputForm.Show();
+        }
 
         ///////////
-        // 폴더 삭제
-        private void btnDelete_Click(object sender, EventArgs e)  
+        // 폴더 삭제 동작 함수
+        public void RemoveFolder(object sender, EventArgs e)
         {
+            _customInputForm.Close();
             var sNode = treeView1.SelectedNode;
 
             if (sNode != null && sNode.Parent != null)
             {
-                if (MessageBox.Show("폴더를 삭제하시겠습니까?", "삭제", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (CustomMessageBox.ShowMessage("폴더를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     string deletePath = string.Format("..\\{0}", sNode.FullPath);
                     Directory.Delete(deletePath, recursive: true);
                     treeView1.Nodes.Remove(sNode);
 
-                    MessageBox.Show(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text));
+                    CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     tBoxName.Text = string.Empty;
                 }
-                
+
             }
         }
 
+        
+
         //////////
-        /// 파일 추가
+        /// 파일 추가 창 띄우기
         private void btnAddFile_Click(object sender, EventArgs e)
         {
+            _lx = _f1.Location.X;
+            _ly = _f1.Location.Y;
+            _customInputForm = new CustomInputForm(this);
+            _customInputForm.StartPosition = FormStartPosition.Manual;
+            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
+            _customInputForm._type = TypeEnum.Type.File.ToString();
+            _customInputForm._action = TypeEnum.Action.Add.ToString();
+            _customInputForm.Show();
+        }
+
+
+        //////////
+        /// 파일 추가 동작 함수
+        public void AddFile(object sender, EventArgs e)
+        {
+            _customInputForm.Close();
             var sNode = treeView1.SelectedNode;
-            string fileName = tBoxName.Text;
+
+            string fileName = _customInputForm._name;
 
             if (fileName != "")
             {
                 if (sNode != null)
                 {
-                    string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, string.Format(fileName+".xml") );
+                    string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, string.Format(fileName + ".xml"));
 
                     RequestXML requestXML = new RequestXML();
 
@@ -149,38 +192,57 @@ namespace API_Tester
                     {
                         _f1.Save_XML(requestXML, savePath);
                         sNode.Nodes.Add(new TreeNode(fileName));
-                        MessageBox.Show(string.Format("{0}이(가) 추가됐습니다 !", fileName));
+                        CustomMessageBox.ShowMessage(string.Format("{0}이(가) 추가됐습니다 !", fileName), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         tBoxName.Text = string.Empty;
                     }
                     else
                     {
-                        MessageBox.Show("중복된 파일명입니다!");
+                        CustomMessageBox.ShowMessage("중복된 폴더명입니다!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
             }
             else
             {
-                MessageBox.Show("이름은 한 글자 이상 입력해주세요!");
+                CustomMessageBox.ShowMessage("이름은 한 글자 이상 입력해주세요!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 tBoxName.Text = string.Empty;
             }
         }
 
+
+
+
+
         /////////
-        /// 파일 삭제
+        /// 파일 삭제 창 띄우기
         private void btnDelFile_Click(object sender, EventArgs e)
         {
+            _lx = _f1.Location.X;
+            _ly = _f1.Location.Y;
+            _customInputForm = new CustomInputForm(this);
+            _customInputForm.StartPosition = FormStartPosition.Manual;
+            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
+            _customInputForm._type = TypeEnum.Type.File.ToString();
+            _customInputForm._action = TypeEnum.Action.Remove.ToString();
+            _customInputForm.Show();
+        }
+        
+        /////////
+        /// 파일 삭제 동작 함수
+        public void RemoveFile(object sender, EventArgs e)
+        {
+            _customInputForm.Close();
             var sNode = treeView1.SelectedNode;
 
             if (sNode != null && sNode.Parent != null)
             {
-                if (MessageBox.Show("폴더를 삭제하시겠습니까?", "삭제", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (CustomMessageBox.ShowMessage("파일를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    string deletePath = string.Format("..\\{0}", string.Format(sNode.FullPath+".xml"));
+                    string deletePath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".xml"));
 
                     File.Delete(deletePath);
                     treeView1.Nodes.Remove(sNode);
 
-                    MessageBox.Show(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text));
+                    CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     tBoxName.Text = string.Empty;
                 }
 
@@ -191,10 +253,10 @@ namespace API_Tester
 
 
 
-            //////////
-            ////선택한 노드가 있나 없나 체크
-            ///그리고 버튼 보여줄지 말지
-            private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        //////////
+        ////선택한 노드가 있나 없나 체크
+        ///그리고 버튼 보여줄지 말지
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             var sNode = treeView1.SelectedNode;
             _f1._selectedNode = sNode;
@@ -360,9 +422,10 @@ namespace API_Tester
                             // myTreeView.SelectedNode.Name = "NewNodeName";
                     }
                 }
-                //_inputForm.Show();
                 cMenu.Show(this, FormPoint);
             }
         }
+
+
     }
 }

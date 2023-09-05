@@ -27,6 +27,9 @@ namespace API_Tester
                                 customMBox.MessageIcon = API_Tester.Properties.Resources.question_sky;
                                 break;
                             case System.Windows.Forms.MessageBoxIcon.Warning:
+                                customMBox.MessageIcon = API_Tester.Properties.Resources.warning;
+                                break;
+                            case System.Windows.Forms.MessageBoxIcon.Error:
                                 customMBox.MessageIcon = API_Tester.Properties.Resources.error;
                                 break;
                         }
@@ -47,6 +50,9 @@ namespace API_Tester
                                 customYoNBox.MessageIcon = API_Tester.Properties.Resources.question_sky;
                                 break;
                             case System.Windows.Forms.MessageBoxIcon.Warning:
+                                customYoNBox.MessageIcon = API_Tester.Properties.Resources.warning;
+                                break;
+                            case System.Windows.Forms.MessageBoxIcon.Error:
                                 customYoNBox.MessageIcon = API_Tester.Properties.Resources.error;
                                 break;
                         }

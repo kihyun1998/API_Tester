@@ -38,14 +38,16 @@ namespace API_Tester
             // 
             // btnYes
             // 
+            this.btnYes.BackColor = System.Drawing.Color.ForestGreen;
             this.btnYes.DialogResult = System.Windows.Forms.DialogResult.Yes;
             this.btnYes.Font = new System.Drawing.Font("나눔고딕", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnYes.Location = new System.Drawing.Point(186, 113);
+            this.btnYes.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnYes.Location = new System.Drawing.Point(398, 113);
             this.btnYes.Name = "btnYes";
             this.btnYes.Size = new System.Drawing.Size(83, 43);
             this.btnYes.TabIndex = 0;
             this.btnYes.Text = "Yes";
-            this.btnYes.UseVisualStyleBackColor = true;
+            this.btnYes.UseVisualStyleBackColor = false;
             // 
             // lblMessage
             // 
@@ -69,14 +71,16 @@ namespace API_Tester
             // 
             // btnNo
             // 
+            this.btnNo.BackColor = System.Drawing.Color.Red;
             this.btnNo.DialogResult = System.Windows.Forms.DialogResult.No;
             this.btnNo.Font = new System.Drawing.Font("나눔고딕", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnNo.Location = new System.Drawing.Point(375, 113);
+            this.btnNo.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnNo.Location = new System.Drawing.Point(309, 113);
             this.btnNo.Name = "btnNo";
             this.btnNo.Size = new System.Drawing.Size(83, 43);
             this.btnNo.TabIndex = 3;
             this.btnNo.Text = "No";
-            this.btnNo.UseVisualStyleBackColor = true;
+            this.btnNo.UseVisualStyleBackColor = false;
             // 
             // YesOrNoMessageBox
             // 

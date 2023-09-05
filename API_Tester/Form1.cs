@@ -74,8 +74,11 @@ namespace API_Tester
         }
 
 
-        ///////
+        /////////////////
         ///트리 뷰 조작
+        
+        //////////
+        /// 좌측 repository 창 열기
         private void btnLeft_Click(object sender, EventArgs e)
         {
             btnRight.Visible = true;
@@ -94,8 +97,6 @@ namespace API_Tester
         /// 좌측 repository 창 닫기
         private void btnRight_Click(object sender, EventArgs e)
         {
-            
-
             btnRight.Visible = false;
             btnLeft.Visible = true;
 
@@ -149,7 +150,7 @@ namespace API_Tester
                 requestXML._MSG = tBoxMsg.Text;
 
                 Save_XML(requestXML, savePath);
-                CustomMessageBox.ShowMessage("저장되었습니다.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                CustomMessageBox.ShowMessage("저장되었습니다.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -179,12 +180,12 @@ namespace API_Tester
                 requestXML._MSG = tBoxMsg.Text;
 
                 Save_XML(requestXML, savePath);
-                CustomMessageBox.ShowMessage("저장이 완료됐습니다!","Message",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                CustomMessageBox.ShowMessage("저장이 완료됐습니다!", "Information", MessageBoxButtons.OK,MessageBoxIcon.Information);
                 btnSave.Visible = false;
             }
             else
             {
-                CustomMessageBox.ShowMessage("파일 저장 버그!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                CustomMessageBox.ShowMessage("파일 저장 버그!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -294,7 +295,7 @@ namespace API_Tester
             }
             catch
             {
-                CustomMessageBox.ShowMessage("노드 선택 여부 검사 안함 !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                CustomMessageBox.ShowMessage("노드 선택 여부 검사 안함 !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return "";
             }   
@@ -414,7 +415,7 @@ namespace API_Tester
         {
             if (err.Length != 0)
             {
-                CustomMessageBox.ShowMessage(err, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                CustomMessageBox.ShowMessage(err, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 if (err.Contains("404"))
                 {
                     tBoxURL.Text = "";
