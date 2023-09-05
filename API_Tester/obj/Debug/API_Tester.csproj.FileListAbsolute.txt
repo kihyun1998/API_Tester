@@ -22,3 +22,6 @@ C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.csproj.Cor
 C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.exe
 C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.pdb
 C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.InputForm.resources
+C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.OKMessageBox.resources
+C:\Users\User\source\repos\API_Tester\API_Tester\obj\Debug\API_Tester.YesOrNoMessageBox.resources

@@ -21,11 +21,19 @@ namespace API_Tester
         //Thread _thread = null;
         Form1 _f1 = null;
 
+        InputForm _inputForm = null;
+
         public Repository(Form1 form)
         {
             InitializeComponent();
             ListDirectory(treeView1, _rootPath);
             this._f1 = form;
+        }
+
+        public Repository(InputForm iputForm)
+        {
+            InitializeComponent();
+            this._inputForm = iputForm;
         }
 
         private void ListDirectory(TreeView treeView, string path)
@@ -322,15 +330,15 @@ namespace API_Tester
                     switch (nLevel)
                     {
                         case 0:
-                            ToolStripMenuItem itemAddService = new ToolStripMenuItem("Add a Service");
+                            ToolStripMenuItem itemAddService = new ToolStripMenuItem("➕ Add a Service");
 
                             itemAddService.Click += btnAdd_Click;
                             
                             cMenu.Items.Add(itemAddService);
                             break;
                         case 1:
-                            ToolStripMenuItem itemAddRequest = new ToolStripMenuItem("Add a Request");
-                            ToolStripMenuItem itemRemoveFolder = new ToolStripMenuItem("Remove");
+                            ToolStripMenuItem itemAddRequest = new ToolStripMenuItem("➕ Add a Request");
+                            ToolStripMenuItem itemRemoveFolder = new ToolStripMenuItem("🗑 Remove");
 
                             itemAddRequest.Click += btnAddFile_Click;
                             itemRemoveFolder.Click += btnDelete_Click;
@@ -339,7 +347,7 @@ namespace API_Tester
                             cMenu.Items.Add(itemRemoveFolder);
                             break;
                         case 2:
-                            ToolStripMenuItem itemRemoveFile = new ToolStripMenuItem("Remove");
+                            ToolStripMenuItem itemRemoveFile = new ToolStripMenuItem("🗑 Remove");
 
                             itemRemoveFile.Click += btnDelFile_Click;
                     
@@ -352,7 +360,7 @@ namespace API_Tester
                             // myTreeView.SelectedNode.Name = "NewNodeName";
                     }
                 }
-
+                //_inputForm.Show();
                 cMenu.Show(this, FormPoint);
             }
         }

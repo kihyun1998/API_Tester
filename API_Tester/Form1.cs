@@ -139,7 +139,7 @@ namespace API_Tester
         /// 잡다한 함수
         private void QuestionToSave(string savePath)
         {
-            if (MessageBox.Show("변경내용이 있습니다.\n저장 하시겠습니까?", "Save", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if(CustomMessageBox.ShowMessage("변경내용이 있습니다.\n저장 하시겠습니까?","Save",MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 RequestXML requestXML = new RequestXML();
 
@@ -149,7 +149,7 @@ namespace API_Tester
                 requestXML._MSG = tBoxMsg.Text;
 
                 Save_XML(requestXML, savePath);
-                MessageBox.Show("저장되었습니다.");
+                CustomMessageBox.ShowMessage("저장되었습니다.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -169,7 +169,7 @@ namespace API_Tester
             if (_rt != null)
             {
                 var sNode = _rt.treeView1.SelectedNode;
-                string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, "save_file.xml");
+                string savePath = string.Format("..\\{0}", string.Format(sNode.FullPath+".xml"));
 
                 RequestXML requestXML = new RequestXML();
 
@@ -179,13 +179,12 @@ namespace API_Tester
                 requestXML._MSG = tBoxMsg.Text;
 
                 Save_XML(requestXML, savePath);
-
-                MessageBox.Show("저장이 완료됐습니다!");
+                CustomMessageBox.ShowMessage("저장이 완료됐습니다!","Message",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 btnSave.Visible = false;
             }
             else
             {
-                MessageBox.Show("파일 저장 버그!");
+                CustomMessageBox.ShowMessage("파일 저장 버그!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -290,12 +289,13 @@ namespace API_Tester
         {
             try
             {
-                string savePath = string.Format("..\\{0}\\{1}", _selectedNode.FullPath, "save_file.xml");
+                string savePath = string.Format("..\\{0}", string.Format(_selectedNode.FullPath+".xml"));
                 return savePath;
             }
             catch
             {
-                MessageBox.Show("노드 선택 여부 검사 안함");
+                CustomMessageBox.ShowMessage("노드 선택 여부 검사 안함 !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
                 return "";
             }   
         }
@@ -414,7 +414,7 @@ namespace API_Tester
         {
             if (err.Length != 0)
             {
-                MessageBox.Show(err);
+                CustomMessageBox.ShowMessage(err, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 if (err.Contains("404"))
                 {
                     tBoxURL.Text = "";

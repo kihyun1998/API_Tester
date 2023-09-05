@@ -52,6 +52,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OKMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OKMessageBox.Designer.cs">
+      <DependentUpon>OKMessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YesOrNoMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="YesOrNoMessageBox.Designer.cs">
+      <DependentUpon>YesOrNoMessageBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Custom\CustomTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -64,6 +76,13 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="InputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InputForm.Designer.cs">
+      <DependentUpon>InputForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomMessageBox.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs">
@@ -73,11 +92,20 @@
       <DependentUpon>Repository.cs</DependentUpon>
     </Compile>
     <Compile Include="RequestXML.cs" />
+    <EmbeddedResource Include="OKMessageBox.resx">
+      <DependentUpon>OKMessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="YesOrNoMessageBox.resx">
+      <DependentUpon>YesOrNoMessageBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Custom\CustomTextBox.resx">
       <DependentUpon>CustomTextBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InputForm.resx">
+      <DependentUpon>InputForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -87,6 +115,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Repository.resx">
       <DependentUpon>Repository.cs</DependentUpon>
@@ -103,6 +132,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\question2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\information.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

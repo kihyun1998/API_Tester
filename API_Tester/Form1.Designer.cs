@@ -76,17 +76,17 @@ namespace API_Tester
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("궁서체", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label2.Font = new System.Drawing.Font("나눔고딕", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label2.Location = new System.Drawing.Point(39, 198);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(89, 19);
+            this.label2.Size = new System.Drawing.Size(109, 26);
             this.label2.TabIndex = 2;
             this.label2.Text = "Method :";
             // 
             // btnRequest
             // 
-            this.btnRequest.Font = new System.Drawing.Font("궁서체", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnRequest.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btnRequest.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btnRequest.Location = new System.Drawing.Point(987, 248);
             this.btnRequest.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -100,11 +100,11 @@ namespace API_Tester
             // lblMsg
             // 
             this.lblMsg.AutoSize = true;
-            this.lblMsg.Font = new System.Drawing.Font("궁서체", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lblMsg.Font = new System.Drawing.Font("나눔고딕", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lblMsg.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.lblMsg.Location = new System.Drawing.Point(58, 314);
             this.lblMsg.Name = "lblMsg";
-            this.lblMsg.Size = new System.Drawing.Size(69, 19);
+            this.lblMsg.Size = new System.Drawing.Size(76, 26);
             this.lblMsg.TabIndex = 8;
             this.lblMsg.Text = "Body :";
             // 
@@ -120,11 +120,11 @@ namespace API_Tester
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("궁서체", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label3.Font = new System.Drawing.Font("나눔고딕", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label3.Location = new System.Drawing.Point(40, 258);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(89, 19);
+            this.label3.Size = new System.Drawing.Size(96, 26);
             this.label3.TabIndex = 12;
             this.label3.Text = "Cookie :";
             // 
@@ -178,10 +178,10 @@ namespace API_Tester
             // 
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.label4.Font = new System.Drawing.Font("궁서", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label4.Location = new System.Drawing.Point(50, 4);
+            this.label4.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label4.Location = new System.Drawing.Point(50, -1);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(256, 40);
+            this.label4.Size = new System.Drawing.Size(206, 46);
             this.label4.TabIndex = 23;
             this.label4.Text = "API Tester";
             // 
@@ -264,6 +264,7 @@ namespace API_Tester
             // 
             // tBoxRst
             // 
+            this.tBoxRst.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.tBoxRst.Location = new System.Drawing.Point(42, 416);
             this.tBoxRst.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tBoxRst.Multiline = true;
@@ -291,10 +292,10 @@ namespace API_Tester
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.lblTitle.Font = new System.Drawing.Font("궁서체", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lblTitle.Location = new System.Drawing.Point(37, 80);
+            this.lblTitle.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lblTitle.Location = new System.Drawing.Point(36, 62);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(93, 30);
+            this.lblTitle.Size = new System.Drawing.Size(72, 35);
             this.lblTitle.TabIndex = 25;
             this.lblTitle.Text = "Title";
             this.lblTitle.Visible = false;
@@ -304,6 +305,7 @@ namespace API_Tester
             this.tBoxMsg.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tBoxMsg.BorderColor = System.Drawing.Color.Gray;
             this.tBoxMsg.BorderSize = 2;
+            this.tBoxMsg.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.tBoxMsg.Location = new System.Drawing.Point(128, 314);
             this.tBoxMsg.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tBoxMsg.Multiline = false;
@@ -320,6 +322,7 @@ namespace API_Tester
             this.tBoxCookie.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tBoxCookie.BorderColor = System.Drawing.Color.Gray;
             this.tBoxCookie.BorderSize = 2;
+            this.tBoxCookie.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.tBoxCookie.Location = new System.Drawing.Point(128, 258);
             this.tBoxCookie.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tBoxCookie.Multiline = false;
@@ -336,13 +339,14 @@ namespace API_Tester
             this.tBoxURL.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tBoxURL.BorderColor = System.Drawing.Color.Gray;
             this.tBoxURL.BorderSize = 2;
+            this.tBoxURL.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.tBoxURL.Location = new System.Drawing.Point(338, 197);
             this.tBoxURL.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tBoxURL.Multiline = false;
             this.tBoxURL.Name = "tBoxURL";
             this.tBoxURL.Padding = new System.Windows.Forms.Padding(7, 8, 7, 8);
             this.tBoxURL.PasswordChar = false;
-            this.tBoxURL.Size = new System.Drawing.Size(797, 34);
+            this.tBoxURL.Size = new System.Drawing.Size(798, 34);
             this.tBoxURL.TabIndex = 16;
             this.tBoxURL.UnderlinedStyle = true;
             this.tBoxURL.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
@@ -350,11 +354,11 @@ namespace API_Tester
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("궁서체", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label1.Font = new System.Drawing.Font("나눔고딕", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label1.Location = new System.Drawing.Point(283, 198);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 19);
+            this.label1.Size = new System.Drawing.Size(66, 26);
             this.label1.TabIndex = 26;
             this.label1.Text = "URL :";
             // 
