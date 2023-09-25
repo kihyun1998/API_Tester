@@ -12,7 +12,7 @@ using System.IO;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Xml;
-using System.Security.Cryptography;
+
 
 namespace API_Tester
 {
@@ -170,7 +170,7 @@ namespace API_Tester
             if (_repository != null)
             {
                 var sNode = _repository.treeView1.SelectedNode;
-                string savePath = string.Format("..\\{0}", string.Format(sNode.FullPath+".xml"));
+                string savePath = string.Format("..\\{0}", string.Format(sNode.FullPath+".txt"));
 
                 RequestXML requestXML = new RequestXML();
 
@@ -216,9 +216,14 @@ namespace API_Tester
 
             root.AppendChild(xData);
 
-            xdoc.Save(savePath);
-        }
+            string ciphertext = AES256.EncryptAES(root.OuterXml);
+            File.WriteAllText(savePath, ciphertext, Encoding.Default);
 
+            //xdoc.Save(savePath);
+        }
+        
+
+        // 추후 GO DLL로 수정해야 함
         public string[] Load_XML(string loadPath)
         {
             List<string> returnList = new List<string> { };
@@ -287,7 +292,7 @@ namespace API_Tester
         {
             try
             {
-                string savePath = string.Format("..\\{0}", string.Format(_selectedNode.FullPath+".xml"));
+                string savePath = string.Format("..\\{0}", string.Format(_selectedNode.FullPath+".txt"));
                 return savePath;
             }
             catch

@@ -175,7 +175,7 @@ namespace API_Tester
             {
                 if (sNode != null)
                 {
-                    string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, string.Format(fileName + ".xml"));
+                    string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, string.Format(fileName + ".txt"));
 
                     RequestXML requestXML = new RequestXML();
 
@@ -233,7 +233,7 @@ namespace API_Tester
             {
                 if (CustomMessageBox.ShowMessage("파일를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    string deletePath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".xml"));
+                    string deletePath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".txt"));
 
                     File.Delete(deletePath);
                     treeView1.Nodes.Remove(sNode);
@@ -311,7 +311,7 @@ namespace API_Tester
 
 
                         // 한번 클리 시에도 창 전환되도록 변경
-                        string savePath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".xml"));
+                        string savePath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".txt"));
                         FileInfo saveFile = new FileInfo(savePath);
                         if (saveFile.Exists)
                         {
@@ -376,7 +376,7 @@ namespace API_Tester
                         _f1.notUse();
                         break;
                     case 2:
-                        string savePath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".xml"));
+                        string savePath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".txt"));
                         FileInfo saveFile = new FileInfo(savePath);
                         if (saveFile.Exists)
                         {
