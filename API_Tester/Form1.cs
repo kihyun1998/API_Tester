@@ -216,7 +216,7 @@ namespace API_Tester
 
             root.AppendChild(xData);
 
-            string ciphertext = AES256.EncryptAES(root.OuterXml);
+            string ciphertext = AES256.Encrypt(root.OuterXml);
             File.WriteAllText(savePath, ciphertext, Encoding.Default);
 
             //xdoc.Save(savePath);

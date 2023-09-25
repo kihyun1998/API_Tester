@@ -15,7 +15,7 @@ namespace API_Tester
         //16byte
         static string aes_iv = aes_key.Substring(0, 16);
 
-        public static string EncryptAES(string input)
+        public static string Encrypt(string input)
         {
             byte[] encrypted;
 
