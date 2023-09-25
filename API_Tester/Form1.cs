@@ -12,7 +12,7 @@ using System.IO;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Xml;
-using System.Reflection;
+using System.Security.Cryptography;
 
 namespace API_Tester
 {
@@ -37,7 +37,7 @@ namespace API_Tester
         public string[] _methods = { "GET", "POST", "PUT", "DELETE" };
 
         Thread _threadRequest = null;
-        Repository _rt = null;
+        Repository _repository = null;
 
         int _lx = 0;
         int _ly = 0;
@@ -65,11 +65,11 @@ namespace API_Tester
         private void Form1_Move(object sender, EventArgs e)
         {
 
-            if (_rt != null)
+            if (_repository != null)
             {
                 _lx = this.Location.X;
                 _ly = this.Location.Y;
-                _rt.Location = new Point(_lx - _rt.Width, _ly);
+                _repository.Location = new Point(_lx - _repository.Width, _ly);
             }
         }
 
@@ -87,10 +87,10 @@ namespace API_Tester
             _lx = this.Location.X;
             _ly = this.Location.Y;
 
-            _rt = new Repository(this);
-            _rt.StartPosition = FormStartPosition.Manual;
-            _rt.Location = new Point(_lx - _rt.Width, _ly);
-            _rt.Show();
+            _repository = new Repository(this);
+            _repository.StartPosition = FormStartPosition.Manual;
+            _repository.Location = new Point(_lx - _repository.Width, _ly);
+            _repository.Show();
         }
 
         ///////
@@ -123,8 +123,8 @@ namespace API_Tester
                 }
             }
             
-            _rt.Close();
-            _rt = null;
+            _repository.Close();
+            _repository = null;
             _selectedNode = null;
             lblTitle.Visible = false;
             btnSave.Visible = false;
@@ -167,9 +167,9 @@ namespace API_Tester
         private void btnSave_Click(object sender, EventArgs e)
         {
 
-            if (_rt != null)
+            if (_repository != null)
             {
-                var sNode = _rt.treeView1.SelectedNode;
+                var sNode = _repository.treeView1.SelectedNode;
                 string savePath = string.Format("..\\{0}", string.Format(sNode.FullPath+".xml"));
 
                 RequestXML requestXML = new RequestXML();
@@ -251,9 +251,7 @@ namespace API_Tester
         ///텍스트 변경 시 저장버튼 visible
         public void TextBox_TextChanged(Object sender, EventArgs e)
         {
-
-
-            if (_rt != null)
+            if (_repository != null)
             {
                 string savePath = GetSavePath();
                 FileInfo save = new FileInfo(savePath);
@@ -282,7 +280,6 @@ namespace API_Tester
                     }
                 }
             }
-
         }
 
         //파일 저장 경로 얻는 함수
@@ -295,7 +292,7 @@ namespace API_Tester
             }
             catch
             {
-                CustomMessageBox.ShowMessage("노드 선택 여부 검사 안함 !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CustomMessageBox.ShowMessage("[Form1.GetSavePath()] 노드 선택 여부 검사 안함 !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return "";
             }   
@@ -436,6 +433,7 @@ namespace API_Tester
             }
         }
 
+        
         private void cBoxMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cBoxMethod.Text == "POST" || cBoxMethod.Text == "PUT" || cBoxMethod.Text == "DELETE")
@@ -447,6 +445,37 @@ namespace API_Tester
             {
                 tBoxMsg.Visible = false;
                 lblMsg.Visible = false;
+            }
+
+            // Method 변경 시 저장 버튼 추가하는 로직 추가
+            if(_repository != null)
+            {
+                string savePath = GetSavePath();
+                FileInfo save = new FileInfo(savePath);
+                if (save.Exists)
+                {
+                    string[] saveData = Load_XML(savePath);
+                    if (IsChanged(saveData))
+                    {
+                        btnSave.Visible = true;
+                    }
+                    else
+                    {
+                        btnSave.Visible = false;
+                    }
+                }
+                else
+                {
+                    string[] data = new string[] { _methods[0], "", "", "" };
+                    if (IsChanged(data))
+                    {
+                        btnSave.Visible = true;
+                    }
+                    else
+                    {
+                        btnSave.Visible = false;
+                    }
+                }
             }
         }
         //////////////////////////////////////

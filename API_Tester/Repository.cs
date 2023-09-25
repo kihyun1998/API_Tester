@@ -258,7 +258,10 @@ namespace API_Tester
             _f1._selectedNode = sNode;
 
             int nLevel = sNode.Level;
-           
+
+            // 저장 버튼 숨기기
+            _f1.btnSave.Visible = false;
+
             if (sNode != null)
             {
 
@@ -271,6 +274,15 @@ namespace API_Tester
                         btnDelete.Visible = false;  // 폴더 삭제 불가능
                         btnAddFile.Visible = false; // 파일 추가 불가능
                         btnDelFile.Visible = false; // 파일 삭제 불가능
+
+                        // 한번 클리 시에도 창 전환되도록 변경
+                        _f1.lblTitle.Visible = false;
+                        _f1.cBoxMethod.Text = _f1._methods[0];
+                        _f1.tBoxURL.Text = string.Empty;
+                        _f1.tBoxCookie.Text = string.Empty;
+                        _f1.tBoxMsg.Text = string.Empty;
+                        _f1.tBoxRst.Text = string.Empty;
+                        _f1.notUse();
                         break;
                     case 1:
                         tBoxName.Enabled = true;    // 입력 가능
@@ -279,6 +291,15 @@ namespace API_Tester
                         btnDelete.Visible = true;   // 폴더 삭제 가능
                         btnAddFile.Visible = true;  // 파일 추가 가능
                         btnDelFile.Visible = false; // 파일 삭제 불가능
+
+                        // 한번 클리 시에도 창 전환되도록 변경
+                        _f1.lblTitle.Visible = false;
+                        _f1.cBoxMethod.Text = _f1._methods[0];
+                        _f1.tBoxURL.Text = string.Empty;
+                        _f1.tBoxCookie.Text = string.Empty;
+                        _f1.tBoxMsg.Text = string.Empty;
+                        _f1.tBoxRst.Text = string.Empty;
+                        _f1.notUse();
                         break;
                     case 2:
                         tBoxName.Enabled = false;    // 입력 불가능
@@ -287,6 +308,22 @@ namespace API_Tester
                         btnDelete.Visible = false;  // 폴더 삭제 불가능
                         btnAddFile.Visible = false; // 파일 추가 불가능
                         btnDelFile.Visible = true;  // 파일 삭제 가능
+
+
+                        // 한번 클리 시에도 창 전환되도록 변경
+                        string savePath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".xml"));
+                        FileInfo saveFile = new FileInfo(savePath);
+                        if (saveFile.Exists)
+                        {
+                            string[] saveData = _f1.Load_XML(savePath);
+                            _f1.isUse();
+                            _f1.lblTitle.Visible = true;
+                            _f1.lblTitle.Text = sNode.Text;
+                            _f1.cBoxMethod.Text = saveData[0];
+                            _f1.tBoxURL.Text = saveData[1];
+                            _f1.tBoxCookie.Text = saveData[2];
+                            _f1.tBoxMsg.Text = saveData[3];
+                        }
                         break;
                     default:
                         break;
