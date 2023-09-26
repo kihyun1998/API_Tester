@@ -104,15 +104,17 @@ namespace API_Tester
 
             if (_selectedNode != null)
             {
-                string savePath = GetSavePath();
-                FileInfo saved = new FileInfo(savePath);
+                string xmlPath = _repository.GetXmlPath(_selectedNode);
+                string hashPath = _repository.GetHashPathForFile(_selectedNode);
+                FileInfo saved = new FileInfo(xmlPath);
                 if (saved.Exists)
                 {
-                    string [] saveData = Load_XML(savePath);
+                    bool wantCheckIntegrity = false;
+                    string [] saveData = Load_XML(_selectedNode, wantCheckIntegrity);
 
                     if (IsChanged(saveData))
                     {
-                        QuestionToSave(savePath);
+                        QuestionToSave(xmlPath, hashPath);
                     }
                 }
                 else
@@ -120,7 +122,7 @@ namespace API_Tester
                     string[] data = new string[] { _methods[0], "", "", "" };
                     if (IsChanged(data))
                     {
-                        QuestionToSave(savePath);
+                        QuestionToSave(xmlPath, hashPath);
                     }
                 }
             }
@@ -140,7 +142,7 @@ namespace API_Tester
 
         /////////////////
         /// 잡다한 함수
-        private void QuestionToSave(string savePath)
+        private void QuestionToSave(string xmlPath, string hashPath)
         {
             if(CustomMessageBox.ShowMessage("변경내용이 있습니다.\n저장 하시겠습니까?","Save",MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -151,7 +153,7 @@ namespace API_Tester
                 requestXML._COOKIE = tBoxCookie.Text;
                 requestXML._MSG = tBoxMsg.Text;
 
-                Save_XML(requestXML, savePath);
+                Save_XML(requestXML, xmlPath, hashPath);
                 CustomMessageBox.ShowMessage("저장되었습니다.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
@@ -172,7 +174,8 @@ namespace API_Tester
             if (_repository != null)
             {
                 var sNode = _repository.treeView1.SelectedNode;
-                string savePath = string.Format("..\\{0}", string.Format(sNode.FullPath+".txt"));
+                string xmlPath = _repository.GetXmlPath(sNode);
+                string hashPath = _repository.GetHashPathForFile(sNode);
 
                 RequestXML requestXML = new RequestXML();
 
@@ -181,7 +184,7 @@ namespace API_Tester
                 requestXML._COOKIE = tBoxCookie.Text;
                 requestXML._MSG = tBoxMsg.Text;
 
-                Save_XML(requestXML, savePath);
+                Save_XML(requestXML, xmlPath, hashPath);
                 CustomMessageBox.ShowMessage("저장이 완료됐습니다!", "Information", MessageBoxButtons.OK,MessageBoxIcon.Information);
                 btnSave.Visible = false;
             }
@@ -191,7 +194,7 @@ namespace API_Tester
             }
         }
 
-        public void Save_XML(RequestXML requestXML, string savePath)
+        public void Save_XML(RequestXML requestXML, string xmlPath, string hashPath)
         {
             XmlDocument xdoc = new XmlDocument();
 
@@ -218,22 +221,44 @@ namespace API_Tester
 
             root.AppendChild(xData);
 
-            string ciphertext = AES256.Encrypt(root.OuterXml);
-            File.WriteAllText(savePath, ciphertext, Encoding.Default);
+            //XML 대신 암호문을 Base64로 저장
+            string cipherText = AES256.Encrypt(root.OuterXml);
+            File.WriteAllText(xmlPath, cipherText, Encoding.Default);
+
+            string hashText = SHA256.Hash(root.OuterXml);
+
+            File.WriteAllText(hashPath, hashText, Encoding.Default);
 
             //xdoc.Save(savePath);
         }
         
 
-        // 추후 GO DLL로 수정해야 함
-        public string[] Load_XML(string loadPath)
+        public string[] Load_XML(TreeNode sNode, bool wantCheck)
         {
-
             List<string> returnList = new List<string> { };
+
+            string loadPath = _repository.GetXmlPath(sNode);
+
+            string cryptXML = File.ReadAllText(loadPath);
+            string decryptXML = AES256.Decrypt(cryptXML);
+
+            if (wantCheck)
+            {
+                string hashPath = _repository.GetHashPathForFile(sNode);
+                string hashText = File.ReadAllText(hashPath);
+
+                bool checkValue = SHA256.CheckIntegrity(hashText, decryptXML);
+
+                if (!checkValue)
+                {
+                    CustomMessageBox.ShowMessage("[ERROR] 무결성 검사 실패", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return returnList.ToArray();
+                }
+            }
 
             XmlDocument xdoc = new XmlDocument();
 
-            xdoc.Load(loadPath);
+            xdoc.LoadXml(decryptXML);
 
             XmlNodeList nodes = xdoc.SelectNodes("/Request/Request-Data");
 
@@ -249,8 +274,9 @@ namespace API_Tester
                 returnList.Add(sCookie);
                 returnList.Add(sMsg);
 
-                return returnList.ToArray();
+                //return returnList.ToArray();
             }
+
             return returnList.ToArray();
         }
 
@@ -261,11 +287,12 @@ namespace API_Tester
         {
             if (_repository != null)
             {
-                string savePath = GetSavePath();
-                FileInfo save = new FileInfo(savePath);
+                string xmlPath = _repository.GetXmlPath(_selectedNode);
+                FileInfo save = new FileInfo(xmlPath);
                 if (save.Exists)
                 {
-                    string[] saveData = Load_XML(savePath);
+                    bool wantCheckIntegrity = false;
+                    string[] saveData = Load_XML(_selectedNode,wantCheckIntegrity);
                     if (IsChanged(saveData))
                     {
                         btnSave.Visible = true;
@@ -290,22 +317,6 @@ namespace API_Tester
             }
         }
 
-        //파일 저장 경로 얻는 함수
-        private string GetSavePath()
-        {
-            try
-            {
-                string savePath = string.Format("..\\{0}", string.Format(_selectedNode.FullPath+".txt"));
-                return savePath;
-            }
-            catch
-            {
-                CustomMessageBox.ShowMessage("[Form1.GetSavePath()] 노드 선택 여부 검사 안함 !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                return "";
-            }   
-        }
-
         // 내용 변경 확인 함수
         private bool IsChanged(string[] read)
         {
@@ -320,7 +331,7 @@ namespace API_Tester
         }
 
         //사용하지 않을 때 색 변경
-        public void notUse()
+        public void isNotUse()
         {
             tBoxURL.BackColor = Color.Gray;
             tBoxCookie.BackColor = Color.Gray;
@@ -329,6 +340,7 @@ namespace API_Tester
             tBoxURL.Enabled = false;
             tBoxCookie.Enabled = false;
             tBoxMsg.Enabled = false;
+            btnRequest.Enabled = false;
         }
 
         //사용할 때 색 변경
@@ -341,6 +353,7 @@ namespace API_Tester
             tBoxURL.Enabled = true;
             tBoxCookie.Enabled = true;
             tBoxMsg.Enabled = true;
+            btnRequest.Enabled = true;
         }
 
         /////////////////////////////
@@ -458,11 +471,12 @@ namespace API_Tester
             // Method 변경 시 저장 버튼 추가하는 로직 추가
             if(_repository != null)
             {
-                string savePath = GetSavePath();
-                FileInfo save = new FileInfo(savePath);
+                string xmlPath = _repository.GetXmlPath(_selectedNode);
+                FileInfo save = new FileInfo(xmlPath);
                 if (save.Exists)
                 {
-                    string[] saveData = Load_XML(savePath);
+                    bool wantCheckIntegrity = false;
+                    string[] saveData = Load_XML(_selectedNode, wantCheckIntegrity);
                     if (IsChanged(saveData))
                     {
                         btnSave.Visible = true;
@@ -570,13 +584,6 @@ namespace API_Tester
             HTBOTTOMRIGHT = 17;
 
         const int ten = 10;
-
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            string res = AES256.Decrypt("6asVJPcCJrjmPpl+OOZuCNNzZzLbIgtoFwyMpyVtuQNGhsgGRq5FAxRBIRpkrK5oYQg9DZ/xodwEFJFu67bFKYxXhgCMEnHbz22a9Pt2lq/+e/JJYGT2i4xm12MUxlZ7KXuxZEynbCjNaw7APwL6ZA==");
-            MessageBox.Show(res);
-        }
 
 
         //Rectangle Top { get { return new Rectangle(0, 0, this.ClientSize.Width, ten); } }

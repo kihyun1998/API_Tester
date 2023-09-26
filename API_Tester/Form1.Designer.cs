@@ -52,7 +52,6 @@ namespace API_Tester
             this.tBoxCookie = new API_Tester.Custom.CustomTextBox();
             this.tBoxURL = new API_Tester.Custom.CustomTextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.titleBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnRight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnLeft)).BeginInit();
@@ -363,24 +362,12 @@ namespace API_Tester
             this.label1.TabIndex = 26;
             this.label1.Text = "URL :";
             // 
-            // button1
-            // 
-            this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button1.Location = new System.Drawing.Point(508, 83);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 27;
-            this.button1.Text = "test";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(1184, 725);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.btnSave);
@@ -437,7 +424,6 @@ namespace API_Tester
         public System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.TextBox tBoxRst;
-        private System.Windows.Forms.Button button1;
     }
 }
 

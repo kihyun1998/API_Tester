@@ -25,8 +25,8 @@ namespace API_Tester
 
         public string Message
         {
-            get { return lblMessage.Text; }
-            set { lblMessage.Text = value;  }
+            get { return tBoxMessage.Text; }
+            set { tBoxMessage.Text = value;  }
         }
     }
 }

@@ -15,7 +15,7 @@ namespace API_Tester
         public static extern IntPtr AesDecrypt(byte[] cipherText, byte[] key, byte[] iv);
 
         [DllImport("crypt.dll")]
-        public static extern void SecurityFree();
+        public static extern void CryptFree(IntPtr p);
 
         //32byte
         static string aes_key = "01234567890123456789012345678901";
@@ -74,6 +74,9 @@ namespace API_Tester
                 Encoding.UTF8.GetBytes(aes_iv)
             );
             string resText = Form1.MarshalUtf8ToUnicode(pRst);
+
+            CryptFree(pRst);
+
             return resText;
         }
     }

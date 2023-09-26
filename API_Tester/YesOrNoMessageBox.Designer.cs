@@ -30,9 +30,9 @@ namespace API_Tester
         private void InitializeComponent()
         {
             this.btnYes = new System.Windows.Forms.Button();
-            this.lblMessage = new System.Windows.Forms.Label();
             this.pBox = new System.Windows.Forms.PictureBox();
             this.btnNo = new System.Windows.Forms.Button();
+            this.tBoxMessage = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,16 +48,6 @@ namespace API_Tester
             this.btnYes.TabIndex = 0;
             this.btnYes.Text = "Yes";
             this.btnYes.UseVisualStyleBackColor = false;
-            // 
-            // lblMessage
-            // 
-            this.lblMessage.AutoSize = true;
-            this.lblMessage.Font = new System.Drawing.Font("나눔고딕", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lblMessage.Location = new System.Drawing.Point(182, 24);
-            this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(90, 23);
-            this.lblMessage.TabIndex = 1;
-            this.lblMessage.Text = "Message";
             // 
             // pBox
             // 
@@ -82,15 +72,25 @@ namespace API_Tester
             this.btnNo.Text = "No";
             this.btnNo.UseVisualStyleBackColor = false;
             // 
+            // tBoxMessage
+            // 
+            this.tBoxMessage.Location = new System.Drawing.Point(189, 12);
+            this.tBoxMessage.Multiline = true;
+            this.tBoxMessage.Name = "tBoxMessage";
+            this.tBoxMessage.ReadOnly = true;
+            this.tBoxMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tBoxMessage.Size = new System.Drawing.Size(292, 79);
+            this.tBoxMessage.TabIndex = 4;
+            // 
             // YesOrNoMessageBox
             // 
             this.AcceptButton = this.btnYes;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(505, 168);
+            this.Controls.Add(this.tBoxMessage);
             this.Controls.Add(this.btnNo);
             this.Controls.Add(this.pBox);
-            this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.btnYes);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -109,8 +109,8 @@ namespace API_Tester
         #endregion
 
         private System.Windows.Forms.Button btnYes;
-        private System.Windows.Forms.Label lblMessage;
         private System.Windows.Forms.PictureBox pBox;
         private System.Windows.Forms.Button btnNo;
+        private System.Windows.Forms.TextBox tBoxMessage;
     }
 }

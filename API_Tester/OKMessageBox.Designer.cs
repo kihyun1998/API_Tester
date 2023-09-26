@@ -30,8 +30,8 @@ namespace API_Tester
         private void InitializeComponent()
         {
             this.btnOk = new System.Windows.Forms.Button();
-            this.lblMessage = new System.Windows.Forms.Label();
             this.pBox = new System.Windows.Forms.PictureBox();
+            this.tBoxMessage = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -45,15 +45,6 @@ namespace API_Tester
             this.btnOk.Text = "ok";
             this.btnOk.UseVisualStyleBackColor = true;
             // 
-            // lblMessage
-            // 
-            this.lblMessage.AutoSize = true;
-            this.lblMessage.Location = new System.Drawing.Point(182, 24);
-            this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(67, 15);
-            this.lblMessage.TabIndex = 1;
-            this.lblMessage.Text = "Message";
-            // 
             // pBox
             // 
             this.pBox.Image = global::API_Tester.Properties.Resources.warning;
@@ -64,14 +55,25 @@ namespace API_Tester
             this.pBox.TabIndex = 2;
             this.pBox.TabStop = false;
             // 
+            // tBoxMessage
+            // 
+            this.tBoxMessage.Location = new System.Drawing.Point(185, 12);
+            this.tBoxMessage.Multiline = true;
+            this.tBoxMessage.Name = "tBoxMessage";
+            this.tBoxMessage.ReadOnly = true;
+            this.tBoxMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tBoxMessage.Size = new System.Drawing.Size(203, 79);
+            this.tBoxMessage.TabIndex = 3;
+            this.tBoxMessage.TextChanged += new System.EventHandler(this.tBoxMessage_TextChanged);
+            // 
             // OKMessageBox
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(431, 168);
+            this.Controls.Add(this.tBoxMessage);
             this.Controls.Add(this.pBox);
-            this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.btnOk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -90,7 +92,7 @@ namespace API_Tester
         #endregion
 
         private System.Windows.Forms.Button btnOk;
-        private System.Windows.Forms.Label lblMessage;
         private System.Windows.Forms.PictureBox pBox;
+        private System.Windows.Forms.TextBox tBoxMessage;
     }
 }

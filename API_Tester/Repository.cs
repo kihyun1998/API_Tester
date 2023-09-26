@@ -44,10 +44,18 @@ namespace API_Tester
 
         private static TreeNode CreateDirectoryNode(DirectoryInfo directoryInfo)
         {
-            var directoryNode = new TreeNode(directoryInfo.Name);
+            TreeNode directoryNode = new TreeNode(directoryInfo.Name);
+            
 
             foreach (var directory in directoryInfo.GetDirectories())
             {
+                // 무결성 검사 폴더는 숨기기
+                if (directory.Name == "HASH")
+                {
+                    break;
+                }
+
+                
                 directoryNode.Nodes.Add(CreateDirectoryNode(directory));
             }
             //파일도 tree view에 등록
@@ -56,6 +64,9 @@ namespace API_Tester
                 string fileName = file.Name.Substring(0, file.Name.LastIndexOf('.'));
                 directoryNode.Nodes.Add(new TreeNode(fileName));
             }
+
+
+            
 
             return directoryNode;
         }
@@ -88,7 +99,7 @@ namespace API_Tester
                 if (sNode != null)
                 {
                     string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, folderName);
-
+                    string hashFolder = string.Format("..\\{0}\\{1}\\HASH", sNode.FullPath, folderName);
 
                     DirectoryInfo createdDir = new DirectoryInfo(savePath);
                     if (!createdDir.Exists)
@@ -101,6 +112,12 @@ namespace API_Tester
                     else
                     {
                         CustomMessageBox.ShowMessage("중복된 폴더명입니다!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+
+                    DirectoryInfo hashDir = new DirectoryInfo(hashFolder);
+                    if (!hashDir.Exists)
+                    {
+                        hashDir.Create();
                     }
                 }
             }
@@ -175,7 +192,8 @@ namespace API_Tester
             {
                 if (sNode != null)
                 {
-                    string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, string.Format(fileName + ".txt"));
+                    string savePath = GetSavePath(sNode, fileName);
+                    string hashPath = GetHashPathForFolder(sNode, fileName);
 
                     RequestXML requestXML = new RequestXML();
 
@@ -187,7 +205,7 @@ namespace API_Tester
                     FileInfo createdFile = new FileInfo(savePath);
                     if (!createdFile.Exists)
                     {
-                        _f1.Save_XML(requestXML, savePath);
+                        _f1.Save_XML(requestXML, savePath, hashPath);
                         sNode.Nodes.Add(new TreeNode(fileName));
                         CustomMessageBox.ShowMessage(string.Format("{0}이(가) 추가됐습니다 !", fileName), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         tBoxName.Text = string.Empty;
@@ -233,9 +251,11 @@ namespace API_Tester
             {
                 if (CustomMessageBox.ShowMessage("파일를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    string deletePath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".txt"));
+                    string deletePath = GetXmlPath(sNode);
+                    string deleteHashPath = GetHashPathForFile(sNode);
 
                     File.Delete(deletePath);
+                    File.Delete(deleteHashPath);
                     treeView1.Nodes.Remove(sNode);
 
                     CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -245,6 +265,75 @@ namespace API_Tester
             }
         }
 
+        ///////
+        /// Hash파일 경로 반환 ( 폴더 노드 선택한 상태에서 사용 )
+        public string GetHashPathForFolder(TreeNode sNode, string fileName)
+        {
+            try
+            {
+                string hashPath = string.Format("..\\{0}\\HASH\\{1}", sNode.FullPath, string.Format(fileName + "-Hash.txt"));
+                return hashPath;
+            }
+            catch
+            {
+                CustomMessageBox.ShowMessage("[Repository.GetHashPathForParent()] 노드 선택 여부 검사 안함 !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return "";
+            }
+        }
+
+        ///////
+        /// Hash파일 경로 반환 ( 파일 노드 선택한 상태에서 사용 )
+        public string GetHashPathForFile(TreeNode sNode)
+        {
+            try
+            {
+                string parentPath = sNode.FullPath.Substring(0, sNode.FullPath.Length - sNode.Text.Length);
+                string hashPath = string.Format("..\\{0}\\HASH\\{1}", parentPath, string.Format(sNode.Text + "-Hash.txt"));
+                return hashPath;
+            }
+            catch
+            {
+                CustomMessageBox.ShowMessage("[Repository.GetHashPathForChild()] 노드 선택 여부 검사 안함 !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return "";
+            }
+        }
+
+
+        /////////
+        /// 수정할 때 사용
+        public string GetXmlPath(TreeNode sNode)
+        {
+            try
+            {
+                string xmlPath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".txt"));
+                return xmlPath;
+            }
+            catch
+            {
+                CustomMessageBox.ShowMessage("[Repository.GetXmlPath()] 노드 선택 여부 검사 안함 !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return "";
+            }
+        }
+
+        ///////////
+        /// 파일 생성 시 사용
+        public string GetSavePath(TreeNode sNode, string fileName)
+        {
+            try
+            {
+                string xmlPath = string.Format("..\\{0}\\{1}", sNode.FullPath, string.Format(fileName + ".txt"));
+                return xmlPath;
+            }
+            catch
+            {
+                CustomMessageBox.ShowMessage("[Repository.GetXmlPath()] 노드 선택 여부 검사 안함 !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return "";
+            }
+        }
 
 
 
@@ -282,7 +371,7 @@ namespace API_Tester
                         _f1.tBoxCookie.Text = string.Empty;
                         _f1.tBoxMsg.Text = string.Empty;
                         _f1.tBoxRst.Text = string.Empty;
-                        _f1.notUse();
+                        _f1.isNotUse();
                         break;
                     case 1:
                         tBoxName.Enabled = true;    // 입력 가능
@@ -299,7 +388,7 @@ namespace API_Tester
                         _f1.tBoxCookie.Text = string.Empty;
                         _f1.tBoxMsg.Text = string.Empty;
                         _f1.tBoxRst.Text = string.Empty;
-                        _f1.notUse();
+                        _f1.isNotUse();
                         break;
                     case 2:
                         tBoxName.Enabled = false;    // 입력 불가능
@@ -310,19 +399,34 @@ namespace API_Tester
                         btnDelFile.Visible = true;  // 파일 삭제 가능
 
 
-                        // 한번 클리 시에도 창 전환되도록 변경
-                        string savePath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".txt"));
-                        FileInfo saveFile = new FileInfo(savePath);
+                        // 한번 클릭 시에도 창 전환되도록 변경
+                        string xmlPath = GetXmlPath(sNode);
+                        FileInfo saveFile = new FileInfo(xmlPath);
                         if (saveFile.Exists)
                         {
-                            string[] saveData = _f1.Load_XML(savePath);
-                            _f1.isUse();
-                            _f1.lblTitle.Visible = true;
-                            _f1.lblTitle.Text = sNode.Text;
-                            _f1.cBoxMethod.Text = saveData[0];
-                            _f1.tBoxURL.Text = saveData[1];
-                            _f1.tBoxCookie.Text = saveData[2];
-                            _f1.tBoxMsg.Text = saveData[3];
+                            bool wantCheckIntegrity = true;
+                            string[] saveData = _f1.Load_XML(sNode,wantCheckIntegrity);
+
+                            if (saveData.Length == 0)
+                            {
+                                _f1.cBoxMethod.Text = "";
+                                _f1.tBoxURL.Text = "";
+                                _f1.tBoxCookie.Text = "";
+                                _f1.tBoxMsg.Text = "";
+                                _f1.isNotUse();
+                                _f1.lblTitle.Visible = true;
+                                _f1.lblTitle.Text = "무결성 검사 오류";
+                            }
+                            else
+                            {
+                                _f1.cBoxMethod.Text = saveData[0];
+                                _f1.tBoxURL.Text = saveData[1];
+                                _f1.tBoxCookie.Text = saveData[2];
+                                _f1.tBoxMsg.Text = saveData[3];
+                                _f1.isUse();
+                                _f1.lblTitle.Visible = true;
+                                _f1.lblTitle.Text = sNode.Text;
+                            }
                         }
                         break;
                     default:
@@ -364,7 +468,7 @@ namespace API_Tester
                         _f1.tBoxCookie.Text = string.Empty;
                         _f1.tBoxMsg.Text = string.Empty;
                         _f1.tBoxRst.Text = string.Empty;
-                        _f1.notUse();
+                        _f1.isNotUse();
                         break;
                     case 1:
                         _f1.lblTitle.Visible = false;
@@ -373,21 +477,35 @@ namespace API_Tester
                         _f1.tBoxCookie.Text = string.Empty;
                         _f1.tBoxMsg.Text = string.Empty;
                         _f1.tBoxRst.Text = string.Empty;
-                        _f1.notUse();
+                        _f1.isNotUse();
                         break;
                     case 2:
-                        string savePath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".txt"));
-                        FileInfo saveFile = new FileInfo(savePath);
+                        string xmlPath = GetXmlPath(sNode);
+                        FileInfo saveFile = new FileInfo(xmlPath);
                         if (saveFile.Exists)
                         {
-                            string[] saveData = _f1.Load_XML(savePath);
-                            _f1.isUse();
-                            _f1.lblTitle.Visible = true;
-                            _f1.lblTitle.Text = sNode.Text;
-                            _f1.cBoxMethod.Text = saveData[0];
-                            _f1.tBoxURL.Text = saveData[1];
-                            _f1.tBoxCookie.Text = saveData[2];
-                            _f1.tBoxMsg.Text = saveData[3];
+                            bool wantCheckIntegrity = true;
+                            string[] saveData = _f1.Load_XML(sNode,wantCheckIntegrity);
+                            if (saveData.Length == 0)
+                            {
+                                _f1.cBoxMethod.Text = "";
+                                _f1.tBoxURL.Text = "";
+                                _f1.tBoxCookie.Text = "";
+                                _f1.tBoxMsg.Text = "";
+                                _f1.isNotUse();
+                                _f1.lblTitle.Visible = true;
+                                _f1.lblTitle.Text = "무결성 검사 오류";
+                            }
+                            else
+                            {
+                                _f1.cBoxMethod.Text = saveData[0];
+                                _f1.tBoxURL.Text = saveData[1];
+                                _f1.tBoxCookie.Text = saveData[2];
+                                _f1.tBoxMsg.Text = saveData[3];
+                                _f1.isUse();
+                                _f1.lblTitle.Visible = true;
+                                _f1.lblTitle.Text = sNode.Text;
+                            }
                         }
                         break;
                     default:
