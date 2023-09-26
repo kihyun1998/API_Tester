@@ -28,6 +28,8 @@ namespace API_Tester
         public static extern void RequestFree(IntPtr p);
 
 
+
+
         string _url = string.Empty;
         string _method = string.Empty;
         string _cookie = string.Empty;
@@ -226,6 +228,7 @@ namespace API_Tester
         // 추후 GO DLL로 수정해야 함
         public string[] Load_XML(string loadPath)
         {
+
             List<string> returnList = new List<string> { };
 
             XmlDocument xdoc = new XmlDocument();
@@ -404,7 +407,7 @@ namespace API_Tester
 
         }
 
-        static unsafe string MarshalUtf8ToUnicode(IntPtr pStringUtf82)
+        public static unsafe string MarshalUtf8ToUnicode(IntPtr pStringUtf82)
         {
             var pStringUtf8 = (byte*)pStringUtf82;
             var len = 0;
@@ -567,6 +570,13 @@ namespace API_Tester
             HTBOTTOMRIGHT = 17;
 
         const int ten = 10;
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string res = AES256.Decrypt("6asVJPcCJrjmPpl+OOZuCNNzZzLbIgtoFwyMpyVtuQNGhsgGRq5FAxRBIRpkrK5oYQg9DZ/xodwEFJFu67bFKYxXhgCMEnHbz22a9Pt2lq/+e/JJYGT2i4xm12MUxlZ7KXuxZEynbCjNaw7APwL6ZA==");
+            MessageBox.Show(res);
+        }
 
 
         //Rectangle Top { get { return new Rectangle(0, 0, this.ClientSize.Width, ten); } }

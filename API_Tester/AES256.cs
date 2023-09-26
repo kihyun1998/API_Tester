@@ -5,11 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace API_Tester
 {
     class AES256
     {
+        [DllImport("crypt.dll")]
+        public static extern IntPtr AesDecrypt(byte[] cipherText, byte[] key, byte[] iv);
+
+        [DllImport("crypt.dll")]
+        public static extern void SecurityFree();
+
         //32byte
         static string aes_key = "01234567890123456789012345678901";
         //16byte
@@ -55,6 +62,19 @@ namespace API_Tester
 
             // 스트링 >> base64로 반환
             return Convert.ToBase64String(encrypted);
+        }
+
+        public static string Decrypt(string cypherText)
+        {
+            IntPtr pRst;
+
+            pRst = AesDecrypt(
+                Encoding.UTF8.GetBytes(cypherText),
+                Encoding.UTF8.GetBytes(aes_key),
+                Encoding.UTF8.GetBytes(aes_iv)
+            );
+            string resText = Form1.MarshalUtf8ToUnicode(pRst);
+            return resText;
         }
     }
 }
