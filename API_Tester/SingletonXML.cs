@@ -31,6 +31,36 @@ namespace API_Tester
         {
             return this.loadXml;
         }
-        
+
+        public XmlDocument ResetXML()
+        {
+            XmlDocument xdoc = new XmlDocument();
+
+            XmlNode root = xdoc.CreateElement("Request");
+            xdoc.AppendChild(root);
+
+            XmlNode xData = xdoc.CreateElement("Request-Data");
+
+            XmlNode xMethod = xdoc.CreateElement("Method");
+            xMethod.InnerText = "GET";
+            xData.AppendChild(xMethod);
+
+            XmlNode xUrl = xdoc.CreateElement("URL");
+            xUrl.InnerText = "";
+            xData.AppendChild(xUrl);
+
+            XmlNode xCookie = xdoc.CreateElement("Cookie");
+            xCookie.InnerText = "";
+            xData.AppendChild(xCookie);
+
+            XmlNode xMsg = xdoc.CreateElement("Msg");
+            xMsg.InnerText = "";
+            xData.AppendChild(xMsg);
+
+            root.AppendChild(xData);
+
+            return xdoc;
+        }
+
     }
 }

@@ -96,7 +96,7 @@ namespace API_Tester
         }
 
         ///////
-        /// 좌측 repository 창 닫기 - 싱글톤 사용해야함. (아직 변경 전)
+        /// 좌측 repository 창 닫기
         private void btnRight_Click(object sender, EventArgs e)
         {
             btnRight.Visible = false;
@@ -109,8 +109,6 @@ namespace API_Tester
                 FileInfo saved = new FileInfo(xmlPath);
                 if (saved.Exists)
                 {
-                    //bool wantCheckIntegrity = false;
-                    //string [] saveData = Load_XML(_selectedNode, wantCheckIntegrity);
 
                     // 싱글톤 객체를 통한 XML 검사
                     SingletonXML sXML = SingletonXML.Instance;
@@ -149,7 +147,7 @@ namespace API_Tester
         /// 잡다한 함수
         /// 
 
-        // 비밀번호 저장할거냐고 묻는 함수 - SAVE_XML
+        // 비밀번호 저장할거냐고 묻는 함수
         private void QuestionToSave(string xmlPath, string hashPath)
         {
             if(CustomMessageBox.ShowMessage("변경내용이 있습니다.\n저장 하시겠습니까?","Save",MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -175,7 +173,7 @@ namespace API_Tester
         }
 
         ////////////////
-        /// 파일 저장 - 싱글톤 사용 해야 함.(화면 닫힐 때 Save_XML 로직 추가해야할듯)
+        /// 파일 저장
         private void btnSave_Click(object sender, EventArgs e)
         {
 
@@ -252,8 +250,6 @@ namespace API_Tester
             // 저장 시 싱글톤에 저장
             SingletonXML sXML = SingletonXML.Instance;
             sXML.SetXML(xdoc);
-
-            //xdoc.Save(savePath);
         }
         
 
@@ -274,8 +270,8 @@ namespace API_Tester
 
                 if (!checkValue)
                 {
-                    CustomMessageBox.ShowMessage("[ERROR] 무결성 검사 실패", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //return returnList.ToArray();
+                    //CustomMessageBox.ShowMessage("[ERROR] 무결성 검사 실패", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
                 }
             }
 
@@ -283,36 +279,16 @@ namespace API_Tester
             xdoc.LoadXml(decryptXML);
 
             return xdoc;
-
-            //XmlNodeList nodes = xdoc.SelectNodes("/Request/Request-Data");
-
-            //foreach (XmlNode data in nodes)
-            //{
-            //    string sMethod = data.SelectSingleNode("Method").InnerText;
-            //    string sURL = data.SelectSingleNode("URL").InnerText;
-            //    string sCookie = data.SelectSingleNode("Cookie").InnerText;
-            //    string sMsg = data.SelectSingleNode("Msg").InnerText;
-
-            //    returnList.Add(sMethod);
-            //    returnList.Add(sURL);
-            //    returnList.Add(sCookie);
-            //    returnList.Add(sMsg);
-
-            //    //return returnList.ToArray();
-            //}
-
-            //// 불러온 XML 싱글톤으로 등록
-            //SingletonXML sXML = SingletonXML.Instance;
-            //sXML.SetXML(returnList.ToArray());
-
-            //string[] rtn = XMLtoStringArr(xdoc);
-
-            //return rtn;
         }
 
         public string[] XMLtoStringArr(XmlDocument xdoc)
         {
             List<string> returnList = new List<string> { };
+
+            if (xdoc == null)
+            {
+                return returnList.ToArray();
+            }
 
             XmlNodeList nodes = xdoc.SelectNodes("/Request/Request-Data");
 
@@ -327,8 +303,6 @@ namespace API_Tester
                 returnList.Add(sURL);
                 returnList.Add(sCookie);
                 returnList.Add(sMsg);
-
-                //return returnList.ToArray();
             }
 
             // 불러온 XML 싱글톤으로 등록
@@ -340,25 +314,25 @@ namespace API_Tester
 
 
         //////////////////
-        ///텍스트 변경 시 저장버튼 visible - 싱글톤 사용해야 한다. (아직 변경 전)
+        ///텍스트 변경 시 저장버튼 visible 
         public void TextBox_TextChanged(Object sender, EventArgs e)
         {
             if (_repository != null)
             {
+                TreeNode sNode = _repository.treeView1.SelectedNode;
                 string xmlPath = _repository.GetXmlPath(_selectedNode);
                 FileInfo save = new FileInfo(xmlPath);
                 if (save.Exists)
                 {
-                    bool wantCheckIntegrity = false;
-                    //string[] saveData = Load_XML(_selectedNode,wantCheckIntegrity);
-
                     // 싱글톤 객체를 통한 XML 검사
                     SingletonXML sXML = SingletonXML.Instance;
                     XmlDocument xdoc = sXML.GetXML();
                     string[] saveData = XMLtoStringArr(xdoc);
+                    MessageBox.Show(_selectedNode.Text);
 
                     if (IsChanged(saveData))
                     {
+                        MessageBox.Show(saveData[1]);
                         btnSave.Visible = true;
                     }
                     else
@@ -366,18 +340,19 @@ namespace API_Tester
                         btnSave.Visible = false;
                     }
                 }
-                else
-                {
-                    string[] data = new string[] { _methods[0], "", "", "" };
-                    if (IsChanged(data))
-                    {
-                        btnSave.Visible = true;
-                    }
-                    else
-                    {
-                        btnSave.Visible = false;
-                    }
-                }
+                // 이제 사용 안함
+                //else
+                //{
+                //    string[] data = new string[] { _methods[0], "", "", "" };
+                //    if (IsChanged(data))
+                //    {
+                //        btnSave.Visible = true;
+                //    }
+                //    else
+                //    {
+                //        btnSave.Visible = false;
+                //    }
+                //}
             }
         }
 
@@ -532,15 +507,13 @@ namespace API_Tester
                 lblMsg.Visible = false;
             }
 
-            // Method 변경 시 저장 버튼 추가하는 로직 추가 - 싱글톤 사용해야함 (변경 전)
+            // Method 변경 시 저장 버튼 추가하는 로직 추가
             if(_repository != null)
             {
                 string xmlPath = _repository.GetXmlPath(_selectedNode);
                 FileInfo save = new FileInfo(xmlPath);
                 if (save.Exists)
                 {
-                    //bool wantCheckIntegrity = false;
-                    //string[] saveData = Load_XML(_selectedNode, wantCheckIntegrity);
                     // 싱글톤 객체를 통한 XML 검사
                     SingletonXML sXML = SingletonXML.Instance;
                     XmlDocument xdoc = sXML.GetXML();
@@ -555,18 +528,19 @@ namespace API_Tester
                         btnSave.Visible = false;
                     }
                 }
-                else
-                {
-                    string[] data = new string[] { _methods[0], "", "", "" };
-                    if (IsChanged(data))
-                    {
-                        btnSave.Visible = true;
-                    }
-                    else
-                    {
-                        btnSave.Visible = false;
-                    }
-                }
+                // 이제 사용 안함
+                //else
+                //{
+                //    string[] data = new string[] { _methods[0], "", "", "" };
+                //    if (IsChanged(data))
+                //    {
+                //        btnSave.Visible = true;
+                //    }
+                //    else
+                //    {
+                //        btnSave.Visible = false;
+                //    }
+                //}
             }
         }
         //////////////////////////////////////
@@ -578,7 +552,7 @@ namespace API_Tester
 
 
 
-        ///////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ///패널 이동 + 상단바
         private Boolean mouseDown = false;
         private Point startPos;

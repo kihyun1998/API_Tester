@@ -407,7 +407,6 @@ namespace API_Tester
 
             if (sNode != null)
             {
-
                 switch (nLevel)
                 {
                     case 0:
@@ -418,7 +417,7 @@ namespace API_Tester
                         btnAddFile.Visible = false; // 파일 추가 불가능
                         btnDelFile.Visible = false; // 파일 삭제 불가능
 
-                        // 한번 클리 시에도 창 전환되도록 변경
+                        // 한번 클릭 시에도 창 전환되도록 변경
                         _f1.lblTitle.Visible = false;
                         _f1.cBoxMethod.Text = _f1._methods[0];
                         _f1.tBoxURL.Text = string.Empty;
@@ -435,7 +434,7 @@ namespace API_Tester
                         btnAddFile.Visible = true;  // 파일 추가 가능
                         btnDelFile.Visible = false; // 파일 삭제 불가능
 
-                        // 한번 클리 시에도 창 전환되도록 변경
+                        // 한번 클릭 시에도 창 전환되도록 변경
                         _f1.lblTitle.Visible = false;
                         _f1.cBoxMethod.Text = _f1._methods[0];
                         _f1.tBoxURL.Text = string.Empty;
@@ -468,15 +467,37 @@ namespace API_Tester
                             XmlDocument xdoc = _f1.Load_XML(sNode, wantCheckIntegrity);
                             string[] saveData = _f1.XMLtoStringArr(xdoc);
 
+
+                            // 여기서 무결성깨지면 초기화가 이루어줘야 한다.(아직 안함)
                             if (saveData.Length == 0)
                             {
-                                _f1.cBoxMethod.Text = "";
+                                // 초기화 해야하나====================================
+
+                                //SingletonXML singleton = SingletonXML.Instance;
+                                //singleton.ResetXML();
+
+                                // 특수한 경우로 저장 버튼이 나와서 숨김
+                                _f1.btnSave.Visible = false;
+
+                                _f1.cBoxMethod.Text = _f1._methods[0];
                                 _f1.tBoxURL.Text = "";
                                 _f1.tBoxCookie.Text = "";
                                 _f1.tBoxMsg.Text = "";
-                                _f1.isNotUse();
+                                _f1.isUse();
                                 _f1.lblTitle.Visible = true;
-                                _f1.lblTitle.Text = "무결성 검사 오류";
+                                _f1.lblTitle.Text = sNode.Text;
+
+                                RequestXML requestXML = new RequestXML();
+
+                                requestXML._METHOD = _f1._methods[0];
+                                requestXML._URL = "";
+                                requestXML._COOKIE = "";
+                                requestXML._MSG = "";
+
+                                string savePath = GetXmlPath(sNode);
+                                string hashPath = GetHashPathForFile(sNode);
+
+                                _f1.Save_XML(requestXML, savePath, hashPath);
                             }
                             else
                             {
@@ -509,81 +530,103 @@ namespace API_Tester
         /// 추후에 notUse()로 막혀있는 화면은 다른 화면으로 대체할 예정
         private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            // 초기 폴더 생성 및 검사 (etc,sec)
-            CreateEtcFolder();
-
-            var sNode = treeView1.SelectedNode;
-            _f1._selectedNode = sNode;
-
-            int nLevel = sNode.Level;
-
-            // 일단 저장 버튼 숨기기
-            _f1.btnSave.Visible = false;
-            
-            if (sNode != null)
+            try
             {
-                switch (nLevel)
+                // 초기 폴더 생성 및 검사 (etc,sec)
+                CreateEtcFolder();
+
+                var sNode = treeView1.SelectedNode;
+                _f1._selectedNode = sNode;
+
+                int nLevel = sNode.Level;
+
+                // 일단 저장 버튼 숨기기
+                _f1.btnSave.Visible = false;
+
+                if (sNode != null)
                 {
-                    case 0:
-                        _f1.lblTitle.Visible = false;
-                        _f1.cBoxMethod.Text = _f1._methods[0];
-                        _f1.tBoxURL.Text = string.Empty;
-                        _f1.tBoxCookie.Text = string.Empty;
-                        _f1.tBoxMsg.Text = string.Empty;
-                        _f1.tBoxRst.Text = string.Empty;
-                        _f1.isNotUse();
-                        break;
-                    case 1:
-                        _f1.lblTitle.Visible = false;
-                        _f1.cBoxMethod.Text = _f1._methods[0];
-                        _f1.tBoxURL.Text = string.Empty;
-                        _f1.tBoxCookie.Text = string.Empty;
-                        _f1.tBoxMsg.Text = string.Empty;
-                        _f1.tBoxRst.Text = string.Empty;
-                        _f1.isNotUse();
+                    switch (nLevel)
+                    {
+                        case 0:
+                            _f1.lblTitle.Visible = false;
+                            _f1.cBoxMethod.Text = _f1._methods[0];
+                            _f1.tBoxURL.Text = string.Empty;
+                            _f1.tBoxCookie.Text = string.Empty;
+                            _f1.tBoxMsg.Text = string.Empty;
+                            _f1.tBoxRst.Text = string.Empty;
+                            _f1.isNotUse();
+                            break;
+                        case 1:
+                            _f1.lblTitle.Visible = false;
+                            _f1.cBoxMethod.Text = _f1._methods[0];
+                            _f1.tBoxURL.Text = string.Empty;
+                            _f1.tBoxCookie.Text = string.Empty;
+                            _f1.tBoxMsg.Text = string.Empty;
+                            _f1.tBoxRst.Text = string.Empty;
+                            _f1.isNotUse();
 
-                        // 만약 해시 폴더 없다면 생성
-                        CreateHashFolder(sNode.Text);
-                        break;
-                    case 2:
+                            // 만약 해시 폴더 없다면 생성
+                            CreateHashFolder(sNode.Text);
+                            break;
+                        case 2:
 
-                        // 더블 클릭 시 Request 정보 표시 - Load_XML 사용
-                        string xmlPath = GetXmlPath(sNode);
-                        FileInfo saveFile = new FileInfo(xmlPath);
-                        if (saveFile.Exists)
-                        {
-                            // 테스트를 위해 남겨논건데 추후 삭제 예정
-                            bool wantCheckIntegrity = true;
-                            //string[] saveData = _f1.Load_XML(sNode,wantCheckIntegrity);
-
-                            XmlDocument xdoc = _f1.Load_XML(sNode, wantCheckIntegrity);
-                            string[] saveData = _f1.XMLtoStringArr(xdoc);
-                            if (saveData.Length == 0)
+                            // 더블 클릭 시 Request 정보 표시 - Load_XML 사용
+                            string xmlPath = GetXmlPath(sNode);
+                            FileInfo saveFile = new FileInfo(xmlPath);
+                            if (saveFile.Exists)
                             {
-                                _f1.cBoxMethod.Text = "";
-                                _f1.tBoxURL.Text = "";
-                                _f1.tBoxCookie.Text = "";
-                                _f1.tBoxMsg.Text = "";
-                                _f1.isNotUse();
-                                _f1.lblTitle.Visible = true;
-                                _f1.lblTitle.Text = "무결성 검사 오류";
+                                // 테스트를 위해 남겨논건데 추후 삭제 예정
+                                bool wantCheckIntegrity = true;
+                                //string[] saveData = _f1.Load_XML(sNode,wantCheckIntegrity);
+
+                                XmlDocument xdoc = _f1.Load_XML(sNode, wantCheckIntegrity);
+                                string[] saveData = _f1.XMLtoStringArr(xdoc);
+
+                                // 여기서 무결성깨지면 초기화가 이루어줘야 한다.(아직 안함)
+                                if (saveData.Length == 0)
+                                {
+                                    // 특수한 경우로 저장 버튼이 나와서 숨김
+                                    _f1.btnSave.Visible = false;
+
+                                    _f1.cBoxMethod.Text = _f1._methods[0];
+                                    _f1.tBoxURL.Text = "";
+                                    _f1.tBoxCookie.Text = "";
+                                    _f1.tBoxMsg.Text = "";
+                                    _f1.isUse();
+                                    _f1.lblTitle.Visible = true;
+                                    _f1.lblTitle.Text = sNode.Text;
+
+                                    RequestXML requestXML = new RequestXML();
+
+                                    requestXML._METHOD = _f1._methods[0];
+                                    requestXML._URL = "";
+                                    requestXML._COOKIE = "";
+                                    requestXML._MSG = "";
+
+                                    string savePath = GetXmlPath(sNode);
+                                    string hashPath = GetHashPathForFile(sNode);
+
+                                    _f1.Save_XML(requestXML, savePath, hashPath);
+                                }
+                                else
+                                {
+                                    _f1.cBoxMethod.Text = saveData[0];
+                                    _f1.tBoxURL.Text = saveData[1];
+                                    _f1.tBoxCookie.Text = saveData[2];
+                                    _f1.tBoxMsg.Text = saveData[3];
+                                    _f1.isUse();
+                                    _f1.lblTitle.Visible = true;
+                                    _f1.lblTitle.Text = sNode.Text;
+                                }
                             }
-                            else
-                            {
-                                _f1.cBoxMethod.Text = saveData[0];
-                                _f1.tBoxURL.Text = saveData[1];
-                                _f1.tBoxCookie.Text = saveData[2];
-                                _f1.tBoxMsg.Text = saveData[3];
-                                _f1.isUse();
-                                _f1.lblTitle.Visible = true;
-                                _f1.lblTitle.Text = sNode.Text;
-                            }
-                        }
-                        break;
-                    default:
-                        break;
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
+            catch { }
+            
         }
 
 
