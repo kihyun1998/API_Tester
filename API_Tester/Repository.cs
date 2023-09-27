@@ -13,8 +13,9 @@ using System.IO;
 namespace API_Tester
 {
     public partial class Repository : Form
-    { 
+    {
 
+        string _etcFolderName = ".apitest";
         string _rootPath = Path.GetFullPath(@"..\Repository");
         Form1 _f1 = null;
 
@@ -50,7 +51,7 @@ namespace API_Tester
             foreach (var directory in directoryInfo.GetDirectories())
             {
                 // 무결성 검사 폴더는 숨기기
-                if (directory.Name == "HASH")
+                if (directory.Name == "etc")
                 {
                     break;
                 }
@@ -85,21 +86,58 @@ namespace API_Tester
             _customInputForm.Show();
         }
 
+        public void CreateEtcFolder()
+        {
+            // C:\Users\유저\.apitest 폴더 생성
+            string etcFolder = string.Format("{0}\\..\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName);
+            DirectoryInfo etcDir = new DirectoryInfo(etcFolder);
+            if (!etcDir.Exists)
+            {
+                etcDir.Create();
+            }
+
+            // C:\Users\유저\.apitest\sec 폴더 생성
+            string secFolder = string.Format("{0}\\..\\{1}\\sec", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName);
+            DirectoryInfo secDir = new DirectoryInfo(secFolder);
+            if (!secDir.Exists)
+            {
+                secDir.Create();
+            }
+        }
+
+        public void CreateHashFolder(string folderName)
+        {
+            string hashPath = string.Format("{0}\\..\\{1}\\sec\\{2}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName, folderName);
+            // C:\Users\유저\.apitest\sec 밑에 전용 해쉬 폴더 생성
+            // 왜냐하면 폴더 마다 중복되는 파일 명 있으면 안되니까
+            DirectoryInfo hashDir = new DirectoryInfo(hashPath);
+            if (!hashDir.Exists)
+            {
+                hashDir.Create();
+            }
+        }
+
+
         ////////////
         /// 폴더 추가 동작 함수
         public void AddFolder(object sender, EventArgs e)
         {
+            // 파일 생성 창 닫기
             _customInputForm.Close();
+
+            // 초기 폴더 생성 및 검사 (etc,sec)
+            CreateEtcFolder();
+
             var sNode = treeView1.SelectedNode;
 
             string folderName = _customInputForm._name;
+            
 
             if (folderName != "")
             {
                 if (sNode != null)
                 {
                     string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, folderName);
-                    string hashFolder = string.Format("..\\{0}\\{1}\\HASH", sNode.FullPath, folderName);
 
                     DirectoryInfo createdDir = new DirectoryInfo(savePath);
                     if (!createdDir.Exists)
@@ -114,11 +152,10 @@ namespace API_Tester
                         CustomMessageBox.ShowMessage("중복된 폴더명입니다!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
 
-                    DirectoryInfo hashDir = new DirectoryInfo(hashFolder);
-                    if (!hashDir.Exists)
-                    {
-                        hashDir.Create();
-                    }
+                    CreateHashFolder(folderName);
+
+                    
+
                 }
             }
             else
@@ -183,10 +220,17 @@ namespace API_Tester
         /// 파일 추가 동작 함수
         public void AddFile(object sender, EventArgs e)
         {
+            // 파일 생성 창 닫기
             _customInputForm.Close();
+
+            // 초기 폴더 생성 및 검사 (etc,sec)
+            CreateEtcFolder();
+
+            
             var sNode = treeView1.SelectedNode;
 
             string fileName = _customInputForm._name;
+
 
             if (fileName != "")
             {
@@ -245,6 +289,9 @@ namespace API_Tester
         /// 파일 삭제 동작 함수
         public void btnDelFile_Click(object sender, EventArgs e)
         {
+            // 초기 폴더 생성 및 검사 (etc,sec)
+            CreateEtcFolder();
+
             var sNode = treeView1.SelectedNode;
 
             if (sNode != null && sNode.Parent != null)
@@ -271,7 +318,8 @@ namespace API_Tester
         {
             try
             {
-                string hashPath = string.Format("..\\{0}\\HASH\\{1}", sNode.FullPath, string.Format(fileName + "-Hash.txt"));
+                string hashPath = string.Format("{0}\\..\\{1}\\sec\\{2}\\{3}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName, sNode.Text, string.Format(fileName + "-etc.txt"));
+
                 return hashPath;
             }
             catch
@@ -288,8 +336,8 @@ namespace API_Tester
         {
             try
             {
-                string parentPath = sNode.FullPath.Substring(0, sNode.FullPath.Length - sNode.Text.Length);
-                string hashPath = string.Format("..\\{0}\\HASH\\{1}", parentPath, string.Format(sNode.Text + "-Hash.txt"));
+                string hashPath = string.Format("{0}\\..\\{1}\\sec\\{2}\\{3}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName, sNode.Parent.Text, string.Format(sNode.Text + "-etc.txt"));
+
                 return hashPath;
             }
             catch
@@ -343,6 +391,9 @@ namespace API_Tester
         ///그리고 버튼 보여줄지 말지
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            // 초기 폴더 생성 및 검사 (etc,sec)
+            CreateEtcFolder();
+
             var sNode = treeView1.SelectedNode;
             _f1._selectedNode = sNode;
 
@@ -389,6 +440,9 @@ namespace API_Tester
                         _f1.tBoxMsg.Text = string.Empty;
                         _f1.tBoxRst.Text = string.Empty;
                         _f1.isNotUse();
+
+                        // 만약 해시 폴더 없다면 생성
+                        CreateHashFolder(sNode.Text);
                         break;
                     case 2:
                         tBoxName.Enabled = false;    // 입력 불가능
@@ -448,6 +502,8 @@ namespace API_Tester
         /// 추후에 notUse()로 막혀있는 화면은 다른 화면으로 대체할 예정
         private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+            // 초기 폴더 생성 및 검사 (etc,sec)
+            CreateEtcFolder();
 
             var sNode = treeView1.SelectedNode;
             _f1._selectedNode = sNode;
@@ -478,6 +534,9 @@ namespace API_Tester
                         _f1.tBoxMsg.Text = string.Empty;
                         _f1.tBoxRst.Text = string.Empty;
                         _f1.isNotUse();
+
+                        // 만약 해시 폴더 없다면 생성
+                        CreateHashFolder(sNode.Text);
                         break;
                     case 2:
                         string xmlPath = GetXmlPath(sNode);
@@ -578,5 +637,25 @@ namespace API_Tester
         }
 
 
+        // TreeView 확장 시에도 Hash 폴더 만들도록
+        private void treeView1_AfterExpand(object sender, TreeViewEventArgs e)
+        {
+            if (e.Node.Level == 1)
+            {
+                // 만약 해시 폴더 없다면 생성
+                CreateHashFolder(e.Node.Text);
+            }
+            
+        }
+
+        // TreeView 축소 시에도 Hash 폴더 만들도록
+        private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        {
+            if (e.Node.Level == 1)
+            {
+                // 만약 해시 폴더 없다면 생성
+                CreateHashFolder(e.Node.Text);
+            }
+        }
     }
 }
