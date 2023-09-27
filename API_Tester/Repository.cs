@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.IO;
+using System.Xml;
 
 namespace API_Tester
 {
@@ -219,7 +220,7 @@ namespace API_Tester
 
 
         //////////
-        /// 파일 추가 동작 함수
+        /// 파일 추가 동작 함수 - SAVE_XML
         public void AddFile(object sender, EventArgs e)
         {
             // 파일 생성 창 닫기
@@ -455,13 +456,17 @@ namespace API_Tester
                         btnDelFile.Visible = true;  // 파일 삭제 가능
 
 
-                        // 한번 클릭 시에도 창 전환되도록 변경
+                        // 한번 클릭 시에도 창 전환되도록 변경 - Load_XML 사용
                         string xmlPath = GetXmlPath(sNode);
                         FileInfo saveFile = new FileInfo(xmlPath);
                         if (saveFile.Exists)
                         {
+                            // 테스트를 위해 남겨논건데 추후 삭제 예정
                             bool wantCheckIntegrity = true;
-                            string[] saveData = _f1.Load_XML(sNode,wantCheckIntegrity);
+                            //string[] saveData = _f1.Load_XML(sNode,wantCheckIntegrity);
+
+                            XmlDocument xdoc = _f1.Load_XML(sNode, wantCheckIntegrity);
+                            string[] saveData = _f1.XMLtoStringArr(xdoc);
 
                             if (saveData.Length == 0)
                             {
@@ -541,12 +546,18 @@ namespace API_Tester
                         CreateHashFolder(sNode.Text);
                         break;
                     case 2:
+
+                        // 더블 클릭 시 Request 정보 표시 - Load_XML 사용
                         string xmlPath = GetXmlPath(sNode);
                         FileInfo saveFile = new FileInfo(xmlPath);
                         if (saveFile.Exists)
                         {
+                            // 테스트를 위해 남겨논건데 추후 삭제 예정
                             bool wantCheckIntegrity = true;
-                            string[] saveData = _f1.Load_XML(sNode,wantCheckIntegrity);
+                            //string[] saveData = _f1.Load_XML(sNode,wantCheckIntegrity);
+
+                            XmlDocument xdoc = _f1.Load_XML(sNode, wantCheckIntegrity);
+                            string[] saveData = _f1.XMLtoStringArr(xdoc);
                             if (saveData.Length == 0)
                             {
                                 _f1.cBoxMethod.Text = "";

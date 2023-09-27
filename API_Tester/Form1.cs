@@ -96,7 +96,7 @@ namespace API_Tester
         }
 
         ///////
-        /// 좌측 repository 창 닫기
+        /// 좌측 repository 창 닫기 - 싱글톤 사용해야함. (아직 변경 전)
         private void btnRight_Click(object sender, EventArgs e)
         {
             btnRight.Visible = false;
@@ -109,8 +109,13 @@ namespace API_Tester
                 FileInfo saved = new FileInfo(xmlPath);
                 if (saved.Exists)
                 {
-                    bool wantCheckIntegrity = false;
-                    string [] saveData = Load_XML(_selectedNode, wantCheckIntegrity);
+                    //bool wantCheckIntegrity = false;
+                    //string [] saveData = Load_XML(_selectedNode, wantCheckIntegrity);
+
+                    // 싱글톤 객체를 통한 XML 검사
+                    SingletonXML sXML = SingletonXML.Instance;
+                    XmlDocument xdoc = sXML.GetXML();
+                    string[] saveData = XMLtoStringArr(xdoc);
 
                     if (IsChanged(saveData))
                     {
@@ -142,6 +147,9 @@ namespace API_Tester
 
         /////////////////
         /// 잡다한 함수
+        /// 
+
+        // 비밀번호 저장할거냐고 묻는 함수 - SAVE_XML
         private void QuestionToSave(string xmlPath, string hashPath)
         {
             if(CustomMessageBox.ShowMessage("변경내용이 있습니다.\n저장 하시겠습니까?","Save",MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -167,7 +175,7 @@ namespace API_Tester
         }
 
         ////////////////
-        /// 파일 저장
+        /// 파일 저장 - 싱글톤 사용 해야 함.(화면 닫힐 때 Save_XML 로직 추가해야할듯)
         private void btnSave_Click(object sender, EventArgs e)
         {
 
@@ -194,6 +202,9 @@ namespace API_Tester
             }
         }
 
+
+        // textbox에 있던 파일을 requestXML 객체로 받아서 로컬에 저장하기 직전 함수
+        // 프로그램 종료 시에도 저장 하도록 하는 로직 추가해야한다. (아직 안함)
         public void Save_XML(RequestXML requestXML, string xmlPath, string hashPath)
         {
             XmlDocument xdoc = new XmlDocument();
@@ -225,23 +236,35 @@ namespace API_Tester
             string cipherText = AES256.Encrypt(root.OuterXml);
             File.WriteAllText(xmlPath, cipherText, Encoding.Default);
 
+            // 해시파일도 등록 (추후 원본 해시로 변경해야함)
             string hashText = SHA256.Hash(root.OuterXml);
-
             File.WriteAllText(hashPath, hashText, Encoding.Default);
+
+
+            // 저장한 XML 싱글톤으로 등록
+            List<string> returnList = new List<string> { };
+
+            returnList.Add(requestXML._METHOD);
+            returnList.Add(requestXML._URL);
+            returnList.Add(requestXML._COOKIE);
+            returnList.Add(requestXML._MSG);
+
+            // 저장 시 싱글톤에 저장
+            SingletonXML sXML = SingletonXML.Instance;
+            sXML.SetXML(xdoc);
 
             //xdoc.Save(savePath);
         }
         
 
-        public string[] Load_XML(TreeNode sNode, bool wantCheck)
+        public XmlDocument Load_XML(TreeNode sNode, bool wantCheck)
         {
-            List<string> returnList = new List<string> { };
-
             string loadPath = _repository.GetXmlPath(sNode);
 
             string cryptXML = File.ReadAllText(loadPath);
             string decryptXML = AES256.Decrypt(cryptXML);
 
+            // 무결성 검사 실패한다면 무결성 실패가 아닌 그냥 값 초기화 후 사용할 수 있도록 해야함
             if (wantCheck)
             {
                 string hashPath = _repository.GetHashPathForFile(sNode);
@@ -252,13 +275,44 @@ namespace API_Tester
                 if (!checkValue)
                 {
                     CustomMessageBox.ShowMessage("[ERROR] 무결성 검사 실패", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return returnList.ToArray();
+                    //return returnList.ToArray();
                 }
             }
 
             XmlDocument xdoc = new XmlDocument();
-
             xdoc.LoadXml(decryptXML);
+
+            return xdoc;
+
+            //XmlNodeList nodes = xdoc.SelectNodes("/Request/Request-Data");
+
+            //foreach (XmlNode data in nodes)
+            //{
+            //    string sMethod = data.SelectSingleNode("Method").InnerText;
+            //    string sURL = data.SelectSingleNode("URL").InnerText;
+            //    string sCookie = data.SelectSingleNode("Cookie").InnerText;
+            //    string sMsg = data.SelectSingleNode("Msg").InnerText;
+
+            //    returnList.Add(sMethod);
+            //    returnList.Add(sURL);
+            //    returnList.Add(sCookie);
+            //    returnList.Add(sMsg);
+
+            //    //return returnList.ToArray();
+            //}
+
+            //// 불러온 XML 싱글톤으로 등록
+            //SingletonXML sXML = SingletonXML.Instance;
+            //sXML.SetXML(returnList.ToArray());
+
+            //string[] rtn = XMLtoStringArr(xdoc);
+
+            //return rtn;
+        }
+
+        public string[] XMLtoStringArr(XmlDocument xdoc)
+        {
+            List<string> returnList = new List<string> { };
 
             XmlNodeList nodes = xdoc.SelectNodes("/Request/Request-Data");
 
@@ -277,12 +331,16 @@ namespace API_Tester
                 //return returnList.ToArray();
             }
 
+            // 불러온 XML 싱글톤으로 등록
+            SingletonXML sXML = SingletonXML.Instance;
+            sXML.SetXML(xdoc);
+
             return returnList.ToArray();
         }
 
 
         //////////////////
-        ///텍스트 변경 시 저장버튼 visible
+        ///텍스트 변경 시 저장버튼 visible - 싱글톤 사용해야 한다. (아직 변경 전)
         public void TextBox_TextChanged(Object sender, EventArgs e)
         {
             if (_repository != null)
@@ -292,7 +350,13 @@ namespace API_Tester
                 if (save.Exists)
                 {
                     bool wantCheckIntegrity = false;
-                    string[] saveData = Load_XML(_selectedNode,wantCheckIntegrity);
+                    //string[] saveData = Load_XML(_selectedNode,wantCheckIntegrity);
+
+                    // 싱글톤 객체를 통한 XML 검사
+                    SingletonXML sXML = SingletonXML.Instance;
+                    XmlDocument xdoc = sXML.GetXML();
+                    string[] saveData = XMLtoStringArr(xdoc);
+
                     if (IsChanged(saveData))
                     {
                         btnSave.Visible = true;
@@ -468,15 +532,20 @@ namespace API_Tester
                 lblMsg.Visible = false;
             }
 
-            // Method 변경 시 저장 버튼 추가하는 로직 추가
+            // Method 변경 시 저장 버튼 추가하는 로직 추가 - 싱글톤 사용해야함 (변경 전)
             if(_repository != null)
             {
                 string xmlPath = _repository.GetXmlPath(_selectedNode);
                 FileInfo save = new FileInfo(xmlPath);
                 if (save.Exists)
                 {
-                    bool wantCheckIntegrity = false;
-                    string[] saveData = Load_XML(_selectedNode, wantCheckIntegrity);
+                    //bool wantCheckIntegrity = false;
+                    //string[] saveData = Load_XML(_selectedNode, wantCheckIntegrity);
+                    // 싱글톤 객체를 통한 XML 검사
+                    SingletonXML sXML = SingletonXML.Instance;
+                    XmlDocument xdoc = sXML.GetXML();
+                    string[] saveData = XMLtoStringArr(xdoc);
+
                     if (IsChanged(saveData))
                     {
                         btnSave.Visible = true;
