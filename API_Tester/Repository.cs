@@ -190,7 +190,9 @@ namespace API_Tester
                 if (CustomMessageBox.ShowMessage("폴더를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     string deletePath = string.Format("..\\{0}", sNode.FullPath);
+                    string deleteHashPath = string.Format("{0}\\..\\{1}\\sec\\{2}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName, sNode.Text);
                     Directory.Delete(deletePath, recursive: true);
+                    Directory.Delete(deleteHashPath, recursive: true);
                     treeView1.Nodes.Remove(sNode);
 
                     CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
