@@ -29,7 +29,6 @@ namespace API_Tester
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Repository));
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.titleBar = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -103,7 +102,7 @@ namespace API_Tester
             // btnAddFile
             // 
             this.btnAddFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddFile.Image = ((System.Drawing.Image)(resources.GetObject("btnAddFile.Image")));
+            this.btnAddFile.Image = global::API_Tester.Properties.Resources.document_add;
             this.btnAddFile.Location = new System.Drawing.Point(234, 5);
             this.btnAddFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnAddFile.Name = "btnAddFile";
@@ -117,7 +116,7 @@ namespace API_Tester
             // btnDelFile
             // 
             this.btnDelFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDelFile.Image = ((System.Drawing.Image)(resources.GetObject("btnDelFile.Image")));
+            this.btnDelFile.Image = global::API_Tester.Properties.Resources.document_del;
             this.btnDelFile.Location = new System.Drawing.Point(234, 4);
             this.btnDelFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDelFile.Name = "btnDelFile";
@@ -131,7 +130,7 @@ namespace API_Tester
             // btnDelete
             // 
             this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDelete.Image = ((System.Drawing.Image)(resources.GetObject("btnDelete.Image")));
+            this.btnDelete.Image = global::API_Tester.Properties.Resources.folder;
             this.btnDelete.Location = new System.Drawing.Point(195, 5);
             this.btnDelete.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDelete.Name = "btnDelete";
@@ -145,7 +144,7 @@ namespace API_Tester
             // btnAdd
             // 
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnAdd.Image")));
+            this.btnAdd.Image = global::API_Tester.Properties.Resources.add_folder;
             this.btnAdd.Location = new System.Drawing.Point(195, 6);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnAdd.Name = "btnAdd";

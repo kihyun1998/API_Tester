@@ -175,5 +175,26 @@
   <ItemGroup>
     <None Include="img\question-sky.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="img\document_add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\document_del.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\free-icon-left-arrow-271220.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\free-icon-right-arrow-271228.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\add-folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

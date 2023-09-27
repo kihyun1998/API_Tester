@@ -29,7 +29,6 @@ namespace API_Tester
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.cBoxMethod = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.btnRequest = new System.Windows.Forms.Button();
@@ -151,7 +150,7 @@ namespace API_Tester
             // 
             // btnRight
             // 
-            this.btnRight.Image = ((System.Drawing.Image)(resources.GetObject("btnRight.Image")));
+            this.btnRight.Image = global::API_Tester.Properties.Resources.free_icon_right_arrow_271228;
             this.btnRight.Location = new System.Drawing.Point(3, 4);
             this.btnRight.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnRight.Name = "btnRight";
@@ -164,7 +163,7 @@ namespace API_Tester
             // 
             // btnLeft
             // 
-            this.btnLeft.Image = ((System.Drawing.Image)(resources.GetObject("btnLeft.Image")));
+            this.btnLeft.Image = global::API_Tester.Properties.Resources.free_icon_left_arrow_271220;
             this.btnLeft.Location = new System.Drawing.Point(3, 4);
             this.btnLeft.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnLeft.Name = "btnLeft";
@@ -277,7 +276,7 @@ namespace API_Tester
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Image = ((System.Drawing.Image)(resources.GetObject("btnSave.Image")));
+            this.btnSave.Image = global::API_Tester.Properties.Resources.save;
             this.btnSave.Location = new System.Drawing.Point(1103, 62);
             this.btnSave.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnSave.Name = "btnSave";
