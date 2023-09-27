@@ -101,11 +101,12 @@ namespace API_Tester
         {
             btnRight.Visible = false;
             btnLeft.Visible = true;
+            TreeNode sNode = _repository.treeView1.SelectedNode;
 
-            if (_selectedNode != null)
+            if (sNode != null)
             {
-                string xmlPath = _repository.GetXmlPath(_selectedNode);
-                string hashPath = _repository.GetHashPathForFile(_selectedNode);
+                string xmlPath = _repository.GetXmlPath(sNode);
+                string hashPath = _repository.GetHashPathForFile(sNode);
                 FileInfo saved = new FileInfo(xmlPath);
                 if (saved.Exists)
                 {
@@ -132,7 +133,7 @@ namespace API_Tester
             
             _repository.Close();
             _repository = null;
-            _selectedNode = null;
+            sNode = null;
             lblTitle.Visible = false;
             btnSave.Visible = false;
             cBoxMethod.Text = _methods[0];
@@ -320,7 +321,7 @@ namespace API_Tester
             if (_repository != null)
             {
                 TreeNode sNode = _repository.treeView1.SelectedNode;
-                string xmlPath = _repository.GetXmlPath(_selectedNode);
+                string xmlPath = _repository.GetXmlPath(sNode);
                 FileInfo save = new FileInfo(xmlPath);
                 if (save.Exists)
                 {
@@ -328,11 +329,11 @@ namespace API_Tester
                     SingletonXML sXML = SingletonXML.Instance;
                     XmlDocument xdoc = sXML.GetXML();
                     string[] saveData = XMLtoStringArr(xdoc);
-                    MessageBox.Show(_selectedNode.Text);
+                    //MessageBox.Show(sNode.Text);
 
                     if (IsChanged(saveData))
                     {
-                        MessageBox.Show(saveData[1]);
+                        //MessageBox.Show(saveData[1]);
                         btnSave.Visible = true;
                     }
                     else
@@ -510,7 +511,8 @@ namespace API_Tester
             // Method 변경 시 저장 버튼 추가하는 로직 추가
             if(_repository != null)
             {
-                string xmlPath = _repository.GetXmlPath(_selectedNode);
+                TreeNode sNode = _repository.treeView1.SelectedNode;
+                string xmlPath = _repository.GetXmlPath(sNode);
                 FileInfo save = new FileInfo(xmlPath);
                 if (save.Exists)
                 {
