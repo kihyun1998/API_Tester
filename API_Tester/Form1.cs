@@ -35,7 +35,7 @@ namespace API_Tester
         string _cookie = string.Empty;
         string _postData = string.Empty;
         string _err = string.Empty;
-        public TreeNode _selectedNode = null;
+  
         public string[] _methods = { "GET", "POST", "PUT", "DELETE" };
 
         Thread _threadRequest = null;
@@ -279,6 +279,11 @@ namespace API_Tester
             XmlDocument xdoc = new XmlDocument();
             xdoc.LoadXml(decryptXML);
 
+
+            // 불러온 XML 싱글톤으로 등록
+            SingletonXML sXML = SingletonXML.Instance;
+            sXML.SetXML(xdoc);
+
             return xdoc;
         }
 
@@ -306,9 +311,6 @@ namespace API_Tester
                 returnList.Add(sMsg);
             }
 
-            // 불러온 XML 싱글톤으로 등록
-            SingletonXML sXML = SingletonXML.Instance;
-            sXML.SetXML(xdoc);
 
             return returnList.ToArray();
         }
@@ -323,6 +325,7 @@ namespace API_Tester
                 TreeNode sNode = _repository.treeView1.SelectedNode;
                 string xmlPath = _repository.GetXmlPath(sNode);
                 FileInfo save = new FileInfo(xmlPath);
+
                 if (save.Exists)
                 {
                     // 싱글톤 객체를 통한 XML 검사
@@ -333,7 +336,8 @@ namespace API_Tester
 
                     if (IsChanged(saveData))
                     {
-                        //MessageBox.Show(saveData[1]);
+                        MessageBox.Show(saveData[1]);
+                        MessageBox.Show(xdoc.ToString());
                         btnSave.Visible = true;
                     }
                     else

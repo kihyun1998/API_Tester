@@ -10,7 +10,7 @@ namespace API_Tester
     class SingletonXML
     {
         private static readonly Lazy<SingletonXML> lazyInstance = new Lazy<SingletonXML>(() => new SingletonXML());
-        private XmlDocument loadXml;
+        private XmlDocument loadedXml;
 
         // Singleton 인스턴스를 가져오는 속성입니다.
         public static SingletonXML Instance => lazyInstance.Value;
@@ -18,18 +18,18 @@ namespace API_Tester
 
         private SingletonXML()
         {
-            this.loadXml = new XmlDocument();
+            this.loadedXml = new XmlDocument();
         }
 
         // Save_XML이 됐다면 SetXML 해줘야 한다.
         public void SetXML(XmlDocument xml)
         {
-            this.loadXml = xml;
+            this.loadedXml = xml;
         }
 
         public XmlDocument GetXML()
         {
-            return this.loadXml;
+            return this.loadedXml;
         }
 
         public XmlDocument ResetXML()
