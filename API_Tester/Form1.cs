@@ -35,6 +35,7 @@ namespace API_Tester
         string _cookie = string.Empty;
         string _postData = string.Empty;
         string _err = string.Empty;
+        public bool _canCheck = true;
   
         public string[] _methods = { "GET", "POST", "PUT", "DELETE" };
 
@@ -320,7 +321,7 @@ namespace API_Tester
         ///텍스트 변경 시 저장버튼 visible 
         public void TextBox_TextChanged(Object sender, EventArgs e)
         {
-            if (_repository != null)
+            if (_repository != null && _canCheck)
             {
                 TreeNode sNode = _repository.treeView1.SelectedNode;
                 string xmlPath = _repository.GetXmlPath(sNode);
@@ -332,12 +333,9 @@ namespace API_Tester
                     SingletonXML sXML = SingletonXML.Instance;
                     XmlDocument xdoc = sXML.GetXML();
                     string[] saveData = XMLtoStringArr(xdoc);
-                    //MessageBox.Show(sNode.Text);
 
                     if (IsChanged(saveData))
                     {
-                        MessageBox.Show(saveData[1]);
-                        MessageBox.Show(xdoc.ToString());
                         btnSave.Visible = true;
                     }
                     else
