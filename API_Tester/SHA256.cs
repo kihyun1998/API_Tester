@@ -22,9 +22,9 @@ namespace API_Tester
             return stringBuilder.ToString();
         }
 
-        public static bool CheckIntegrity(string hashText,string decryptText)
+        public static bool CheckIntegrity(string originText, string hashText)
         {
-            string decryptHash = Hash(decryptText);
+            string decryptHash = Hash(originText);
             if (string.Equals(hashText, decryptHash))
             {
                 return true;
