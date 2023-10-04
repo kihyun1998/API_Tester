@@ -29,6 +29,7 @@ namespace API_Tester
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.cBoxMethod = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.btnRequest = new System.Windows.Forms.Button();
@@ -158,7 +159,7 @@ namespace API_Tester
             this.btnMin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMin.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btnMin.ForeColor = System.Drawing.Color.White;
-            this.btnMin.Location = new System.Drawing.Point(1049, 4);
+            this.btnMin.Location = new System.Drawing.Point(1047, 6);
             this.btnMin.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnMin.Name = "btnMin";
             this.btnMin.Size = new System.Drawing.Size(32, 31);
@@ -228,7 +229,7 @@ namespace API_Tester
             // 
             this.btnMax.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMax.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.btnMax.BackgroundImage = global::API_Tester.Properties.Resources.square;
+            this.btnMax.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMax.BackgroundImage")));
             this.btnMax.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMax.FlatAppearance.BorderSize = 0;
             this.btnMax.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -247,7 +248,7 @@ namespace API_Tester
             // 
             this.btnX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnX.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.btnX.BackgroundImage = global::API_Tester.Properties.Resources.close;
+            this.btnX.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnX.BackgroundImage")));
             this.btnX.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnX.FlatAppearance.BorderSize = 0;
             this.btnX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -359,14 +360,12 @@ namespace API_Tester
             // 
             // btnSave
             // 
-            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.Image = global::API_Tester.Properties.Resources.save;
-            this.btnSave.Location = new System.Drawing.Point(-6034, -4189);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnSave.Location = new System.Drawing.Point(1096, 62);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(33, 33);
+            this.btnSave.Size = new System.Drawing.Size(39, 35);
             this.btnSave.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnSave.TabIndex = 24;
+            this.btnSave.TabIndex = 27;
             this.btnSave.TabStop = false;
             this.btnSave.Visible = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -377,9 +376,9 @@ namespace API_Tester
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(1188, 700);
+            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.tBoxRst);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tBoxMsg);
@@ -428,11 +427,11 @@ namespace API_Tester
         public Custom.CustomTextBox tBoxCookie;
         public Custom.CustomTextBox tBoxMsg;
         public Custom.CustomTextBox tBoxURL;
-        public System.Windows.Forms.PictureBox btnSave;
         public System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.TextBox tBoxRst;
         private System.Windows.Forms.Button btnMin;
+        public System.Windows.Forms.PictureBox btnSave;
     }
 }
 

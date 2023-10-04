@@ -388,14 +388,8 @@ namespace API_Tester
 
 
 
-
-
-        /// Form1의 text changed 이벤트 관련한 에러가 있음
-        /// 그래서 노드를 변경할 때 특정검사값을 설정해줘서 노드 간 변경 시에는 텍스트 변환 검사 안하도록 코드 수정해야함
-
         //////////
         ////선택한 노드가 있나 없나 체크
-        ///그리고 버튼 보여줄지 말지
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             whenClick();
@@ -403,24 +397,26 @@ namespace API_Tester
 
         /////////////
         ///더블 클릭 시 이벤트 (값 불러오기)
-        /// 추후에 isNotUse()로 막혀있는 화면은 다른 화면으로 대체할 예정
         private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             whenClick();
         }
 
+        /// 추후에 isNotUse()로 막혀있는 화면은 다른 화면으로 대체할 예정
         private void whenClick()
         {
             // 초기 폴더 생성 및 검사 (etc,sec)
             CreateEtcFolder();
+
+            // 저장 버튼 안보이게하기
+            _f1.btnSave.Visible = false;
 
             var sNode = treeView1.SelectedNode;
             if (sNode != null)
             {
                 int nLevel = sNode.Level;
 
-                // 저장 버튼 숨기기
-                _f1.btnSave.Visible = false;
+
 
                 if (sNode != null)
                 {
@@ -463,6 +459,8 @@ namespace API_Tester
                             // 만약 해시 폴더 없다면 생성
                             CreateHashFolder(sNode.Text);
                             break;
+
+                            // 해시 파일 없는 경우 처리 해야함
                         case 2:
                             tBoxName.Enabled = false;    // 입력 불가능
                             tBoxName.Visible = false;   // 이름 인풋 안보임
@@ -471,23 +469,19 @@ namespace API_Tester
                             btnAddFile.Visible = false; // 파일 추가 불가능
                             btnDelFile.Visible = true;  // 파일 삭제 가능
 
-
                             _f1._canCheck = false;      // 노드 변경 시 text_changed 이벤트가 발생하는 현상이 있어서 검사
 
-
-                            // 한번 클릭 시에도 창 전환되도록 변경 - Load_XML 사용
+                            // 한번 클릭 시에도 창 전환되도록 변경
                             string xmlPath = GetXmlPath(sNode);
                             FileInfo saveFile = new FileInfo(xmlPath);
                             if (saveFile.Exists)
                             {
-                                // 테스트를 위해 남겨논건데 추후 삭제 예정
-                                bool wantCheckIntegrity = true;
 
-                                XmlDocument xdoc = _f1.Load_XML(sNode, wantCheckIntegrity);
+                                XmlDocument xdoc = _f1.Load_XML(sNode);
                                 string[] saveData = _f1.XMLtoStringArr(xdoc);
 
-
-                                // 여기서 무결성깨지면 초기화가 이루어줘야 한다.(아직 안함)
+                                // 무결성 깨지면 saveData.Length == 0 임.
+                                // 무결성 깨지면 초기화가 이루어진다.
                                 if (saveData.Length == 0)
                                 {
                                     _f1.cBoxMethod.Text = _f1._methods[0];
@@ -520,10 +514,8 @@ namespace API_Tester
                                     _f1.lblTitle.Visible = true;
                                     _f1.lblTitle.Text = sNode.Text;
                                 }
+                                _f1._canCheck = true;     // 값을 잘 불러왔다면 텍스트 변화 감지 true
                             }
-
-                            _f1._canCheck = true;     // 값을 잘 불러왔다면 텍스트 변화 감지 true
-
                             break;
                         default:
                             break;

@@ -174,34 +174,6 @@ namespace API_Tester
             }
         }
 
-        ////////////////
-        /// 파일 저장
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-
-            if (_repository != null)
-            {
-                var sNode = _repository.treeView1.SelectedNode;
-                string xmlPath = _repository.GetXmlPath(sNode);
-                string hashPath = _repository.GetHashPathForFile(sNode);
-
-                RequestXML requestXML = new RequestXML();
-
-                requestXML._METHOD = cBoxMethod.Text;
-                requestXML._URL = tBoxURL.Text;
-                requestXML._COOKIE = tBoxCookie.Text;
-                requestXML._MSG = tBoxMsg.Text;
-
-                Save_XML(requestXML, xmlPath, hashPath);
-                CustomMessageBox.ShowMessage("저장이 완료됐습니다!", "Information", MessageBoxButtons.OK,MessageBoxIcon.Information);
-                btnSave.Visible = false;
-            }
-            else
-            {
-                CustomMessageBox.ShowMessage("파일 저장 버그!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
 
         // textbox에 있던 파일을 requestXML 객체로 받아서 로컬에 저장하기 직전 함수
         // 프로그램 종료 시에도 저장 하도록 하는 로직 추가해야한다. (아직 안함)
@@ -232,16 +204,21 @@ namespace API_Tester
 
             root.AppendChild(xData);
 
-            //XML 대신 암호문을 Base64로 저장
-            string cipherText = AES256.Encrypt(root.OuterXml);
-            File.WriteAllText(xmlPath, cipherText, Encoding.Default);
+            // 여기서 root.OuterXMl은 원본
 
-            // 해시파일도 등록 (추후 원본 해시로 변경해야함)
+            // 1. 원본을 해시한다.
             string hashText = SHA256.Hash(root.OuterXml);
-            File.WriteAllText(hashPath, hashText, Encoding.Default);
 
+            // 2. 원본 + 해시 (개행으로 구분)
+            string originHash = string.Format("{0}\n{1}", root.OuterXml, hashText);
 
-            // 저장한 XML 싱글톤으로 등록
+            // 3. 원본+해시를 암호화
+            string cipherText = AES256.Encrypt(originHash);
+
+            // 4. 저장
+            File.WriteAllText(hashPath, cipherText, Encoding.Default);
+
+            // 5. 싱글톤 객체에 저장 ( 그래야 값 변경 시 저장 버튼 나오게 할 수 있음 )
             List<string> returnList = new List<string> { };
 
             returnList.Add(requestXML._METHOD);
@@ -249,33 +226,53 @@ namespace API_Tester
             returnList.Add(requestXML._COOKIE);
             returnList.Add(requestXML._MSG);
 
-            // 저장 시 싱글톤에 저장
             SingletonXML sXML = SingletonXML.Instance;
             sXML.SetXML(xdoc);
-        }
-        
 
-        public XmlDocument Load_XML(TreeNode sNode, bool wantCheck)
+            //기존 방식
+
+            ////XML 대신 암호문을 Base64로 저장
+            //string cipherText = AES256.Encrypt(root.OuterXml);
+            //File.WriteAllText(xmlPath, cipherText, Encoding.Default);
+
+            //// 해시파일도 등록 (추후 원본 해시로 변경해야함)
+            //string hashText = SHA256.Hash(root.OuterXml);
+            //File.WriteAllText(hashPath, hashText, Encoding.Default);
+
+
+            //// 저장한 XML 싱글톤으로 등록
+            //List<string> returnList = new List<string> { };
+
+            //returnList.Add(requestXML._METHOD);
+            //returnList.Add(requestXML._URL);
+            //returnList.Add(requestXML._COOKIE);
+            //returnList.Add(requestXML._MSG);
+
+            //// 저장 시 싱글톤에 저장
+            //SingletonXML sXML = SingletonXML.Instance;
+            //sXML.SetXML(xdoc);
+        }
+
+
+        public XmlDocument Load_XML(TreeNode sNode)
         {
             string loadPath = _repository.GetXmlPath(sNode);
 
             string cryptXML = File.ReadAllText(loadPath);
             string decryptXML = AES256.Decrypt(cryptXML);
 
-            // 무결성 검사 실패한다면 무결성 실패가 아닌 그냥 값 초기화 후 사용할 수 있도록 해야함
-            if (wantCheck)
+
+            string hashPath = _repository.GetHashPathForFile(sNode);
+            string hashText = File.ReadAllText(hashPath);
+
+            bool checkValue = SHA256.CheckIntegrity(hashText, decryptXML);
+
+            if (!checkValue)
             {
-                string hashPath = _repository.GetHashPathForFile(sNode);
-                string hashText = File.ReadAllText(hashPath);
-
-                bool checkValue = SHA256.CheckIntegrity(hashText, decryptXML);
-
-                if (!checkValue)
-                {
-                    //CustomMessageBox.ShowMessage("[ERROR] 무결성 검사 실패", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return null;
-                }
+                // null을 반환하면 무결성이 깨짐을 의미함.
+                return null;
             }
+
 
             XmlDocument xdoc = new XmlDocument();
             xdoc.LoadXml(decryptXML);
@@ -316,6 +313,32 @@ namespace API_Tester
             return returnList.ToArray();
         }
 
+        // 파일 저장 버튼
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            if (_repository != null)
+            {
+                var sNode = _repository.treeView1.SelectedNode;
+                string xmlPath = _repository.GetXmlPath(sNode);
+                string hashPath = _repository.GetHashPathForFile(sNode);
+
+                RequestXML requestXML = new RequestXML();
+
+                requestXML._METHOD = cBoxMethod.Text;
+                requestXML._URL = tBoxURL.Text;
+                requestXML._COOKIE = tBoxCookie.Text;
+                requestXML._MSG = tBoxMsg.Text;
+
+                Save_XML(requestXML, xmlPath, hashPath);
+                CustomMessageBox.ShowMessage("저장이 완료됐습니다!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                btnSave.Visible = false;
+            }
+            else
+            {
+                CustomMessageBox.ShowMessage("파일 저장 버그!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         //////////////////
         ///텍스트 변경 시 저장버튼 visible 
@@ -343,19 +366,6 @@ namespace API_Tester
                         btnSave.Visible = false;
                     }
                 }
-                // 이제 사용 안함
-                //else
-                //{
-                //    string[] data = new string[] { _methods[0], "", "", "" };
-                //    if (IsChanged(data))
-                //    {
-                //        btnSave.Visible = true;
-                //    }
-                //    else
-                //    {
-                //        btnSave.Visible = false;
-                //    }
-                //}
             }
         }
 
@@ -532,19 +542,6 @@ namespace API_Tester
                         btnSave.Visible = false;
                     }
                 }
-                // 이제 사용 안함
-                //else
-                //{
-                //    string[] data = new string[] { _methods[0], "", "", "" };
-                //    if (IsChanged(data))
-                //    {
-                //        btnSave.Visible = true;
-                //    }
-                //    else
-                //    {
-                //        btnSave.Visible = false;
-                //    }
-                //}
             }
         }
         //////////////////////////////////////
@@ -625,6 +622,8 @@ namespace API_Tester
         //////////// 상단 버튼 함수들 ////////////////////////
         private void btnX_Click(object sender, EventArgs e)
         {
+            // 종료 시 저장 묻기
+
             this.Close();
         }
 
@@ -664,6 +663,9 @@ namespace API_Tester
             HTBOTTOMRIGHT = 17;
 
         const int ten = 10;
+
+
+        
 
 
         //Rectangle Top { get { return new Rectangle(0, 0, this.ClientSize.Width, ten); } }
