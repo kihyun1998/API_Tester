@@ -563,7 +563,9 @@ namespace API_Tester
         private Point endPos;
 
 
-
+        ///////////////////////상단바 이동 함수들////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        // 상단바 클릭 시
         private void titleBar_MouseDown(object sender, MouseEventArgs e)
         {
             mouseDown = true;
@@ -590,6 +592,36 @@ namespace API_Tester
             mouseDown = false;
         }
 
+        // 상단 이름 클릭 시
+        private void lblProgramName_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouseDown = true;
+            startPos = ((Control)sender).PointToScreen(new Point(e.X, e.Y));
+        }
+
+        private void lblProgramName_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseDown)
+            {
+                endPos = ((Control)sender).PointToScreen(new Point(e.X, e.Y));
+                Point pLoc = new Point((this.Location.X + (endPos.X - startPos.X)), (this.Location.Y + (endPos.Y - startPos.Y)));
+                startPos = endPos;
+                this.Location = pLoc;
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        private void lblProgramName_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouseDown = false;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////// 상단 버튼 함수들 ////////////////////////
         private void btnX_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -631,6 +663,9 @@ namespace API_Tester
             HTBOTTOMRIGHT = 17;
 
         const int ten = 10;
+
+
+
 
 
         //Rectangle Top { get { return new Rectangle(0, 0, this.ClientSize.Width, ten); } }

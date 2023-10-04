@@ -38,7 +38,7 @@ namespace API_Tester
             this.titleBar = new System.Windows.Forms.Panel();
             this.btnRight = new System.Windows.Forms.PictureBox();
             this.btnLeft = new System.Windows.Forms.PictureBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lblProgramName = new System.Windows.Forms.Label();
             this.btnNom = new System.Windows.Forms.Button();
             this.btnMax = new System.Windows.Forms.Button();
             this.btnMin = new System.Windows.Forms.Button();
@@ -134,7 +134,7 @@ namespace API_Tester
             this.titleBar.BackColor = System.Drawing.SystemColors.HotTrack;
             this.titleBar.Controls.Add(this.btnRight);
             this.titleBar.Controls.Add(this.btnLeft);
-            this.titleBar.Controls.Add(this.label4);
+            this.titleBar.Controls.Add(this.lblProgramName);
             this.titleBar.Controls.Add(this.btnNom);
             this.titleBar.Controls.Add(this.btnMax);
             this.titleBar.Controls.Add(this.btnMin);
@@ -173,16 +173,19 @@ namespace API_Tester
             this.btnLeft.TabStop = false;
             this.btnLeft.Click += new System.EventHandler(this.btnLeft_Click);
             // 
-            // label4
+            // lblProgramName
             // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.label4.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label4.Location = new System.Drawing.Point(50, -1);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(206, 46);
-            this.label4.TabIndex = 23;
-            this.label4.Text = "API Tester";
+            this.lblProgramName.AutoSize = true;
+            this.lblProgramName.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.lblProgramName.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lblProgramName.Location = new System.Drawing.Point(50, -1);
+            this.lblProgramName.Name = "lblProgramName";
+            this.lblProgramName.Size = new System.Drawing.Size(206, 46);
+            this.lblProgramName.TabIndex = 23;
+            this.lblProgramName.Text = "API Tester";
+            this.lblProgramName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lblProgramName_MouseDown);
+            this.lblProgramName.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lblProgramName_MouseMove);
+            this.lblProgramName.MouseUp += new System.Windows.Forms.MouseEventHandler(this.lblProgramName_MouseUp);
             // 
             // btnNom
             // 
@@ -414,7 +417,7 @@ namespace API_Tester
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox btnLeft;
         private System.Windows.Forms.PictureBox btnRight;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblProgramName;
         public System.Windows.Forms.ComboBox cBoxMethod;
         public Custom.CustomTextBox tBoxCookie;
         public Custom.CustomTextBox tBoxMsg;
