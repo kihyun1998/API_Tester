@@ -565,6 +565,7 @@ namespace API_Tester
 
         ///////////////////////상단바 이동 함수들////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
+
         // 상단바 클릭 시
         private void titleBar_MouseDown(object sender, MouseEventArgs e)
         {
@@ -592,6 +593,7 @@ namespace API_Tester
             mouseDown = false;
         }
 
+
         // 상단 이름 클릭 시
         private void lblProgramName_MouseDown(object sender, MouseEventArgs e)
         {
@@ -618,7 +620,6 @@ namespace API_Tester
         {
             mouseDown = false;
         }
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //////////// 상단 버튼 함수들 ////////////////////////
@@ -663,9 +664,6 @@ namespace API_Tester
             HTBOTTOMRIGHT = 17;
 
         const int ten = 10;
-
-
-
 
 
         //Rectangle Top { get { return new Rectangle(0, 0, this.ClientSize.Width, ten); } }

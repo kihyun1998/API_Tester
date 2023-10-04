@@ -36,21 +36,21 @@ namespace API_Tester
             this.panel2 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.titleBar = new System.Windows.Forms.Panel();
+            this.btnMin = new System.Windows.Forms.Button();
             this.btnRight = new System.Windows.Forms.PictureBox();
             this.btnLeft = new System.Windows.Forms.PictureBox();
             this.lblProgramName = new System.Windows.Forms.Label();
             this.btnNom = new System.Windows.Forms.Button();
             this.btnMax = new System.Windows.Forms.Button();
-            this.btnMin = new System.Windows.Forms.Button();
             this.btnX = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tBoxRst = new System.Windows.Forms.TextBox();
-            this.btnSave = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
             this.tBoxMsg = new API_Tester.Custom.CustomTextBox();
             this.tBoxCookie = new API_Tester.Custom.CustomTextBox();
             this.tBoxURL = new API_Tester.Custom.CustomTextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnSave = new System.Windows.Forms.PictureBox();
             this.titleBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnRight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnLeft)).BeginInit();
@@ -132,12 +132,12 @@ namespace API_Tester
             this.titleBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.titleBar.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.titleBar.Controls.Add(this.btnMin);
             this.titleBar.Controls.Add(this.btnRight);
             this.titleBar.Controls.Add(this.btnLeft);
             this.titleBar.Controls.Add(this.lblProgramName);
             this.titleBar.Controls.Add(this.btnNom);
             this.titleBar.Controls.Add(this.btnMax);
-            this.titleBar.Controls.Add(this.btnMin);
             this.titleBar.Controls.Add(this.btnX);
             this.titleBar.Location = new System.Drawing.Point(0, -2);
             this.titleBar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -147,6 +147,24 @@ namespace API_Tester
             this.titleBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.titleBar_MouseDown);
             this.titleBar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.titleBar_MouseMove);
             this.titleBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.titleBar_MouseUp);
+            // 
+            // btnMin
+            // 
+            this.btnMin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnMin.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnMin.BackgroundImage = global::API_Tester.Properties.Resources.minus;
+            this.btnMin.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMin.FlatAppearance.BorderSize = 0;
+            this.btnMin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMin.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnMin.ForeColor = System.Drawing.Color.White;
+            this.btnMin.Location = new System.Drawing.Point(1049, 4);
+            this.btnMin.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnMin.Name = "btnMin";
+            this.btnMin.Size = new System.Drawing.Size(32, 31);
+            this.btnMin.TabIndex = 24;
+            this.btnMin.TabStop = false;
+            this.btnMin.UseVisualStyleBackColor = false;
             // 
             // btnRight
             // 
@@ -191,16 +209,18 @@ namespace API_Tester
             // 
             this.btnNom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnNom.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.btnNom.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnNom.BackgroundImage = global::API_Tester.Properties.Resources.overlapping_squares;
+            this.btnNom.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnNom.FlatAppearance.BorderSize = 0;
+            this.btnNom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNom.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btnNom.ForeColor = System.Drawing.Color.White;
-            this.btnNom.Location = new System.Drawing.Point(1113, 4);
+            this.btnNom.Location = new System.Drawing.Point(1096, 6);
             this.btnNom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnNom.Name = "btnNom";
             this.btnNom.Size = new System.Drawing.Size(32, 31);
             this.btnNom.TabIndex = 18;
             this.btnNom.TabStop = false;
-            this.btnNom.Text = "+";
             this.btnNom.UseVisualStyleBackColor = false;
             this.btnNom.Click += new System.EventHandler(this.btnNom_Click);
             // 
@@ -208,50 +228,37 @@ namespace API_Tester
             // 
             this.btnMax.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMax.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.btnMax.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnMax.BackgroundImage = global::API_Tester.Properties.Resources.square;
+            this.btnMax.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMax.FlatAppearance.BorderSize = 0;
+            this.btnMax.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMax.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btnMax.ForeColor = System.Drawing.Color.White;
-            this.btnMax.Location = new System.Drawing.Point(1113, 4);
+            this.btnMax.Location = new System.Drawing.Point(1096, 7);
             this.btnMax.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnMax.Name = "btnMax";
             this.btnMax.Size = new System.Drawing.Size(32, 30);
             this.btnMax.TabIndex = 15;
             this.btnMax.TabStop = false;
-            this.btnMax.Text = "ㅁ";
             this.btnMax.UseVisualStyleBackColor = false;
             this.btnMax.Click += new System.EventHandler(this.btnMax_Click);
-            // 
-            // btnMin
-            // 
-            this.btnMin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMin.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.btnMin.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnMin.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnMin.ForeColor = System.Drawing.Color.White;
-            this.btnMin.Location = new System.Drawing.Point(1079, 4);
-            this.btnMin.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btnMin.Name = "btnMin";
-            this.btnMin.Size = new System.Drawing.Size(32, 31);
-            this.btnMin.TabIndex = 15;
-            this.btnMin.TabStop = false;
-            this.btnMin.Text = "ㅡ";
-            this.btnMin.UseVisualStyleBackColor = false;
-            this.btnMin.Click += new System.EventHandler(this.btnMin_Click);
             // 
             // btnX
             // 
             this.btnX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnX.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.btnX.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnX.BackgroundImage = global::API_Tester.Properties.Resources.close;
+            this.btnX.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnX.FlatAppearance.BorderSize = 0;
+            this.btnX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnX.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btnX.ForeColor = System.Drawing.Color.White;
-            this.btnX.Location = new System.Drawing.Point(1147, 4);
+            this.btnX.Location = new System.Drawing.Point(1147, 7);
             this.btnX.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnX.Name = "btnX";
             this.btnX.Size = new System.Drawing.Size(32, 31);
             this.btnX.TabIndex = 15;
             this.btnX.TabStop = false;
-            this.btnX.Text = "X";
             this.btnX.UseVisualStyleBackColor = false;
             this.btnX.Click += new System.EventHandler(this.btnX_Click);
             // 
@@ -275,20 +282,6 @@ namespace API_Tester
             this.tBoxRst.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tBoxRst.Size = new System.Drawing.Size(1093, 239);
             this.tBoxRst.TabIndex = 21;
-            // 
-            // btnSave
-            // 
-            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Image = global::API_Tester.Properties.Resources.save;
-            this.btnSave.Location = new System.Drawing.Point(1103, 62);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(33, 33);
-            this.btnSave.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnSave.TabIndex = 24;
-            this.btnSave.TabStop = false;
-            this.btnSave.Visible = false;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // lblTitle
             // 
@@ -364,12 +357,26 @@ namespace API_Tester
             this.label1.TabIndex = 26;
             this.label1.Text = "URL :";
             // 
+            // btnSave
+            // 
+            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSave.Image = global::API_Tester.Properties.Resources.save;
+            this.btnSave.Location = new System.Drawing.Point(-6034, -4189);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(33, 33);
+            this.btnSave.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnSave.TabIndex = 24;
+            this.btnSave.TabStop = false;
+            this.btnSave.Visible = false;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(1184, 725);
+            this.ClientSize = new System.Drawing.Size(1188, 700);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.btnSave);
@@ -411,7 +418,6 @@ namespace API_Tester
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel titleBar;
         private System.Windows.Forms.Button btnX;
-        private System.Windows.Forms.Button btnMin;
         private System.Windows.Forms.Button btnMax;
         private System.Windows.Forms.Button btnNom;
         private System.Windows.Forms.Panel panel1;
@@ -426,6 +432,7 @@ namespace API_Tester
         public System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.TextBox tBoxRst;
+        private System.Windows.Forms.Button btnMin;
     }
 }
 
