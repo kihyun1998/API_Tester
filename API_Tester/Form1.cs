@@ -229,6 +229,9 @@ namespace API_Tester
             SingletonXML sXML = SingletonXML.Instance;
             sXML.SetXML(xdoc);
 
+            // 6. xmlPath에 아무 값도 없는 파일 생성 (트리뷰 때문에)
+            File.WriteAllText(xmlPath, "", Encoding.Default);
+
             //기존 방식
 
             ////XML 대신 암호문을 Base64로 저장
@@ -256,33 +259,63 @@ namespace API_Tester
 
         public XmlDocument Load_XML(TreeNode sNode)
         {
-            string loadPath = _repository.GetXmlPath(sNode);
+            string loadPath = _repository.GetHashPathForFile(sNode);
 
-            string cryptXML = File.ReadAllText(loadPath);
-            string decryptXML = AES256.Decrypt(cryptXML);
+            // 1. 복호화 하기 > 결과는 (원본\n해시값)
+            string cipherText = File.ReadAllText(loadPath);
+            string decrpytText = AES256.Decrypt(cipherText);
 
+            // 2. 원본과 해시 나누기 / 0: 원본, 1: 해시
+            string[] texts = decrpytText.Split('\n');
 
-            string hashPath = _repository.GetHashPathForFile(sNode);
-            string hashText = File.ReadAllText(hashPath);
-
-            bool checkValue = SHA256.CheckIntegrity(hashText, decryptXML);
-
-            if (!checkValue)
+            // 3. 무결성 검사
+            bool rstIntegrity = SHA256.CheckIntegrity(texts[0], texts[1]);
+            
+            if (!rstIntegrity)
             {
-                // null을 반환하면 무결성이 깨짐을 의미함.
+                // 무결성 false면 null 반환
                 return null;
             }
 
-
+            // 4. 원본 불러오기
             XmlDocument xdoc = new XmlDocument();
-            xdoc.LoadXml(decryptXML);
+            xdoc.LoadXml(texts[0]);
 
-
-            // 불러온 XML 싱글톤으로 등록
+            // 5. 불러온 XML 싱글톤으로 등록
             SingletonXML sXML = SingletonXML.Instance;
             sXML.SetXML(xdoc);
 
             return xdoc;
+
+
+            // 기존 방식
+            //string loadPath = _repository.GetXmlPath(sNode);
+
+            //string cryptXML = File.ReadAllText(loadPath);
+            //string decryptXML = AES256.Decrypt(cryptXML);
+
+
+            //string hashPath = _repository.GetHashPathForFile(sNode);
+            //string hashText = File.ReadAllText(hashPath);
+
+            //bool checkValue = SHA256.CheckIntegrity(hashText, decryptXML);
+
+            //if (!checkValue)
+            //{
+            //    // null을 반환하면 무결성이 깨짐을 의미함.
+            //    return null;
+            //}
+
+
+            //XmlDocument xdoc = new XmlDocument();
+            //xdoc.LoadXml(decryptXML);
+
+
+            //// 불러온 XML 싱글톤으로 등록
+            //SingletonXML sXML = SingletonXML.Instance;
+            //sXML.SetXML(xdoc);
+
+            //return xdoc;
         }
 
         public string[] XMLtoStringArr(XmlDocument xdoc)
