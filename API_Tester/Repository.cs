@@ -15,9 +15,10 @@ namespace API_Tester
 {
     public partial class Repository : Form
     {
-
+        // _etcFolderName과 관련된거 지워야 함
         string _etcFolderName = ".apitest";
-        string _rootPath = Path.GetFullPath(@"..\Repository");
+        //string _rootPath = Path.GetFullPath(@"..\Repository");
+        string _rootPath = string.Format("{0}\\..\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), ".apitest");
         Form1 _f1 = null;
 
         CustomInputForm _customInputForm = null;
@@ -28,40 +29,50 @@ namespace API_Tester
         public Repository(Form1 form)
         {
             InitializeComponent();
-            ListDirectory(treeView1, _rootPath);
+            string repoPath =  string.Format("{0}\\Repository", _rootPath);
+            ListDirectory(treeView1, repoPath);
             this._f1 = form;
         }
 
         private void ListDirectory(TreeView treeView, string path)
         {
-            DirectoryInfo isExists = new DirectoryInfo(_rootPath);
-            if (!isExists.Exists)
+            // root 경로 확인
+            DirectoryInfo rootDirectoryInfo = new DirectoryInfo(_rootPath);
+            if (!rootDirectoryInfo.Exists)
             {
-                isExists.Create();
+                rootDirectoryInfo.Create();
             }
+            
+            // repo 경로 확인
+            DirectoryInfo repoDirectoryInfo = new DirectoryInfo(path);
+            if (!repoDirectoryInfo.Exists)
+            {
+                repoDirectoryInfo.Create();
+            }
+
             treeView.Nodes.Clear();
-            var rootDirectoryInfo = new DirectoryInfo(path);
-            treeView.Nodes.Add(CreateDirectoryNode(rootDirectoryInfo));
+            treeView.Nodes.Add(CreateDirectoryNode(repoDirectoryInfo));
         }
 
-        private static TreeNode CreateDirectoryNode(DirectoryInfo directoryInfo)
+        private static TreeNode CreateDirectoryNode(DirectoryInfo repoDirectoryInfo)
         {
-            TreeNode directoryNode = new TreeNode(directoryInfo.Name);
+            TreeNode directoryNode = new TreeNode(repoDirectoryInfo.Name);
+            MessageBox.Show(directoryNode.Text);
             
-
-            foreach (var directory in directoryInfo.GetDirectories())
+            // 폴더 등록
+            foreach (var directory in repoDirectoryInfo.GetDirectories())
             {
-                // 무결성 검사 폴더는 숨기기
-                if (directory.Name == "etc")
-                {
-                    break;
-                }
-
+                //// 무결성 검사 폴더는 숨기기
+                //if (directory.Name == "etc")
+                //{
+                //    break;
+                //}
                 
                 directoryNode.Nodes.Add(CreateDirectoryNode(directory));
             }
-            //파일도 tree view에 등록
-            foreach (var file in directoryInfo.GetFiles())
+
+            //파일 등록
+            foreach (var file in repoDirectoryInfo.GetFiles())
             {
                 string fileName = file.Name.Substring(0, file.Name.LastIndexOf('.'));
                 directoryNode.Nodes.Add(new TreeNode(fileName));
@@ -89,26 +100,27 @@ namespace API_Tester
 
         public void CreateEtcFolder()
         {
-            // C:\Users\유저\.apitest 폴더 생성
-            string etcFolder = string.Format("{0}\\..\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName);
-            DirectoryInfo etcDir = new DirectoryInfo(etcFolder);
+            //// C:\Users\유저\.apitest 폴더 생성
+            //string etcFolder = string.Format("{0}\\..\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName);
+            DirectoryInfo etcDir = new DirectoryInfo(_rootPath);
             if (!etcDir.Exists)
             {
                 etcDir.Create();
             }
 
             // C:\Users\유저\.apitest\sec 폴더 생성
-            string secFolder = string.Format("{0}\\..\\{1}\\sec", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName);
-            DirectoryInfo secDir = new DirectoryInfo(secFolder);
-            if (!secDir.Exists)
+            string repoFolder = string.Format("{0}\\Repository", _rootPath);
+            DirectoryInfo repoDir = new DirectoryInfo(repoFolder);
+            if (!repoDir.Exists)
             {
-                secDir.Create();
+                repoDir.Create();
             }
         }
 
+        // 폴더 생성 시 필수
         public void CreateHashFolder(string folderName)
         {
-            string hashPath = string.Format("{0}\\..\\{1}\\sec\\{2}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName, folderName);
+            string hashPath = string.Format("{0}\\Repository\\{1}", _rootPath, folderName);
             // C:\Users\유저\.apitest\sec 밑에 전용 해쉬 폴더 생성
             // 왜냐하면 폴더 마다 중복되는 파일 명 있으면 안되니까
             DirectoryInfo hashDir = new DirectoryInfo(hashPath);
@@ -154,9 +166,6 @@ namespace API_Tester
                     }
 
                     CreateHashFolder(folderName);
-
-                    
-
                 }
             }
             else
@@ -191,7 +200,7 @@ namespace API_Tester
                 if (CustomMessageBox.ShowMessage("폴더를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     string deletePath = string.Format("..\\{0}", sNode.FullPath);
-                    string deleteHashPath = string.Format("{0}\\..\\{1}\\sec\\{2}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName, sNode.Text);
+                    string deleteHashPath = string.Format("{0}\\..\\{1}\\Repository\\{2}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName, sNode.Text);
                     Directory.Delete(deletePath, recursive: true);
                     Directory.Delete(deleteHashPath, recursive: true);
                     treeView1.Nodes.Remove(sNode);
@@ -321,7 +330,7 @@ namespace API_Tester
         {
             try
             {
-                string hashPath = string.Format("{0}\\..\\{1}\\sec\\{2}\\{3}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName, sNode.Text, string.Format(fileName + "-etc.txt"));
+                string hashPath = string.Format("{0}\\..\\{1}\\Repository\\{2}\\{3}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName, sNode.Text, string.Format(fileName + "-etc.txt"));
 
                 return hashPath;
             }
@@ -339,7 +348,7 @@ namespace API_Tester
         {
             try
             {
-                string hashPath = string.Format("{0}\\..\\{1}\\sec\\{2}\\{3}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName, sNode.Parent.Text, string.Format(sNode.Text + "-etc.txt"));
+                string hashPath = string.Format("{0}\\..\\{1}\\Repository\\{2}\\{3}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName, sNode.Parent.Text, string.Format(sNode.Text + "-etc.txt"));
 
                 return hashPath;
             }
