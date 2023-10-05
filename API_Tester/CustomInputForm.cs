@@ -14,6 +14,7 @@ namespace API_Tester
     {
         Repository _rt = null;
         string _title = string.Empty;
+        string _buttonType = string.Empty;
         public string _name = string.Empty;
         public string _type = string.Empty;
 
@@ -35,6 +36,12 @@ namespace API_Tester
             get { return lblTitle.Text; }
             set { lblTitle.Text = value; }
         }
+        
+        public string ButtonText
+        {
+            get { return btnOK.Text; }
+            set { btnOK.Text = value; }
+        }
 
         public string GetName
         {
@@ -42,17 +49,39 @@ namespace API_Tester
             set { tBoxName.Text = value; }
         }
 
-        private void btnCreate_Click(object sender, EventArgs e)
+        private void btnOK_Click(object sender, EventArgs e)
         {
             _name = tBoxName.Text;
+            //if (_type == TypeEnum.Type.CreateFile.ToString() || _type == TypeEnum.Type.CreateFolder.ToString())
+            //{
+            //    // 타입이 Create로 시작하면
+            //    btnOK.Text = "➕ Create";
+            //}
+            //else if (_type == TypeEnum.Type.RenameFile.ToString() || _type == TypeEnum.Type.RenameFolder.ToString())
+            //{
+            //    // 타입이 Rename으로 시작한다면
 
-            if(_type == TypeEnum.Type.Folder.ToString())
+            //    btnOK.Text = "📄 Rename";
+            //}
+            if (_type == TypeEnum.Type.CreateFolder.ToString())
             {
                 _rt.AddFolder(sender, e);
+                btnOK.Text = "➕ Create";
             }
-            else if (_type == TypeEnum.Type.File.ToString())
+            else if (_type == TypeEnum.Type.CreateFile.ToString())
             {
                 _rt.AddFile(sender, e);
+                btnOK.Text = "➕ Create";
+            }
+            else if(_type == TypeEnum.Type.RenameFolder.ToString())
+            {
+                _rt.RenameFolder(sender, e);
+                btnOK.Text = "📄 Rename";
+            }
+            else if(_type == TypeEnum.Type.RenameFile.ToString())
+            {
+                _rt.RenameFile();
+                btnOK.Text = "📄 Rename";
             }
             else
             {

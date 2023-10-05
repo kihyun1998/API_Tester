@@ -32,14 +32,16 @@ namespace API_Tester
             this.lblTitle = new System.Windows.Forms.Label();
             this.tBoxName = new System.Windows.Forms.TextBox();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.btnCreate = new System.Windows.Forms.Button();
+            this.btnOK = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblTitle
             // 
             this.lblTitle.AutoSize = true;
+            this.lblTitle.BackColor = System.Drawing.SystemColors.HotTrack;
             this.lblTitle.Font = new System.Drawing.Font("나눔고딕", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lblTitle.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.lblTitle.Location = new System.Drawing.Point(26, 18);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(68, 35);
@@ -64,17 +66,17 @@ namespace API_Tester
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // btnCreate
+            // btnOK
             // 
-            this.btnCreate.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnCreate.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnCreate.Location = new System.Drawing.Point(252, 140);
-            this.btnCreate.Name = "btnCreate";
-            this.btnCreate.Size = new System.Drawing.Size(98, 56);
-            this.btnCreate.TabIndex = 3;
-            this.btnCreate.Text = "➕ Create";
-            this.btnCreate.UseVisualStyleBackColor = false;
-            this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
+            this.btnOK.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnOK.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnOK.Location = new System.Drawing.Point(252, 140);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(98, 56);
+            this.btnOK.TabIndex = 3;
+            this.btnOK.Text = "OK";
+            this.btnOK.UseVisualStyleBackColor = false;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // label1
             // 
@@ -88,12 +90,13 @@ namespace API_Tester
             // 
             // CustomInputForm
             // 
-            this.AcceptButton = this.btnCreate;
+            this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(381, 227);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.btnCreate);
+            this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.tBoxName);
             this.Controls.Add(this.lblTitle);
@@ -115,7 +118,7 @@ namespace API_Tester
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.TextBox tBoxName;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Button btnCreate;
         private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Button btnOK;
     }
 }

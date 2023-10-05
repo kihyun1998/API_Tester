@@ -10,8 +10,10 @@ namespace API_Tester
     {
         public enum Type
         {
-            Folder,
-            File
+            CreateFolder,
+            CreateFile,
+            RenameFolder,
+            RenameFile
         }
     }
 }

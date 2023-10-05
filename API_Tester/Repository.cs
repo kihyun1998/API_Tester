@@ -117,17 +117,38 @@ namespace API_Tester
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        // 버튼 누르면 나오는 창
+        private void showWindow(string type)
+        {
+            _lx = _f1.Location.X;
+            _ly = _f1.Location.Y;
+            TreeNode sNode = treeView1.SelectedNode;
+            if (sNode != null)
+            {
+                _customInputForm = new CustomInputForm(this);
+                _customInputForm.Title = sNode.Text;
+                _customInputForm.StartPosition = FormStartPosition.Manual;
+                _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
+                _customInputForm._type = type;
+                if (type == TypeEnum.Type.CreateFolder.ToString() || type == TypeEnum.Type.CreateFile.ToString())
+                {
+                    _customInputForm.ButtonText = "➕ Create";
+                }
+                else if (type == TypeEnum.Type.RenameFolder.ToString() || type == TypeEnum.Type.RenameFile.ToString())
+                {
+                    _customInputForm.ButtonText = "📄 Rename";
+                }
+                _customInputForm.Show();
+            }
+        }
+
+
         //////////////////////
         /// 폴더 추가 버튼 클릭 시 - 창만 띄운다.
         private void btnFolderAdd_Click(object sender, EventArgs e)
         {
-            _lx = _f1.Location.X;
-            _ly = _f1.Location.Y;
-            _customInputForm = new CustomInputForm(this);
-            _customInputForm.StartPosition = FormStartPosition.Manual;
-            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
-            _customInputForm._type = TypeEnum.Type.Folder.ToString();
-            _customInputForm.Show();
+            string type = TypeEnum.Type.CreateFolder.ToString();
+            showWindow(type);
         }
 
         //////////////////////
@@ -153,13 +174,8 @@ namespace API_Tester
         // 파일 추가 버튼 클릭 시 - 창만 띄움
         private void btnFileAdd_Click(object sender, EventArgs e)
         {
-            _lx = _f1.Location.X;
-            _ly = _f1.Location.Y;
-            _customInputForm = new CustomInputForm(this);
-            _customInputForm.StartPosition = FormStartPosition.Manual;
-            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
-            _customInputForm._type = TypeEnum.Type.File.ToString();
-            _customInputForm.Show();
+            string type = TypeEnum.Type.CreateFile.ToString();
+            showWindow(type);
         }
 
         // 파일 삭제 버튼 클릭 시 (동작 포함)
@@ -167,7 +183,7 @@ namespace API_Tester
         {
             CreateEtcFolder();
 
-            var sNode = treeView1.SelectedNode;
+            TreeNode sNode = treeView1.SelectedNode;
 
             if (sNode != null && sNode.Parent != null)
             {
@@ -187,25 +203,15 @@ namespace API_Tester
         // 폴더 수정 버튼 클릭 시 
         private void btnFolderRename_Click(object sender, EventArgs e)
         {
-            _lx = _f1.Location.X;
-            _ly = _f1.Location.Y;
-            _customInputForm = new CustomInputForm(this);
-            _customInputForm.StartPosition = FormStartPosition.Manual;
-            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
-            _customInputForm._type = TypeEnum.Type.File.ToString();
-            _customInputForm.Show();
+            string type = TypeEnum.Type.RenameFolder.ToString();
+            showWindow(type);   
         }
 
         // 파일 수정 버튼 클릭 시 
         private void btnFileRename_Click(object sender, EventArgs e)
         {
-            _lx = _f1.Location.X;
-            _ly = _f1.Location.Y;
-            _customInputForm = new CustomInputForm(this);
-            _customInputForm.StartPosition = FormStartPosition.Manual;
-            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
-            _customInputForm._type = TypeEnum.Type.File.ToString();
-            _customInputForm.Show();
+            string type = TypeEnum.Type.RenameFile.ToString();
+            showWindow(type); 
         }
 
 
@@ -217,10 +223,10 @@ namespace API_Tester
             // 파일 생성 창 닫기
             _customInputForm.Close();
 
-            // 초기 폴더 생성 및 검사 (etc,sec)
+            // 초기 폴더 생성 및 검사
             CreateEtcFolder();
 
-            var sNode = treeView1.SelectedNode;
+            TreeNode sNode = treeView1.SelectedNode;
 
             string folderName = _customInputForm._name;
             
@@ -256,13 +262,13 @@ namespace API_Tester
         /// 파일 추가 동작 함수
         public void AddFile(object sender, EventArgs e)
         {
-            // 파일 생성 창 닫기
+            // 인풋창 닫기
             _customInputForm.Close();
 
-            // 초기 폴더 생성 및 검사 (etc,sec)
+            // 초기 폴더 생성 및 검사
             CreateEtcFolder();
             
-            var sNode = treeView1.SelectedNode;
+            TreeNode sNode = treeView1.SelectedNode;
 
             string fileName = _customInputForm._name;
 
@@ -298,7 +304,80 @@ namespace API_Tester
                 CustomMessageBox.ShowMessage("파일 이름은 한 글자 이상 입력해주세요!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-        
+
+        public void RenameFolder(object sender, EventArgs e)
+        {
+            // 인풋창 닫기
+            _customInputForm.Close();
+
+            // 초기 폴더 생성 및 검사
+            CreateEtcFolder();
+
+            TreeNode sNode = treeView1.SelectedNode;
+            string newFolderName = _customInputForm._name;
+
+            if (newFolderName != "")
+            {
+                if (sNode != null)
+                {
+                    string oldPath = string.Format("{0}\\{1}\\{2}", _rootPath, _repoFolderName, sNode.Text);
+                    string newPath = string.Format("{0}\\{1}\\{2}", _rootPath, _repoFolderName, newFolderName);
+                    DirectoryInfo updateDir = new DirectoryInfo(newPath);
+                    if (!updateDir.Exists)
+                    {
+                        Directory.Move(oldPath, newPath);
+                        sNode.Text = newFolderName;
+                        CustomMessageBox.ShowMessage(string.Format("{0}(으)로 변경됐습니다 !", newFolderName), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        CustomMessageBox.ShowMessage("중복된 폴더명입니다!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+            }
+            else
+            {
+                CustomMessageBox.ShowMessage("이름은 한 글자 이상 입력해주세요!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        public void RenameFile()
+        {
+            // 인풋창 닫기
+            _customInputForm.Close();
+
+            // 초기 폴더 생성 및 검사
+            CreateEtcFolder();
+
+            TreeNode sNode = treeView1.SelectedNode;
+            string newFileName = _customInputForm._name;
+
+            if (newFileName != "")
+            {
+                if (sNode != null)
+                {
+                    string oldPath = GetSavePathForFile(sNode);
+                    string newPath = GetSavePathForFolder(sNode.Parent, newFileName);
+
+                    FileInfo updateFile = new FileInfo(newPath);
+                    if (!updateFile.Exists)
+                    {
+                        File.Move(oldPath, newPath);
+                        sNode.Text = newFileName;
+                        CustomMessageBox.ShowMessage(string.Format("{0}(으)로 변경됐습니다 !", newFileName), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        CustomMessageBox.ShowMessage("중복된 폴더명입니다!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+            }
+            else
+            {
+                CustomMessageBox.ShowMessage("이름은 한 글자 이상 입력해주세요!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
         /////////
         /// 이미 생성된 파일을 수정할 때의 경로를 반환해준다.
         public string GetSavePathForFile(TreeNode sNode)
@@ -507,6 +586,7 @@ namespace API_Tester
 
                                 itemAddService.Click += btnFolderAdd_Click;
 
+                                
                                 cMenu.Items.Add(itemAddService);
                                 break;
                             case 1:
@@ -515,17 +595,22 @@ namespace API_Tester
                                 ToolStripMenuItem itemRemoveFolder = new ToolStripMenuItem("🗑 Remove");
 
                                 itemAddRequest.Click += btnFileAdd_Click;
+                                itemRenameFolder.Click += btnFolderRename_Click;
                                 itemRemoveFolder.Click += btnFolderDel_Click;
 
                                 cMenu.Items.Add(itemAddRequest);
+                                cMenu.Items.Add(itemRenameFolder);
                                 cMenu.Items.Add(itemRemoveFolder);
                                 break;
                             case 2:
-                                ToolStripMenuItem itemRenamefile = new ToolStripMenuItem("📄 Rename");
+                                ToolStripMenuItem itemRenameFile = new ToolStripMenuItem("📄 Rename");
                                 ToolStripMenuItem itemRemoveFile = new ToolStripMenuItem("🗑 Remove");
 
+                                itemRenameFile.Click += btnFileRename_Click;
                                 itemRemoveFile.Click += btnFileDel_Click;
 
+
+                                cMenu.Items.Add(itemRenameFile);
                                 cMenu.Items.Add(itemRemoveFile);
                                 break;
                             default:
