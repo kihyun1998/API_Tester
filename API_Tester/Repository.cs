@@ -16,7 +16,9 @@ namespace API_Tester
     public partial class Repository : Form
     {
         // _etcFolderName과 관련된거 지워야 함
-        string _etcFolderName = ".apitest";
+        //string _etcFolderName = ".apitest";
+        string _repoFolderName = "My Drive";
+
         //string _rootPath = Path.GetFullPath(@"..\Repository");
         string _rootPath = string.Format("{0}\\..\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), ".apitest");
         Form1 _f1 = null;
@@ -29,12 +31,12 @@ namespace API_Tester
         public Repository(Form1 form)
         {
             InitializeComponent();
-            string repoPath =  string.Format("{0}\\Repository", _rootPath);
+            string repoPath =  string.Format("{0}\\{1}", _rootPath, _repoFolderName);
             ListDirectory(treeView1, repoPath);
             this._f1 = form;
         }
 
-        private void ListDirectory(TreeView treeView, string path)
+        private void ListDirectory(TreeView treeView, string repoPath)
         {
             // root 경로 확인
             DirectoryInfo rootDirectoryInfo = new DirectoryInfo(_rootPath);
@@ -44,7 +46,7 @@ namespace API_Tester
             }
             
             // repo 경로 확인
-            DirectoryInfo repoDirectoryInfo = new DirectoryInfo(path);
+            DirectoryInfo repoDirectoryInfo = new DirectoryInfo(repoPath);
             if (!repoDirectoryInfo.Exists)
             {
                 repoDirectoryInfo.Create();
@@ -57,7 +59,6 @@ namespace API_Tester
         private static TreeNode CreateDirectoryNode(DirectoryInfo repoDirectoryInfo)
         {
             TreeNode directoryNode = new TreeNode(repoDirectoryInfo.Name);
-            MessageBox.Show(directoryNode.Text);
             
             // 폴더 등록
             foreach (var directory in repoDirectoryInfo.GetDirectories())
@@ -71,15 +72,12 @@ namespace API_Tester
                 directoryNode.Nodes.Add(CreateDirectoryNode(directory));
             }
 
-            //파일 등록
+            //파일 등록 (여기서 잘못된 파일 검증해야함) *******
             foreach (var file in repoDirectoryInfo.GetFiles())
             {
                 string fileName = file.Name.Substring(0, file.Name.LastIndexOf('.'));
                 directoryNode.Nodes.Add(new TreeNode(fileName));
             }
-
-
-            
 
             return directoryNode;
         }
@@ -108,8 +106,8 @@ namespace API_Tester
                 etcDir.Create();
             }
 
-            // C:\Users\유저\.apitest\sec 폴더 생성
-            string repoFolder = string.Format("{0}\\Repository", _rootPath);
+            // My Drive 폴더 생성
+            string repoFolder = string.Format("{0}\\{1}", _rootPath, _repoFolderName);
             DirectoryInfo repoDir = new DirectoryInfo(repoFolder);
             if (!repoDir.Exists)
             {
@@ -118,15 +116,15 @@ namespace API_Tester
         }
 
         // 폴더 생성 시 필수
-        public void CreateHashFolder(string folderName)
+        public void CreateRepoFolder(string folderName)
         {
-            string hashPath = string.Format("{0}\\Repository\\{1}", _rootPath, folderName);
+            string repoPath = string.Format("{0}\\{1}\\{2}", _rootPath, _repoFolderName, folderName);
             // C:\Users\유저\.apitest\sec 밑에 전용 해쉬 폴더 생성
             // 왜냐하면 폴더 마다 중복되는 파일 명 있으면 안되니까
-            DirectoryInfo hashDir = new DirectoryInfo(hashPath);
-            if (!hashDir.Exists)
+            DirectoryInfo repoDir = new DirectoryInfo(repoPath);
+            if (!repoDir.Exists)
             {
-                hashDir.Create();
+                repoDir.Create();
             }
         }
 
@@ -150,7 +148,8 @@ namespace API_Tester
             {
                 if (sNode != null)
                 {
-                    string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, folderName);
+                    //string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, folderName);
+                    string savePath = string.Format("{0}\\{1}\\{2}", _rootPath, _repoFolderName,folderName);
 
                     DirectoryInfo createdDir = new DirectoryInfo(savePath);
                     if (!createdDir.Exists)
@@ -165,7 +164,7 @@ namespace API_Tester
                         CustomMessageBox.ShowMessage("중복된 폴더명입니다!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
 
-                    CreateHashFolder(folderName);
+                    CreateRepoFolder(folderName);
                 }
             }
             else
@@ -199,10 +198,12 @@ namespace API_Tester
             {
                 if (CustomMessageBox.ShowMessage("폴더를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    string deletePath = string.Format("..\\{0}", sNode.FullPath);
-                    string deleteHashPath = string.Format("{0}\\..\\{1}\\Repository\\{2}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName, sNode.Text);
+                    string deletePath = string.Format("{0}\\{1}\\{2}", _rootPath, _repoFolderName, sNode.Text);
+
+                    // 아래 경로의 폴더 하나만 삭제하기 
+                    //string savePath = string.Format("{0}\\{1}\\{2}", _rootPath, _repoFolderName, folderName);
+
                     Directory.Delete(deletePath, recursive: true);
-                    Directory.Delete(deleteHashPath, recursive: true);
                     treeView1.Nodes.Remove(sNode);
 
                     CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -229,7 +230,7 @@ namespace API_Tester
 
 
         //////////
-        /// 파일 추가 동작 함수 - SAVE_XML
+        /// 파일 추가 동작 함수
         public void AddFile(object sender, EventArgs e)
         {
             // 파일 생성 창 닫기
@@ -237,7 +238,6 @@ namespace API_Tester
 
             // 초기 폴더 생성 및 검사 (etc,sec)
             CreateEtcFolder();
-
             
             var sNode = treeView1.SelectedNode;
 
@@ -248,8 +248,7 @@ namespace API_Tester
             {
                 if (sNode != null)
                 {
-                    string savePath = GetSavePath(sNode, fileName);
-                    string hashPath = GetHashPathForFolder(sNode, fileName);
+                    string savePath = GetSavePathForFolder(sNode, fileName);
 
                     RequestXML requestXML = new RequestXML();
 
@@ -261,20 +260,20 @@ namespace API_Tester
                     FileInfo createdFile = new FileInfo(savePath);
                     if (!createdFile.Exists)
                     {
-                        _f1.Save_XML(requestXML, savePath, hashPath);
+                        _f1.Save_XML(requestXML, savePath);
                         sNode.Nodes.Add(new TreeNode(fileName));
                         CustomMessageBox.ShowMessage(string.Format("{0}이(가) 추가됐습니다 !", fileName), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         tBoxName.Text = string.Empty;
                     }
                     else
                     {
-                        CustomMessageBox.ShowMessage("중복된 폴더명입니다!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        CustomMessageBox.ShowMessage("중복된 파일명입니다!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
             }
             else
             {
-                CustomMessageBox.ShowMessage("이름은 한 글자 이상 입력해주세요!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                CustomMessageBox.ShowMessage("파일 이름은 한 글자 이상 입력해주세요!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 tBoxName.Text = string.Empty;
             }
         }
@@ -301,7 +300,6 @@ namespace API_Tester
         /// 파일 삭제 동작 함수
         public void btnDelFile_Click(object sender, EventArgs e)
         {
-            // 초기 폴더 생성 및 검사 (etc,sec)
             CreateEtcFolder();
 
             var sNode = treeView1.SelectedNode;
@@ -310,89 +308,100 @@ namespace API_Tester
             {
                 if (CustomMessageBox.ShowMessage("파일를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    string deletePath = GetXmlPath(sNode);
-                    string deleteHashPath = GetHashPathForFile(sNode);
+                    string deletePath = GetSavePathForFile(sNode);
 
                     File.Delete(deletePath);
-                    File.Delete(deleteHashPath);
                     treeView1.Nodes.Remove(sNode);
 
                     CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     tBoxName.Text = string.Empty;
                 }
-
             }
         }
 
         ///////
         /// Hash파일 경로 반환 ( 폴더 노드 선택한 상태에서 사용 )
-        public string GetHashPathForFolder(TreeNode sNode, string fileName)
-        {
-            try
-            {
-                string hashPath = string.Format("{0}\\..\\{1}\\Repository\\{2}\\{3}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName, sNode.Text, string.Format(fileName + "-etc.txt"));
+        //public string GetHashPathForFolder(TreeNode sNode, string fileName)
+        //{
+        //    if (sNode != null)
+        //    {
+        //        try
+        //        {
+        //            string hashPath = string.Format("{0}\\{1}\\{2}\\{3}", _rootPath, _repoFolderName, sNode.Text, string.Format(fileName + "-etc.txt"));
 
-                return hashPath;
-            }
-            catch
-            {
-                CustomMessageBox.ShowMessage("[Repository.GetHashPathForParent()] 노드 선택 여부 검사 안함 !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //            return hashPath;
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            CustomMessageBox.ShowMessage(string.Format("[Repository.GetHashPathForParent()] 노드 선택 여부 검사 안함 !\n{0}",e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                return "";
-            }
-        }
+        //            return "";
+        //        }
+
+        //    }
+        //    return "";
+                
+        //}
 
         ///////
         /// Hash파일 경로 반환 ( 파일 노드 선택한 상태에서 사용 )
-        public string GetHashPathForFile(TreeNode sNode)
-        {
-            try
-            {
-                string hashPath = string.Format("{0}\\..\\{1}\\Repository\\{2}\\{3}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName, sNode.Parent.Text, string.Format(sNode.Text + "-etc.txt"));
+        //public string GetHashPathForFile(TreeNode sNode)
+        //{
+        //    if(sNode != null)
+        //    {
+        //        try
+        //        {
+        //            string hashPath = string.Format("{0}\\{1}\\{2}\\{3}", _rootPath, _repoFolderName, sNode.Parent.Text, string.Format(sNode.Text + "-etc.txt"));
 
-                return hashPath;
-            }
-            catch
-            {
-                CustomMessageBox.ShowMessage("[Repository.GetHashPathForChild()] 노드 선택 여부 검사 안함 !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //            return hashPath;
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            CustomMessageBox.ShowMessage(string.Format("[Repository.GetHashPathForChild()] 노드 선택 여부 검사 안함 !\\n{0}", e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                return "";
-            }
-        }
+        //            return "";
+        //        }
+        //    }
+        //    return "";
+                
+        //}
 
 
         /////////
         /// 수정할 때 사용
-        public string GetXmlPath(TreeNode sNode)
+        public string GetSavePathForFile(TreeNode sNode)
         {
-            try
+            if (sNode != null)
             {
-                string xmlPath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".txt"));
-                return xmlPath;
+                // sNode가 파일인 경우에만
+                if(sNode.Level == 2)
+                {
+                    // 여기서 sNode는 파일이다.
+                    string savePath = string.Format("{0}\\{1}\\{2}\\{3}.txt", _rootPath, _repoFolderName, sNode.Parent.Text, sNode.Text);
+                    //string xmlPath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".txt"));
+                    return savePath;
+                }
             }
-            catch
-            {
-                CustomMessageBox.ShowMessage("[Repository.GetXmlPath()] 노드 선택 여부 검사 안함 !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                return "";
-            }
+            return "";
         }
 
         ///////////
         /// 파일 생성 시 사용
-        public string GetSavePath(TreeNode sNode, string fileName)
+        public string GetSavePathForFolder(TreeNode sNode, string fileName)
         {
-            try
+            if(sNode != null)
             {
-                string xmlPath = string.Format("..\\{0}\\{1}", sNode.FullPath, string.Format(fileName + ".txt"));
-                return xmlPath;
+                // sNode가 root 폴더가 아닌 폴더만
+                if (sNode.Level == 1)
+                {
+                    // 여기서 sNode는 폴더이다.
+                    string savePath = string.Format("{0}\\{1}\\{2}\\{3}.txt", _rootPath, _repoFolderName, sNode.Text, fileName);
+                    //string xmlPath = string.Format("..\\{0}\\{1}", sNode.FullPath, string.Format(fileName + ".txt"));
+                    return savePath;
+                }
             }
-            catch
-            {
-                CustomMessageBox.ShowMessage("[Repository.GetXmlPath()] 노드 선택 여부 검사 안함 !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                return "";
-            }
+            return "";
+                
         }
 
 
@@ -425,120 +434,114 @@ namespace API_Tester
             {
                 int nLevel = sNode.Level;
 
-
-
-                if (sNode != null)
+                switch (nLevel)
                 {
-                    switch (nLevel)
-                    {
-                        case 0:
-                            tBoxName.Enabled = true;    // 입력 가능
-                            tBoxName.Visible = true;    // 이름 인풋 보임 ( 폴더 생성을 위해 )
-                            btnAdd.Visible = true;      // 폴더 추가 가능
-                            btnDelete.Visible = false;  // 폴더 삭제 불가능
-                            btnAddFile.Visible = false; // 파일 추가 불가능
-                            btnDelFile.Visible = false; // 파일 삭제 불가능
+                    case 0:
+                        tBoxName.Enabled = true;    // 입력 가능
+                        tBoxName.Visible = true;    // 이름 인풋 보임 ( 폴더 생성을 위해 )
 
-                            // 한번 클릭 시에도 창 전환되도록 변경
-                            _f1.lblTitle.Visible = false;
-                            _f1.cBoxMethod.Text = _f1._methods[0];
-                            _f1.tBoxURL.Text = string.Empty;
-                            _f1.tBoxCookie.Text = string.Empty;
-                            _f1.tBoxMsg.Text = string.Empty;
-                            _f1.tBoxRst.Text = string.Empty;
-                            _f1.isNotUse();
-                            break;
-                        case 1:
-                            tBoxName.Enabled = true;    // 입력 가능
-                            tBoxName.Visible = true;    // 이름 인풋 보임( 파일 생성을 위해 )
-                            btnAdd.Visible = false;     // 폴더 추가 불가능
-                            btnDelete.Visible = true;   // 폴더 삭제 가능
-                            btnAddFile.Visible = true;  // 파일 추가 가능
-                            btnDelFile.Visible = false; // 파일 삭제 불가능
+                        btnAdd.Visible = true;      // 폴더 추가 가능
+                        btnDelete.Visible = false;  // 폴더 삭제 불가능
+                        btnAddFile.Visible = false; // 파일 추가 불가능
+                        btnDelFile.Visible = false; // 파일 삭제 불가능
 
-                            // 한번 클릭 시에도 창 전환되도록 변경
-                            _f1.lblTitle.Visible = false;
-                            _f1.cBoxMethod.Text = _f1._methods[0];
-                            _f1.tBoxURL.Text = string.Empty;
-                            _f1.tBoxCookie.Text = string.Empty;
-                            _f1.tBoxMsg.Text = string.Empty;
-                            _f1.tBoxRst.Text = string.Empty;
-                            _f1.isNotUse();
+                        // 한번 클릭 시에도 창 전환되도록 변경
+                        _f1.lblTitle.Visible = false;
+                        _f1.cBoxMethod.Text = _f1._methods[0];
+                        _f1.tBoxURL.Text = string.Empty;
+                        _f1.tBoxCookie.Text = string.Empty;
+                        _f1.tBoxMsg.Text = string.Empty;
+                        _f1.tBoxRst.Text = string.Empty;
+                        _f1.isNotUse();
+                        break;
+                    case 1:
+                        tBoxName.Enabled = true;    // 입력 가능
+                        tBoxName.Visible = true;    // 이름 인풋 보임( 파일 생성을 위해 )
 
-                            // 만약 해시 폴더 없다면 생성
-                            CreateHashFolder(sNode.Text);
-                            break;
+                        btnAdd.Visible = false;     // 폴더 추가 불가능
+                        btnDelete.Visible = true;   // 폴더 삭제 가능
+                        btnAddFile.Visible = true;  // 파일 추가 가능
+                        btnDelFile.Visible = false; // 파일 삭제 불가능
 
-                            // 해시 파일 없는 경우 처리 해야함
-                        case 2:
-                            tBoxName.Enabled = false;    // 입력 불가능
-                            tBoxName.Visible = false;   // 이름 인풋 안보임
-                            btnAdd.Visible = false;     // 폴더 추가 불가능
-                            btnDelete.Visible = false;  // 폴더 삭제 불가능
-                            btnAddFile.Visible = false; // 파일 추가 불가능
-                            btnDelFile.Visible = true;  // 파일 삭제 가능
+                        // 한번 클릭 시에도 창 전환되도록 변경
+                        _f1.lblTitle.Visible = false;
+                        _f1.cBoxMethod.Text = _f1._methods[0];
+                        _f1.tBoxURL.Text = string.Empty;
+                        _f1.tBoxCookie.Text = string.Empty;
+                        _f1.tBoxMsg.Text = string.Empty;
+                        _f1.tBoxRst.Text = string.Empty;
+                        _f1.isNotUse();
 
-                            _f1._canCheck = false;      // 노드 변경 시 text_changed 이벤트가 발생하는 현상이 있어서 검사
+                        // 만약 해시 폴더 없다면 생성
+                        CreateRepoFolder(sNode.Text);
+                        break;
 
-                            // 한번 클릭 시에도 창 전환되도록 변경
-                            string xmlPath = GetXmlPath(sNode);
-                            FileInfo saveFile = new FileInfo(xmlPath);
-                            if (saveFile.Exists)
+                        // 해시 파일 없는 경우 처리 해야함
+                    case 2:
+                        tBoxName.Enabled = false;    // 입력 불가능
+                        tBoxName.Visible = false;   // 이름 인풋 안보임
+
+                        btnAdd.Visible = false;     // 폴더 추가 불가능
+                        btnDelete.Visible = false;  // 폴더 삭제 불가능
+                        btnAddFile.Visible = false; // 파일 추가 불가능
+                        btnDelFile.Visible = true;  // 파일 삭제 가능
+
+                        _f1._canCheck = false;      // 노드 변경 시 text_changed 이벤트가 발생하는 현상이 있어서 검사
+
+                        string savePath = GetSavePathForFile(sNode);
+                        FileInfo saveFile = new FileInfo(savePath);
+                        if (saveFile.Exists)
+                        {
+                                
+                            XmlDocument xdoc = _f1.Load_XML(sNode);
+                            string[] saveData = _f1.XMLtoStringArr(xdoc);
+
+                            // 무결성 깨지면 saveData.Length == 0 임.
+                            // 무결성 깨지면 초기화가 이루어진다.
+                            if (saveData.Length == 0)
                             {
+                                _f1.cBoxMethod.Text = _f1._methods[0];
+                                _f1.tBoxURL.Text = "";
+                                _f1.tBoxCookie.Text = "";
+                                _f1.tBoxMsg.Text = "";
+                                _f1.isUse();
+                                _f1.lblTitle.Visible = true;
+                                _f1.lblTitle.Text = sNode.Text;
 
-                                XmlDocument xdoc = _f1.Load_XML(sNode);
-                                string[] saveData = _f1.XMLtoStringArr(xdoc);
+                                RequestXML requestXML = new RequestXML();
 
-                                // 무결성 깨지면 saveData.Length == 0 임.
-                                // 무결성 깨지면 초기화가 이루어진다.
-                                if (saveData.Length == 0)
-                                {
-                                    _f1.cBoxMethod.Text = _f1._methods[0];
-                                    _f1.tBoxURL.Text = "";
-                                    _f1.tBoxCookie.Text = "";
-                                    _f1.tBoxMsg.Text = "";
-                                    _f1.isUse();
-                                    _f1.lblTitle.Visible = true;
-                                    _f1.lblTitle.Text = sNode.Text;
+                                requestXML._METHOD = _f1._methods[0];
+                                requestXML._URL = "";
+                                requestXML._COOKIE = "";
+                                requestXML._MSG = "";
 
-                                    RequestXML requestXML = new RequestXML();
-
-                                    requestXML._METHOD = _f1._methods[0];
-                                    requestXML._URL = "";
-                                    requestXML._COOKIE = "";
-                                    requestXML._MSG = "";
-
-                                    string savePath = GetXmlPath(sNode);
-                                    string hashPath = GetHashPathForFile(sNode);
-
-                                    _f1.Save_XML(requestXML, savePath, hashPath);
-                                }
-                                else
-                                {
-                                    _f1.cBoxMethod.Text = saveData[0];
-                                    _f1.tBoxURL.Text = saveData[1];
-                                    _f1.tBoxCookie.Text = saveData[2];
-                                    _f1.tBoxMsg.Text = saveData[3];
-                                    _f1.isUse();
-                                    _f1.lblTitle.Visible = true;
-                                    _f1.lblTitle.Text = sNode.Text;
-                                }
-                                _f1._canCheck = true;     // 값을 잘 불러왔다면 텍스트 변화 감지 true
+                                _f1.Save_XML(requestXML, savePath);
                             }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else
-                {
-                    tBoxName.Enabled = false;
-                    _f1.btnSave.Visible = false;
-                    _f1.lblTitle.Visible = false;
-                    //_isSelected = false;
+                            else
+                            {
+                                _f1.cBoxMethod.Text = saveData[0];
+                                _f1.tBoxURL.Text = saveData[1];
+                                _f1.tBoxCookie.Text = saveData[2];
+                                _f1.tBoxMsg.Text = saveData[3];
+                                _f1.isUse();
+                                _f1.lblTitle.Visible = true;
+                                _f1.lblTitle.Text = sNode.Text;
+                            }
+                            _f1._canCheck = true;     // 값을 잘 불러왔다면 텍스트 변화 감지 true
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
-        }
+            else
+            {
+                tBoxName.Enabled = false;
+                _f1.btnSave.Visible = false;
+                _f1.lblTitle.Visible = false;
+                //_isSelected = false;
+            }
+         }
 
 
         //////////////
@@ -607,8 +610,8 @@ namespace API_Tester
         {
             if (e.Node.Level == 1)
             {
-                // 만약 해시 폴더 없다면 생성
-                CreateHashFolder(e.Node.Text);
+                // 만약 repo 폴더 없다면 생성
+                CreateRepoFolder(e.Node.Text);
             }
             
         }
@@ -618,8 +621,8 @@ namespace API_Tester
         {
             if (e.Node.Level == 1)
             {
-                // 만약 해시 폴더 없다면 생성
-                CreateHashFolder(e.Node.Text);
+                // 만약 repo 폴더 없다면 생성
+                CreateRepoFolder(e.Node.Text);
             }
         }
     }

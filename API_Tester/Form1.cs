@@ -106,9 +106,8 @@ namespace API_Tester
 
             if (sNode != null)
             {
-                string xmlPath = _repository.GetXmlPath(sNode);
-                string hashPath = _repository.GetHashPathForFile(sNode);
-                FileInfo saved = new FileInfo(xmlPath);
+                string savePath = _repository.GetSavePathForFile(sNode);
+                FileInfo saved = new FileInfo(savePath);
                 if (saved.Exists)
                 {
 
@@ -119,7 +118,7 @@ namespace API_Tester
 
                     if (IsChanged(saveData))
                     {
-                        QuestionToSave(xmlPath, hashPath);
+                        QuestionToSave(savePath);
                     }
                 }
                 else
@@ -127,7 +126,7 @@ namespace API_Tester
                     string[] data = new string[] { _methods[0], "", "", "" };
                     if (IsChanged(data))
                     {
-                        QuestionToSave(xmlPath, hashPath);
+                        QuestionToSave(savePath);
                     }
                 }
             }
@@ -150,7 +149,7 @@ namespace API_Tester
         /// 
 
         // 비밀번호 저장할거냐고 묻는 함수
-        private void QuestionToSave(string xmlPath, string hashPath)
+        private void QuestionToSave(string savePath)
         {
             if(CustomMessageBox.ShowMessage("변경내용이 있습니다.\n저장 하시겠습니까?","Save",MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -161,7 +160,7 @@ namespace API_Tester
                 requestXML._COOKIE = tBoxCookie.Text;
                 requestXML._MSG = tBoxMsg.Text;
 
-                Save_XML(requestXML, xmlPath, hashPath);
+                Save_XML(requestXML, savePath);
                 CustomMessageBox.ShowMessage("저장되었습니다.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
@@ -177,7 +176,7 @@ namespace API_Tester
 
         // textbox에 있던 파일을 requestXML 객체로 받아서 로컬에 저장하기 직전 함수
         // 프로그램 종료 시에도 저장 하도록 하는 로직 추가해야한다. (아직 안함)
-        public void Save_XML(RequestXML requestXML, string xmlPath, string hashPath)
+        public void Save_XML(RequestXML requestXML, string savePath)
         {
             XmlDocument xdoc = new XmlDocument();
 
@@ -216,7 +215,7 @@ namespace API_Tester
             string cipherText = AES256.Encrypt(originHash);
 
             // 4. 저장
-            File.WriteAllText(hashPath, cipherText, Encoding.Default);
+            File.WriteAllText(savePath, cipherText, Encoding.Default);
 
             // 5. 싱글톤 객체에 저장 ( 그래야 값 변경 시 저장 버튼 나오게 할 수 있음 )
             List<string> returnList = new List<string> { };
@@ -228,9 +227,6 @@ namespace API_Tester
 
             SingletonXML sXML = SingletonXML.Instance;
             sXML.SetXML(xdoc);
-
-            // 6. xmlPath에 아무 값도 없는 파일 생성 (트리뷰 때문에)
-            File.WriteAllText(xmlPath, "", Encoding.Default);
 
             //기존 방식
 
@@ -259,8 +255,17 @@ namespace API_Tester
 
         public XmlDocument Load_XML(TreeNode sNode)
         {
-            string loadPath = _repository.GetHashPathForFile(sNode);
+            string loadPath = string.Empty;
 
+            if (sNode != null)
+            {
+                loadPath = _repository.GetSavePathForFile(sNode);
+            }
+            else
+            {
+                return null;
+            }
+            
             // 1. 복호화 하기 > 결과는 (원본\n해시값)
             string cipherText = File.ReadAllText(loadPath);
             string decrpytText = AES256.Decrypt(cipherText);
@@ -352,8 +357,7 @@ namespace API_Tester
             if (_repository != null)
             {
                 var sNode = _repository.treeView1.SelectedNode;
-                string xmlPath = _repository.GetXmlPath(sNode);
-                string hashPath = _repository.GetHashPathForFile(sNode);
+                string savePath = _repository.GetSavePathForFile(sNode);
 
                 RequestXML requestXML = new RequestXML();
 
@@ -362,7 +366,7 @@ namespace API_Tester
                 requestXML._COOKIE = tBoxCookie.Text;
                 requestXML._MSG = tBoxMsg.Text;
 
-                Save_XML(requestXML, xmlPath, hashPath);
+                Save_XML(requestXML, savePath);
                 CustomMessageBox.ShowMessage("저장이 완료됐습니다!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 btnSave.Visible = false;
             }
@@ -374,31 +378,41 @@ namespace API_Tester
 
 
         //////////////////
-        ///텍스트 변경 시 저장버튼 visible 
+        ///텍스트 변경 시 저장버튼 visible
+        /// But 여기서 노드를 바꾸면 Text Changed 되가지구 오류 생김
+        ////////
         public void TextBox_TextChanged(Object sender, EventArgs e)
         {
             if (_repository != null && _canCheck)
             {
+                string savePath = string.Empty;
                 TreeNode sNode = _repository.treeView1.SelectedNode;
-                string xmlPath = _repository.GetXmlPath(sNode);
-                FileInfo save = new FileInfo(xmlPath);
-
-                if (save.Exists)
+                if(sNode != null)
                 {
-                    // 싱글톤 객체를 통한 XML 검사
-                    SingletonXML sXML = SingletonXML.Instance;
-                    XmlDocument xdoc = sXML.GetXML();
-                    string[] saveData = XMLtoStringArr(xdoc);
+                    // 파일을 선택한 경우에만
+                    if(sNode.Level == 2)
+                    {
+                        savePath = _repository.GetSavePathForFile(sNode);
+                        FileInfo save = new FileInfo(savePath);
 
-                    if (IsChanged(saveData))
-                    {
-                        btnSave.Visible = true;
+                        if (save.Exists)
+                        {
+                            // 싱글톤 객체를 통한 XML 검사
+                            SingletonXML sXML = SingletonXML.Instance;
+                            XmlDocument xdoc = sXML.GetXML();
+                            string[] saveData = XMLtoStringArr(xdoc);
+
+                            if (IsChanged(saveData))
+                            {
+                                btnSave.Visible = true;
+                            }
+                            else
+                            {
+                                btnSave.Visible = false;
+                            }
+                        }
                     }
-                    else
-                    {
-                        btnSave.Visible = false;
-                    }
-                }
+                }  
             }
         }
 
@@ -557,8 +571,13 @@ namespace API_Tester
             if(_repository != null)
             {
                 TreeNode sNode = _repository.treeView1.SelectedNode;
-                string xmlPath = _repository.GetXmlPath(sNode);
-                FileInfo save = new FileInfo(xmlPath);
+                string savePath = string.Empty;
+                if (sNode != null)
+                {
+                    savePath = _repository.GetSavePathForFile(sNode);
+                }
+                
+                FileInfo save = new FileInfo(savePath);
                 if (save.Exists)
                 {
                     // 싱글톤 객체를 통한 XML 검사
