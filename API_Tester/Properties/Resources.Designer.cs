@@ -63,6 +63,16 @@ namespace API_Tester.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
+        internal static System.Drawing.Bitmap add_doc {
+            get {
+                object obj = ResourceManager.GetObject("add_doc", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
         internal static System.Drawing.Bitmap add_folder {
             get {
                 object obj = ResourceManager.GetObject("add-folder", resourceCulture);
@@ -86,6 +96,16 @@ namespace API_Tester.Properties {
         internal static System.Drawing.Bitmap close {
             get {
                 object obj = ResourceManager.GetObject("close", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap del_doc {
+            get {
+                object obj = ResourceManager.GetObject("del_doc", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -206,6 +226,26 @@ namespace API_Tester.Properties {
         internal static System.Drawing.Bitmap question_sky {
             get {
                 object obj = ResourceManager.GetObject("question-sky", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap re_doc {
+            get {
+                object obj = ResourceManager.GetObject("re_doc", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap re_folder {
+            get {
+                object obj = ResourceManager.GetObject("re_folder", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

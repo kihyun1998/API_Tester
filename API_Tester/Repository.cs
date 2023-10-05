@@ -39,6 +39,8 @@ namespace API_Tester
             btnFolderDel.Visible = false;
             btnFileAdd.Visible = false;
             btnFileDel.Visible = false;
+            btnFolderRename.Visible = false;
+            btnFileRename.Visible = false;  
         }
 
         private void ListDirectory(TreeView treeView, string repoPath)
@@ -112,74 +114,6 @@ namespace API_Tester
             }
         }
 
-        ////////////삭제예정
-        /// 폴더 추가 창 띄우기
-        public void btnAdd_Click(object sender, EventArgs e)
-        {
-            _lx = _f1.Location.X;
-            _ly = _f1.Location.Y;
-            _customInputForm = new CustomInputForm(this);
-            _customInputForm.StartPosition = FormStartPosition.Manual;
-            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
-            _customInputForm._type = TypeEnum.Type.Folder.ToString();
-            _customInputForm.Show();
-        }
-
-        ///////////삭제예정
-        // 폴더 삭제 동작 함수
-        public void btnDelete_Click(object sender, EventArgs e)
-        {
-            var sNode = treeView1.SelectedNode;
-
-            if (sNode != null && sNode.Parent != null)
-            {
-                if (CustomMessageBox.ShowMessage("폴더를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    string deletePath = string.Format("{0}\\{1}\\{2}", _rootPath, _repoFolderName, sNode.Text);
-
-                    Directory.Delete(deletePath, recursive: true);
-                    treeView1.Nodes.Remove(sNode);
-
-                    CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-        }
-        //////////삭제예정
-        /// 파일 추가 창 띄우기
-        private void btnAddFile_Click(object sender, EventArgs e)
-        {
-            _lx = _f1.Location.X;
-            _ly = _f1.Location.Y;
-            _customInputForm = new CustomInputForm(this);
-            _customInputForm.StartPosition = FormStartPosition.Manual;
-            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
-            _customInputForm._type = TypeEnum.Type.File.ToString();
-            _customInputForm.Show();
-        }
-        /////////삭제예정
-        /// 파일 삭제 동작 함수
-        public void btnDelFile_Click(object sender, EventArgs e)
-        {
-            CreateEtcFolder();
-
-            var sNode = treeView1.SelectedNode;
-
-            if (sNode != null && sNode.Parent != null)
-            {
-                if (CustomMessageBox.ShowMessage("파일를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    string deletePath = GetSavePathForFile(sNode);
-
-                    File.Delete(deletePath);
-                    treeView1.Nodes.Remove(sNode);
-
-                    CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-        }
-
-
-
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -248,6 +182,32 @@ namespace API_Tester
                 }
             }
         }
+
+
+        // 폴더 수정 버튼 클릭 시 
+        private void btnFolderRename_Click(object sender, EventArgs e)
+        {
+            _lx = _f1.Location.X;
+            _ly = _f1.Location.Y;
+            _customInputForm = new CustomInputForm(this);
+            _customInputForm.StartPosition = FormStartPosition.Manual;
+            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
+            _customInputForm._type = TypeEnum.Type.File.ToString();
+            _customInputForm.Show();
+        }
+
+        // 파일 수정 버튼 클릭 시 
+        private void btnFileRename_Click(object sender, EventArgs e)
+        {
+            _lx = _f1.Location.X;
+            _ly = _f1.Location.Y;
+            _customInputForm = new CustomInputForm(this);
+            _customInputForm.StartPosition = FormStartPosition.Manual;
+            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
+            _customInputForm._type = TypeEnum.Type.File.ToString();
+            _customInputForm.Show();
+        }
+
 
 
         ///////////////////////
@@ -407,10 +367,12 @@ namespace API_Tester
                 switch (nLevel)
                 {
                     case 0:
-                        btnFolderAdd.Visible = true;      // 폴더 추가 가능
-                        btnFolderDel.Visible = false;  // 폴더 삭제 불가능
-                        btnFileAdd.Visible = false; // 파일 추가 불가능
-                        btnFileDel.Visible = false; // 파일 삭제 불가능
+                        btnFolderAdd.Visible = true;     // 폴더 추가 가능
+                        btnFolderDel.Visible = false;    // 폴더 삭제 불가능
+                        btnFolderRename.Visible = false; // 폴더 이름 수정 불가능
+                        btnFileAdd.Visible = false;      // 파일 추가 불가능
+                        btnFileDel.Visible = false;      // 파일 삭제 불가능
+                        btnFileRename.Visible = false;   // 파일 이름 수정 불가능
 
                         // 한번 클릭 시에도 창 전환되도록 변경
                         _f1.lblTitle.Visible = false;
@@ -422,10 +384,12 @@ namespace API_Tester
                         _f1.isNotUse();
                         break;
                     case 1:
-                        btnFolderAdd.Visible = false;     // 폴더 추가 불가능
-                        btnFolderDel.Visible = true;   // 폴더 삭제 가능
-                        btnFileAdd.Visible = true;  // 파일 추가 가능
-                        btnFileDel.Visible = false; // 파일 삭제 불가능
+                        btnFolderAdd.Visible = false;   // 폴더 추가 불가능
+                        btnFolderDel.Visible = true;    // 폴더 삭제 가능
+                        btnFolderRename.Visible = true; // 폴더 이름 수정 가능
+                        btnFileAdd.Visible = true;      // 파일 추가 가능
+                        btnFileDel.Visible = false;     // 파일 삭제 불가능
+                        btnFileRename.Visible = false;  // 파일 이름 수정 불가능
 
                         // 한번 클릭 시에도 창 전환되도록 변경
                         _f1.lblTitle.Visible = false;
@@ -442,10 +406,12 @@ namespace API_Tester
 
                         // 해시 파일 없는 경우 처리 해야함
                     case 2:
-                        btnFolderAdd.Visible = false;     // 폴더 추가 불가능
-                        btnFolderDel.Visible = false;  // 폴더 삭제 불가능
-                        btnFileAdd.Visible = false; // 파일 추가 불가능
-                        btnFileDel.Visible = true;  // 파일 삭제 가능
+                        btnFolderAdd.Visible = false;    // 폴더 추가 불가능
+                        btnFolderDel.Visible = false;    // 폴더 삭제 불가능
+                        btnFolderRename.Visible = false; // 폴더 이름 수정 불가능
+                        btnFileAdd.Visible = false;      // 파일 추가 불가능
+                        btnFileDel.Visible = true;       // 파일 삭제 가능
+                        btnFileRename.Visible = true;   // 파일 이름 수정 가능
 
                         _f1._canCheck = false;      // 노드 변경 시 text_changed 이벤트가 발생하는 현상이 있어서 검사
 
@@ -501,6 +467,8 @@ namespace API_Tester
                 btnFolderDel.Visible = false;
                 btnFileAdd.Visible = false;
                 btnFileDel.Visible = false;
+                btnFolderRename.Visible = false;
+                btnFileRename.Visible = false;
 
                 _f1.btnSave.Visible = false;
                 _f1.lblTitle.Visible = false;
@@ -516,55 +484,59 @@ namespace API_Tester
             {
                 // 우클릭 해도 노드 선택되도록
                 treeView1.SelectedNode = e.Node;
-                var sNode = treeView1.SelectedNode;
-
-                int nLevel = sNode.Level;
-
-                Point ClickPoint = new Point(e.X, e.Y);
-                TreeNode ClickNode = treeView1.GetNodeAt(ClickPoint);
-                if (ClickNode == null) return;
-
-                Point ScreenPoint = treeView1.PointToScreen(ClickPoint);
-                Point FormPoint = this.PointToClient(ScreenPoint);
-
-                ContextMenuStrip cMenu = new ContextMenuStrip();
-
-                if (sNode != null)
+                TreeNode sNode = treeView1.SelectedNode;
+                if(sNode != null)
                 {
-                    switch (nLevel)
+                    int nLevel = sNode.Level;
+
+                    Point ClickPoint = new Point(e.X, e.Y);
+                    TreeNode ClickNode = treeView1.GetNodeAt(ClickPoint);
+                    if (ClickNode == null) return;
+
+                    Point ScreenPoint = treeView1.PointToScreen(ClickPoint);
+                    Point FormPoint = this.PointToClient(ScreenPoint);
+
+                    ContextMenuStrip cMenu = new ContextMenuStrip();
+
+                    if (sNode != null)
                     {
-                        case 0:
-                            ToolStripMenuItem itemAddService = new ToolStripMenuItem("➕ Add a Service");
+                        switch (nLevel)
+                        {
+                            case 0:
+                                ToolStripMenuItem itemAddService = new ToolStripMenuItem("➕ Add a Service");
 
-                            itemAddService.Click += btnAdd_Click;
-                            
-                            cMenu.Items.Add(itemAddService);
-                            break;
-                        case 1:
-                            ToolStripMenuItem itemAddRequest = new ToolStripMenuItem("➕ Add a Request");
-                            ToolStripMenuItem itemRemoveFolder = new ToolStripMenuItem("🗑 Remove");
+                                itemAddService.Click += btnFolderAdd_Click;
 
-                            itemAddRequest.Click += btnAddFile_Click;
-                            itemRemoveFolder.Click += btnDelete_Click;
+                                cMenu.Items.Add(itemAddService);
+                                break;
+                            case 1:
+                                ToolStripMenuItem itemAddRequest = new ToolStripMenuItem("➕ Add a Request");
+                                ToolStripMenuItem itemRenameFolder = new ToolStripMenuItem("📄 Rename");
+                                ToolStripMenuItem itemRemoveFolder = new ToolStripMenuItem("🗑 Remove");
 
-                            cMenu.Items.Add(itemAddRequest);
-                            cMenu.Items.Add(itemRemoveFolder);
-                            break;
-                        case 2:
-                            ToolStripMenuItem itemRemoveFile = new ToolStripMenuItem("🗑 Remove");
+                                itemAddRequest.Click += btnFileAdd_Click;
+                                itemRemoveFolder.Click += btnFolderDel_Click;
 
-                            itemRemoveFile.Click += btnDelFile_Click;
-                    
-                            cMenu.Items.Add(itemRemoveFile);
-                            break;
-                        default:
-                            break;
+                                cMenu.Items.Add(itemAddRequest);
+                                cMenu.Items.Add(itemRemoveFolder);
+                                break;
+                            case 2:
+                                ToolStripMenuItem itemRenamefile = new ToolStripMenuItem("📄 Rename");
+                                ToolStripMenuItem itemRemoveFile = new ToolStripMenuItem("🗑 Remove");
 
-                            // Form 추가해서 rename 기능 추가하기 로직은 밑에 처럼 or Text 해봐야 알듯
-                            // myTreeView.SelectedNode.Name = "NewNodeName";
+                                itemRemoveFile.Click += btnFileDel_Click;
+
+                                cMenu.Items.Add(itemRemoveFile);
+                                break;
+                            default:
+                                break;
+
+                                // Form 추가해서 rename 기능 추가하기 로직은 밑에 처럼 or Text 해봐야 알듯
+                                // myTreeView.SelectedNode.Name = "NewNodeName";
+                        }
                     }
+                    cMenu.Show(this, FormPoint);
                 }
-                cMenu.Show(this, FormPoint);
             }
         }
 
@@ -622,7 +594,8 @@ namespace API_Tester
             mouseDown = false;
         }
 
-        
+
+
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 }
