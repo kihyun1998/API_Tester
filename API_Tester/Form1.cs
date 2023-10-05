@@ -227,29 +227,6 @@ namespace API_Tester
 
             SingletonXML sXML = SingletonXML.Instance;
             sXML.SetXML(xdoc);
-
-            //기존 방식
-
-            ////XML 대신 암호문을 Base64로 저장
-            //string cipherText = AES256.Encrypt(root.OuterXml);
-            //File.WriteAllText(xmlPath, cipherText, Encoding.Default);
-
-            //// 해시파일도 등록 (추후 원본 해시로 변경해야함)
-            //string hashText = SHA256.Hash(root.OuterXml);
-            //File.WriteAllText(hashPath, hashText, Encoding.Default);
-
-
-            //// 저장한 XML 싱글톤으로 등록
-            //List<string> returnList = new List<string> { };
-
-            //returnList.Add(requestXML._METHOD);
-            //returnList.Add(requestXML._URL);
-            //returnList.Add(requestXML._COOKIE);
-            //returnList.Add(requestXML._MSG);
-
-            //// 저장 시 싱글톤에 저장
-            //SingletonXML sXML = SingletonXML.Instance;
-            //sXML.SetXML(xdoc);
         }
 
 
@@ -291,36 +268,6 @@ namespace API_Tester
             sXML.SetXML(xdoc);
 
             return xdoc;
-
-
-            // 기존 방식
-            //string loadPath = _repository.GetXmlPath(sNode);
-
-            //string cryptXML = File.ReadAllText(loadPath);
-            //string decryptXML = AES256.Decrypt(cryptXML);
-
-
-            //string hashPath = _repository.GetHashPathForFile(sNode);
-            //string hashText = File.ReadAllText(hashPath);
-
-            //bool checkValue = SHA256.CheckIntegrity(hashText, decryptXML);
-
-            //if (!checkValue)
-            //{
-            //    // null을 반환하면 무결성이 깨짐을 의미함.
-            //    return null;
-            //}
-
-
-            //XmlDocument xdoc = new XmlDocument();
-            //xdoc.LoadXml(decryptXML);
-
-
-            //// 불러온 XML 싱글톤으로 등록
-            //SingletonXML sXML = SingletonXML.Instance;
-            //sXML.SetXML(xdoc);
-
-            //return xdoc;
         }
 
         public string[] XMLtoStringArr(XmlDocument xdoc)
@@ -379,7 +326,6 @@ namespace API_Tester
 
         //////////////////
         ///텍스트 변경 시 저장버튼 visible
-        /// But 여기서 노드를 바꾸면 Text Changed 되가지구 오류 생김
         ////////
         public void TextBox_TextChanged(Object sender, EventArgs e)
         {

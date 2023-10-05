@@ -174,20 +174,6 @@ namespace API_Tester
             }
         }
 
-        //////////
-        //// 폴더 삭제 창 띄우기
-        //public void btnDelete_Click(object sender, EventArgs e)
-        //{
-        //    _lx = _f1.Location.X;
-        //    _ly = _f1.Location.Y;
-        //    _customInputForm = new CustomInputForm(this);
-        //    _customInputForm.StartPosition = FormStartPosition.Manual;
-        //    _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
-        //    _customInputForm._type = TypeEnum.Type.Folder.ToString();
-        //    _customInputForm._action = TypeEnum.Action.Remove.ToString();
-        //    _customInputForm.Show();
-        //}
-
         ///////////
         // 폴더 삭제 동작 함수
         public void btnDelete_Click(object sender, EventArgs e)
@@ -199,9 +185,6 @@ namespace API_Tester
                 if (CustomMessageBox.ShowMessage("폴더를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     string deletePath = string.Format("{0}\\{1}\\{2}", _rootPath, _repoFolderName, sNode.Text);
-
-                    // 아래 경로의 폴더 하나만 삭제하기 
-                    //string savePath = string.Format("{0}\\{1}\\{2}", _rootPath, _repoFolderName, folderName);
 
                     Directory.Delete(deletePath, recursive: true);
                     treeView1.Nodes.Remove(sNode);
@@ -277,24 +260,6 @@ namespace API_Tester
                 tBoxName.Text = string.Empty;
             }
         }
-
-
-
-
-
-        ///////////
-        ///// 파일 삭제 창 띄우기
-        //private void btnDelFile_Click(object sender, EventArgs e)
-        //{
-        //    _lx = _f1.Location.X;
-        //    _ly = _f1.Location.Y;
-        //    _customInputForm = new CustomInputForm(this);
-        //    _customInputForm.StartPosition = FormStartPosition.Manual;
-        //    _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
-        //    _customInputForm._type = TypeEnum.Type.File.ToString();
-        //    _customInputForm._action = TypeEnum.Action.Remove.ToString();
-        //    _customInputForm.Show();
-        //}
         
         /////////
         /// 파일 삭제 동작 함수
@@ -319,53 +284,6 @@ namespace API_Tester
             }
         }
 
-        ///////
-        /// Hash파일 경로 반환 ( 폴더 노드 선택한 상태에서 사용 )
-        //public string GetHashPathForFolder(TreeNode sNode, string fileName)
-        //{
-        //    if (sNode != null)
-        //    {
-        //        try
-        //        {
-        //            string hashPath = string.Format("{0}\\{1}\\{2}\\{3}", _rootPath, _repoFolderName, sNode.Text, string.Format(fileName + "-etc.txt"));
-
-        //            return hashPath;
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            CustomMessageBox.ShowMessage(string.Format("[Repository.GetHashPathForParent()] 노드 선택 여부 검사 안함 !\n{0}",e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-        //            return "";
-        //        }
-
-        //    }
-        //    return "";
-                
-        //}
-
-        ///////
-        /// Hash파일 경로 반환 ( 파일 노드 선택한 상태에서 사용 )
-        //public string GetHashPathForFile(TreeNode sNode)
-        //{
-        //    if(sNode != null)
-        //    {
-        //        try
-        //        {
-        //            string hashPath = string.Format("{0}\\{1}\\{2}\\{3}", _rootPath, _repoFolderName, sNode.Parent.Text, string.Format(sNode.Text + "-etc.txt"));
-
-        //            return hashPath;
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            CustomMessageBox.ShowMessage(string.Format("[Repository.GetHashPathForChild()] 노드 선택 여부 검사 안함 !\\n{0}", e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-        //            return "";
-        //        }
-        //    }
-        //    return "";
-                
-        //}
-
 
         /////////
         /// 수정할 때 사용
@@ -378,7 +296,6 @@ namespace API_Tester
                 {
                     // 여기서 sNode는 파일이다.
                     string savePath = string.Format("{0}\\{1}\\{2}\\{3}.txt", _rootPath, _repoFolderName, sNode.Parent.Text, sNode.Text);
-                    //string xmlPath = string.Format("..\\{0}", string.Format(sNode.FullPath + ".txt"));
                     return savePath;
                 }
             }
@@ -396,7 +313,6 @@ namespace API_Tester
                 {
                     // 여기서 sNode는 폴더이다.
                     string savePath = string.Format("{0}\\{1}\\{2}\\{3}.txt", _rootPath, _repoFolderName, sNode.Text, fileName);
-                    //string xmlPath = string.Format("..\\{0}\\{1}", sNode.FullPath, string.Format(fileName + ".txt"));
                     return savePath;
                 }
             }
@@ -539,7 +455,6 @@ namespace API_Tester
                 tBoxName.Enabled = false;
                 _f1.btnSave.Visible = false;
                 _f1.lblTitle.Visible = false;
-                //_isSelected = false;
             }
          }
 
