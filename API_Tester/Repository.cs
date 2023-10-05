@@ -34,6 +34,11 @@ namespace API_Tester
             string repoPath =  string.Format("{0}\\{1}", _rootPath, _repoFolderName);
             ListDirectory(treeView1, repoPath);
             this._f1 = form;
+            // 버튼 visible
+            btnFolderAdd.Visible = false;
+            btnFolderDel.Visible = false;
+            btnFileAdd.Visible = false;
+            btnFileDel.Visible = false;
         }
 
         private void ListDirectory(TreeView treeView, string repoPath)
@@ -75,21 +80,6 @@ namespace API_Tester
 
             return directoryNode;
         }
-
-
-        ////////////
-        /// 폴더 추가 창 띄우기
-        public void btnAdd_Click(object sender, EventArgs e)
-        {
-            _lx = _f1.Location.X;
-            _ly = _f1.Location.Y;
-            _customInputForm = new CustomInputForm(this);
-            _customInputForm.StartPosition = FormStartPosition.Manual;
-            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
-            _customInputForm._type = TypeEnum.Type.Folder.ToString();
-            _customInputForm.Show();
-        }
-
         public void CreateEtcFolder()
         {
             //// C:\Users\유저\.apitest 폴더 생성
@@ -122,8 +112,145 @@ namespace API_Tester
             }
         }
 
+        ////////////삭제예정
+        /// 폴더 추가 창 띄우기
+        public void btnAdd_Click(object sender, EventArgs e)
+        {
+            _lx = _f1.Location.X;
+            _ly = _f1.Location.Y;
+            _customInputForm = new CustomInputForm(this);
+            _customInputForm.StartPosition = FormStartPosition.Manual;
+            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
+            _customInputForm._type = TypeEnum.Type.Folder.ToString();
+            _customInputForm.Show();
+        }
 
-        ////////////
+        ///////////삭제예정
+        // 폴더 삭제 동작 함수
+        public void btnDelete_Click(object sender, EventArgs e)
+        {
+            var sNode = treeView1.SelectedNode;
+
+            if (sNode != null && sNode.Parent != null)
+            {
+                if (CustomMessageBox.ShowMessage("폴더를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    string deletePath = string.Format("{0}\\{1}\\{2}", _rootPath, _repoFolderName, sNode.Text);
+
+                    Directory.Delete(deletePath, recursive: true);
+                    treeView1.Nodes.Remove(sNode);
+
+                    CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+        //////////삭제예정
+        /// 파일 추가 창 띄우기
+        private void btnAddFile_Click(object sender, EventArgs e)
+        {
+            _lx = _f1.Location.X;
+            _ly = _f1.Location.Y;
+            _customInputForm = new CustomInputForm(this);
+            _customInputForm.StartPosition = FormStartPosition.Manual;
+            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
+            _customInputForm._type = TypeEnum.Type.File.ToString();
+            _customInputForm.Show();
+        }
+        /////////삭제예정
+        /// 파일 삭제 동작 함수
+        public void btnDelFile_Click(object sender, EventArgs e)
+        {
+            CreateEtcFolder();
+
+            var sNode = treeView1.SelectedNode;
+
+            if (sNode != null && sNode.Parent != null)
+            {
+                if (CustomMessageBox.ShowMessage("파일를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    string deletePath = GetSavePathForFile(sNode);
+
+                    File.Delete(deletePath);
+                    treeView1.Nodes.Remove(sNode);
+
+                    CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////
+        /// 폴더 추가 버튼 클릭 시 - 창만 띄운다.
+        private void btnFolderAdd_Click(object sender, EventArgs e)
+        {
+            _lx = _f1.Location.X;
+            _ly = _f1.Location.Y;
+            _customInputForm = new CustomInputForm(this);
+            _customInputForm.StartPosition = FormStartPosition.Manual;
+            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
+            _customInputForm._type = TypeEnum.Type.Folder.ToString();
+            _customInputForm.Show();
+        }
+
+        //////////////////////
+        /// 폴더 삭제 버튼 클릭 시 (동작 포함)
+        private void btnFolderDel_Click(object sender, EventArgs e)
+        {
+            var sNode = treeView1.SelectedNode;
+
+            if (sNode != null && sNode.Parent != null)
+            {
+                if (CustomMessageBox.ShowMessage("폴더를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    string deletePath = string.Format("{0}\\{1}\\{2}", _rootPath, _repoFolderName, sNode.Text);
+
+                    Directory.Delete(deletePath, recursive: true);
+                    treeView1.Nodes.Remove(sNode);
+
+                    CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        // 파일 추가 버튼 클릭 시 - 창만 띄움
+        private void btnFileAdd_Click(object sender, EventArgs e)
+        {
+            _lx = _f1.Location.X;
+            _ly = _f1.Location.Y;
+            _customInputForm = new CustomInputForm(this);
+            _customInputForm.StartPosition = FormStartPosition.Manual;
+            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
+            _customInputForm._type = TypeEnum.Type.File.ToString();
+            _customInputForm.Show();
+        }
+
+        // 파일 삭제 버튼 클릭 시 (동작 포함)
+        private void btnFileDel_Click(object sender, EventArgs e)
+        {
+            CreateEtcFolder();
+
+            var sNode = treeView1.SelectedNode;
+
+            if (sNode != null && sNode.Parent != null)
+            {
+                if (CustomMessageBox.ShowMessage("파일를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    string deletePath = GetSavePathForFile(sNode);
+
+                    File.Delete(deletePath);
+                    treeView1.Nodes.Remove(sNode);
+
+                    CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+
+        ///////////////////////
         /// 폴더 추가 동작 함수
         public void AddFolder(object sender, EventArgs e)
         {
@@ -142,7 +269,6 @@ namespace API_Tester
             {
                 if (sNode != null)
                 {
-                    //string savePath = string.Format("..\\{0}\\{1}", sNode.FullPath, folderName);
                     string savePath = string.Format("{0}\\{1}\\{2}", _rootPath, _repoFolderName,folderName);
 
                     DirectoryInfo createdDir = new DirectoryInfo(savePath);
@@ -151,59 +277,19 @@ namespace API_Tester
                         createdDir.Create();
                         sNode.Nodes.Add(new TreeNode(folderName));
                         CustomMessageBox.ShowMessage(string.Format("{0}이(가) 추가됐습니다 !", folderName), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        tBoxName.Text = string.Empty;
                     }
                     else
                     {
                         CustomMessageBox.ShowMessage("중복된 폴더명입니다!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
-
-                    CreateRepoFolder(folderName);
                 }
             }
             else
             {
                 CustomMessageBox.ShowMessage("이름은 한 글자 이상 입력해주세요!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                tBoxName.Text = string.Empty;
             }
         }
 
-        ///////////
-        // 폴더 삭제 동작 함수
-        public void btnDelete_Click(object sender, EventArgs e)
-        {
-            var sNode = treeView1.SelectedNode;
-
-            if (sNode != null && sNode.Parent != null)
-            {
-                if (CustomMessageBox.ShowMessage("폴더를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    string deletePath = string.Format("{0}\\{1}\\{2}", _rootPath, _repoFolderName, sNode.Text);
-
-                    Directory.Delete(deletePath, recursive: true);
-                    treeView1.Nodes.Remove(sNode);
-
-                    CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    tBoxName.Text = string.Empty;
-                }
-
-            }
-        }
-
-        
-
-        //////////
-        /// 파일 추가 창 띄우기
-        private void btnAddFile_Click(object sender, EventArgs e)
-        {
-            _lx = _f1.Location.X;
-            _ly = _f1.Location.Y;
-            _customInputForm = new CustomInputForm(this);
-            _customInputForm.StartPosition = FormStartPosition.Manual;
-            _customInputForm.Location = new Point(_lx + _customInputForm.Width, _ly + _customInputForm.Height);
-            _customInputForm._type = TypeEnum.Type.File.ToString();
-            _customInputForm.Show();
-        }
 
 
         //////////
@@ -240,7 +326,6 @@ namespace API_Tester
                         _f1.Save_XML(requestXML, savePath);
                         sNode.Nodes.Add(new TreeNode(fileName));
                         CustomMessageBox.ShowMessage(string.Format("{0}이(가) 추가됐습니다 !", fileName), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        tBoxName.Text = string.Empty;
                     }
                     else
                     {
@@ -251,36 +336,11 @@ namespace API_Tester
             else
             {
                 CustomMessageBox.ShowMessage("파일 이름은 한 글자 이상 입력해주세요!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                tBoxName.Text = string.Empty;
             }
         }
         
         /////////
-        /// 파일 삭제 동작 함수
-        public void btnDelFile_Click(object sender, EventArgs e)
-        {
-            CreateEtcFolder();
-
-            var sNode = treeView1.SelectedNode;
-
-            if (sNode != null && sNode.Parent != null)
-            {
-                if (CustomMessageBox.ShowMessage("파일를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    string deletePath = GetSavePathForFile(sNode);
-
-                    File.Delete(deletePath);
-                    treeView1.Nodes.Remove(sNode);
-
-                    CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    tBoxName.Text = string.Empty;
-                }
-            }
-        }
-
-
-        /////////
-        /// 수정할 때 사용
+        /// 이미 생성된 파일을 수정할 때의 경로를 반환해준다.
         public string GetSavePathForFile(TreeNode sNode)
         {
             if (sNode != null)
@@ -297,7 +357,7 @@ namespace API_Tester
         }
 
         ///////////
-        /// 파일 생성 시 사용
+        /// 파일 처음 생성 시 사용하는 경로를 반환해준다.
         public string GetSavePathForFolder(TreeNode sNode, string fileName)
         {
             if(sNode != null)
@@ -347,13 +407,10 @@ namespace API_Tester
                 switch (nLevel)
                 {
                     case 0:
-                        tBoxName.Enabled = true;    // 입력 가능
-                        tBoxName.Visible = true;    // 이름 인풋 보임 ( 폴더 생성을 위해 )
-
-                        btnAdd.Visible = true;      // 폴더 추가 가능
-                        btnDelete.Visible = false;  // 폴더 삭제 불가능
-                        btnAddFile.Visible = false; // 파일 추가 불가능
-                        btnDelFile.Visible = false; // 파일 삭제 불가능
+                        btnFolderAdd.Visible = true;      // 폴더 추가 가능
+                        btnFolderDel.Visible = false;  // 폴더 삭제 불가능
+                        btnFileAdd.Visible = false; // 파일 추가 불가능
+                        btnFileDel.Visible = false; // 파일 삭제 불가능
 
                         // 한번 클릭 시에도 창 전환되도록 변경
                         _f1.lblTitle.Visible = false;
@@ -365,13 +422,10 @@ namespace API_Tester
                         _f1.isNotUse();
                         break;
                     case 1:
-                        tBoxName.Enabled = true;    // 입력 가능
-                        tBoxName.Visible = true;    // 이름 인풋 보임( 파일 생성을 위해 )
-
-                        btnAdd.Visible = false;     // 폴더 추가 불가능
-                        btnDelete.Visible = true;   // 폴더 삭제 가능
-                        btnAddFile.Visible = true;  // 파일 추가 가능
-                        btnDelFile.Visible = false; // 파일 삭제 불가능
+                        btnFolderAdd.Visible = false;     // 폴더 추가 불가능
+                        btnFolderDel.Visible = true;   // 폴더 삭제 가능
+                        btnFileAdd.Visible = true;  // 파일 추가 가능
+                        btnFileDel.Visible = false; // 파일 삭제 불가능
 
                         // 한번 클릭 시에도 창 전환되도록 변경
                         _f1.lblTitle.Visible = false;
@@ -388,13 +442,10 @@ namespace API_Tester
 
                         // 해시 파일 없는 경우 처리 해야함
                     case 2:
-                        tBoxName.Enabled = false;    // 입력 불가능
-                        tBoxName.Visible = false;   // 이름 인풋 안보임
-
-                        btnAdd.Visible = false;     // 폴더 추가 불가능
-                        btnDelete.Visible = false;  // 폴더 삭제 불가능
-                        btnAddFile.Visible = false; // 파일 추가 불가능
-                        btnDelFile.Visible = true;  // 파일 삭제 가능
+                        btnFolderAdd.Visible = false;     // 폴더 추가 불가능
+                        btnFolderDel.Visible = false;  // 폴더 삭제 불가능
+                        btnFileAdd.Visible = false; // 파일 추가 불가능
+                        btnFileDel.Visible = true;  // 파일 삭제 가능
 
                         _f1._canCheck = false;      // 노드 변경 시 text_changed 이벤트가 발생하는 현상이 있어서 검사
 
@@ -446,7 +497,11 @@ namespace API_Tester
             }
             else
             {
-                tBoxName.Enabled = false;
+                btnFolderAdd.Visible = false;
+                btnFolderDel.Visible = false;
+                btnFileAdd.Visible = false;
+                btnFileDel.Visible = false;
+
                 _f1.btnSave.Visible = false;
                 _f1.lblTitle.Visible = false;
             }
@@ -566,6 +621,8 @@ namespace API_Tester
         {
             mouseDown = false;
         }
+
+        
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 }

@@ -85,41 +85,14 @@ namespace API_Tester
             _repository.Show();
         }
 
-        ///////
+        /////////////////
         /// 좌측 repository 창 닫기
         private void btnRight_Click(object sender, EventArgs e)
         {
             btnRight.Visible = false;
             btnLeft.Visible = true;
             TreeNode sNode = _repository.treeView1.SelectedNode;
-
-            if (sNode != null)
-            {
-                string savePath = _repository.GetSavePathForFile(sNode);
-                FileInfo saved = new FileInfo(savePath);
-                if (saved.Exists)
-                {
-
-                    // 싱글톤 객체를 통한 XML 검사
-                    SingletonXML sXML = SingletonXML.Instance;
-                    XmlDocument xdoc = sXML.GetXML();
-                    string[] saveData = XMLtoStringArr(xdoc);
-
-                    if (IsChanged(saveData))
-                    {
-                        QuestionToSave(savePath);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("btnRight_Click 함수에서 이부분 사용하나?");
-                    string[] data = new string[] { _methods[0], "", "", "" };
-                    if (IsChanged(data))
-                    {
-                        QuestionToSave(savePath);
-                    }
-                }
-            }
+            ifChangedShowQuestion(sNode);
             
             _repository.Close();
             _repository = null;

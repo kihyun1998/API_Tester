@@ -32,16 +32,11 @@ namespace API_Tester
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.titleBar = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.tBoxName = new System.Windows.Forms.TextBox();
-            this.btnAddFile = new System.Windows.Forms.PictureBox();
-            this.btnDelFile = new System.Windows.Forms.PictureBox();
-            this.btnDelete = new System.Windows.Forms.PictureBox();
-            this.btnAdd = new System.Windows.Forms.PictureBox();
+            this.btnFileAdd = new System.Windows.Forms.Button();
+            this.btnFileDel = new System.Windows.Forms.Button();
+            this.btnFolderDel = new System.Windows.Forms.Button();
+            this.btnFolderAdd = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.btnAddFile)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnDelFile)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnDelete)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnAdd)).BeginInit();
             this.SuspendLayout();
             // 
             // treeView1
@@ -50,7 +45,7 @@ namespace API_Tester
             this.treeView1.Location = new System.Drawing.Point(12, 48);
             this.treeView1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(254, 450);
+            this.treeView1.Size = new System.Drawing.Size(254, 423);
             this.treeView1.TabIndex = 1;
             this.treeView1.TabStop = false;
             this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
@@ -78,87 +73,67 @@ namespace API_Tester
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.panel1.Controls.Add(this.tBoxName);
-            this.panel1.Controls.Add(this.btnAddFile);
-            this.panel1.Controls.Add(this.btnDelFile);
-            this.panel1.Controls.Add(this.btnDelete);
-            this.panel1.Controls.Add(this.btnAdd);
+            this.panel1.Controls.Add(this.btnFolderAdd);
+            this.panel1.Controls.Add(this.btnFolderDel);
+            this.panel1.Controls.Add(this.btnFileAdd);
+            this.panel1.Controls.Add(this.btnFileDel);
             this.panel1.Location = new System.Drawing.Point(-1, 514);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(286, 45);
             this.panel1.TabIndex = 16;
             // 
-            // tBoxName
+            // btnFileAdd
             // 
-            this.tBoxName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tBoxName.Enabled = false;
-            this.tBoxName.Font = new System.Drawing.Font("나눔고딕", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.tBoxName.Location = new System.Drawing.Point(13, 7);
-            this.tBoxName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tBoxName.Name = "tBoxName";
-            this.tBoxName.ReadOnly = true;
-            this.tBoxName.Size = new System.Drawing.Size(150, 30);
-            this.tBoxName.TabIndex = 2;
-            this.tBoxName.TabStop = false;
-            this.tBoxName.Visible = false;
+            this.btnFileAdd.BackgroundImage = global::API_Tester.Properties.Resources.document_add;
+            this.btnFileAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnFileAdd.FlatAppearance.BorderSize = 0;
+            this.btnFileAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFileAdd.Location = new System.Drawing.Point(236, 6);
+            this.btnFileAdd.Name = "btnFileAdd";
+            this.btnFileAdd.Size = new System.Drawing.Size(31, 31);
+            this.btnFileAdd.TabIndex = 5;
+            this.btnFileAdd.UseVisualStyleBackColor = true;
+            this.btnFileAdd.Click += new System.EventHandler(this.btnFileAdd_Click);
             // 
-            // btnAddFile
+            // btnFileDel
             // 
-            this.btnAddFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddFile.Image = global::API_Tester.Properties.Resources.document_add;
-            this.btnAddFile.Location = new System.Drawing.Point(234, 5);
-            this.btnAddFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnAddFile.Name = "btnAddFile";
-            this.btnAddFile.Size = new System.Drawing.Size(33, 33);
-            this.btnAddFile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnAddFile.TabIndex = 3;
-            this.btnAddFile.TabStop = false;
-            this.btnAddFile.Visible = false;
-            this.btnAddFile.Click += new System.EventHandler(this.btnAddFile_Click);
+            this.btnFileDel.BackgroundImage = global::API_Tester.Properties.Resources.document_del;
+            this.btnFileDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnFileDel.FlatAppearance.BorderSize = 0;
+            this.btnFileDel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFileDel.Location = new System.Drawing.Point(236, 6);
+            this.btnFileDel.Name = "btnFileDel";
+            this.btnFileDel.Size = new System.Drawing.Size(31, 31);
+            this.btnFileDel.TabIndex = 6;
+            this.btnFileDel.UseVisualStyleBackColor = true;
+            this.btnFileDel.Click += new System.EventHandler(this.btnFileDel_Click);
             // 
-            // btnDelFile
+            // btnFolderDel
             // 
-            this.btnDelFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDelFile.Image = global::API_Tester.Properties.Resources.document_del;
-            this.btnDelFile.Location = new System.Drawing.Point(234, 4);
-            this.btnDelFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnDelFile.Name = "btnDelFile";
-            this.btnDelFile.Size = new System.Drawing.Size(33, 33);
-            this.btnDelFile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnDelFile.TabIndex = 4;
-            this.btnDelFile.TabStop = false;
-            this.btnDelFile.Visible = false;
-            this.btnDelFile.Click += new System.EventHandler(this.btnDelFile_Click);
+            this.btnFolderDel.BackgroundImage = global::API_Tester.Properties.Resources.folder;
+            this.btnFolderDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnFolderDel.FlatAppearance.BorderSize = 0;
+            this.btnFolderDel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFolderDel.Location = new System.Drawing.Point(188, 6);
+            this.btnFolderDel.Name = "btnFolderDel";
+            this.btnFolderDel.Size = new System.Drawing.Size(31, 31);
+            this.btnFolderDel.TabIndex = 7;
+            this.btnFolderDel.UseVisualStyleBackColor = true;
+            this.btnFolderDel.Click += new System.EventHandler(this.btnFolderDel_Click);
             // 
-            // btnDelete
+            // btnFolderAdd
             // 
-            this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDelete.Image = global::API_Tester.Properties.Resources.folder;
-            this.btnDelete.Location = new System.Drawing.Point(195, 5);
-            this.btnDelete.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(33, 33);
-            this.btnDelete.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnDelete.TabIndex = 1;
-            this.btnDelete.TabStop = false;
-            this.btnDelete.Visible = false;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAdd.Image = global::API_Tester.Properties.Resources.add_folder;
-            this.btnAdd.Location = new System.Drawing.Point(195, 6);
-            this.btnAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(33, 32);
-            this.btnAdd.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnAdd.TabIndex = 0;
-            this.btnAdd.TabStop = false;
-            this.btnAdd.Visible = false;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            this.btnFolderAdd.BackgroundImage = global::API_Tester.Properties.Resources.add_folder;
+            this.btnFolderAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnFolderAdd.FlatAppearance.BorderSize = 0;
+            this.btnFolderAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFolderAdd.Location = new System.Drawing.Point(188, 6);
+            this.btnFolderAdd.Name = "btnFolderAdd";
+            this.btnFolderAdd.Size = new System.Drawing.Size(31, 31);
+            this.btnFolderAdd.TabIndex = 8;
+            this.btnFolderAdd.UseVisualStyleBackColor = true;
+            this.btnFolderAdd.Click += new System.EventHandler(this.btnFolderAdd_Click);
             // 
             // Repository
             // 
@@ -174,11 +149,6 @@ namespace API_Tester
             this.Name = "Repository";
             this.Text = "Repository";
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.btnAddFile)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnDelFile)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnDelete)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnAdd)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -186,11 +156,10 @@ namespace API_Tester
         #endregion
         private System.Windows.Forms.Panel titleBar;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.PictureBox btnDelete;
-        private System.Windows.Forms.PictureBox btnAdd;
-        private System.Windows.Forms.TextBox tBoxName;
         public System.Windows.Forms.TreeView treeView1;
-        private System.Windows.Forms.PictureBox btnDelFile;
-        private System.Windows.Forms.PictureBox btnAddFile;
+        private System.Windows.Forms.Button btnFileAdd;
+        private System.Windows.Forms.Button btnFileDel;
+        private System.Windows.Forms.Button btnFolderDel;
+        private System.Windows.Forms.Button btnFolderAdd;
     }
 }

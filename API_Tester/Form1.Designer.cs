@@ -169,8 +169,8 @@ namespace API_Tester
             // 
             // btnRight
             // 
-            this.btnRight.Image = global::API_Tester.Properties.Resources.free_icon_right_arrow_271228;
-            this.btnRight.Location = new System.Drawing.Point(3, 4);
+            this.btnRight.Image = global::API_Tester.Properties.Resources.right_arrow;
+            this.btnRight.Location = new System.Drawing.Point(7, 6);
             this.btnRight.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnRight.Name = "btnRight";
             this.btnRight.Size = new System.Drawing.Size(26, 30);
@@ -182,8 +182,8 @@ namespace API_Tester
             // 
             // btnLeft
             // 
-            this.btnLeft.Image = global::API_Tester.Properties.Resources.free_icon_left_arrow_271220;
-            this.btnLeft.Location = new System.Drawing.Point(3, 4);
+            this.btnLeft.Image = global::API_Tester.Properties.Resources.left_arrow;
+            this.btnLeft.Location = new System.Drawing.Point(3, 6);
             this.btnLeft.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnLeft.Name = "btnLeft";
             this.btnLeft.Size = new System.Drawing.Size(26, 30);
@@ -251,6 +251,8 @@ namespace API_Tester
             this.btnX.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnX.BackgroundImage")));
             this.btnX.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnX.FlatAppearance.BorderSize = 0;
+            this.btnX.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkRed;
+            this.btnX.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
             this.btnX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnX.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btnX.ForeColor = System.Drawing.Color.White;
