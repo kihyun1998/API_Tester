@@ -63,12 +63,6 @@ namespace API_Tester
             // 폴더 등록
             foreach (var directory in repoDirectoryInfo.GetDirectories())
             {
-                //// 무결성 검사 폴더는 숨기기
-                //if (directory.Name == "etc")
-                //{
-                //    break;
-                //}
-                
                 directoryNode.Nodes.Add(CreateDirectoryNode(directory));
             }
 
@@ -540,5 +534,38 @@ namespace API_Tester
                 CreateRepoFolder(e.Node.Text);
             }
         }
+
+
+        //////// 상단바 이동 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        public Boolean mouseDown = false;
+        public Point startPos;
+        public Point endPos;
+
+        private void titleBar_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouseDown = true;
+            startPos = ((Control)sender).PointToScreen(new Point(e.X, e.Y));
+        }
+
+        private void titleBar_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseDown)
+            {
+                endPos = ((Control)sender).PointToScreen(new Point(e.X, e.Y));
+                Point pLoc = new Point((this.Location.X + (endPos.X - startPos.X)), (this.Location.Y + (endPos.Y - startPos.Y)));
+                startPos = endPos;
+                this.Location = pLoc;
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        private void titleBar_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouseDown = false;
+        }
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 }

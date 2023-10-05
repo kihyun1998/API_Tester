@@ -69,6 +69,9 @@ namespace API_Tester
             this.titleBar.Name = "titleBar";
             this.titleBar.Size = new System.Drawing.Size(286, 43);
             this.titleBar.TabIndex = 15;
+            this.titleBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.titleBar_MouseDown);
+            this.titleBar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.titleBar_MouseMove);
+            this.titleBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.titleBar_MouseUp);
             // 
             // panel1
             // 

@@ -63,18 +63,7 @@ namespace API_Tester
             btnNom.Visible = false;
         }
 
-        ///////
-        /// 사이드 창 같이 움직이기
-        private void Form1_Move(object sender, EventArgs e)
-        {
-
-            if (_repository != null)
-            {
-                _lx = this.Location.X;
-                _ly = this.Location.Y;
-                _repository.Location = new Point(_lx - _repository.Width, _ly);
-            }
-        }
+        
 
 
         /////////////////
@@ -123,6 +112,7 @@ namespace API_Tester
                 }
                 else
                 {
+                    MessageBox.Show("btnRight_Click 함수에서 이부분 사용하나?");
                     string[] data = new string[] { _methods[0], "", "", "" };
                     if (IsChanged(data))
                     {
@@ -331,34 +321,66 @@ namespace API_Tester
         {
             if (_repository != null && _canCheck)
             {
-                string savePath = string.Empty;
                 TreeNode sNode = _repository.treeView1.SelectedNode;
-                if(sNode != null)
+                ifChangedSaveButton(sNode);
+            }
+        }
+
+        private void ifChangedSaveButton(TreeNode sNode)
+        {
+            if (sNode != null)
+            {
+                string savePath = string.Empty;
+                // 파일을 선택한 경우에만
+                if (sNode.Level == 2)
                 {
-                    // 파일을 선택한 경우에만
-                    if(sNode.Level == 2)
+                    savePath = _repository.GetSavePathForFile(sNode);
+                    FileInfo save = new FileInfo(savePath);
+
+                    if (save.Exists)
                     {
-                        savePath = _repository.GetSavePathForFile(sNode);
-                        FileInfo save = new FileInfo(savePath);
+                        // 싱글톤 객체를 통한 XML 검사
+                        SingletonXML sXML = SingletonXML.Instance;
+                        XmlDocument xdoc = sXML.GetXML();
+                        string[] saveData = XMLtoStringArr(xdoc);
 
-                        if (save.Exists)
+                        if (IsChanged(saveData))
                         {
-                            // 싱글톤 객체를 통한 XML 검사
-                            SingletonXML sXML = SingletonXML.Instance;
-                            XmlDocument xdoc = sXML.GetXML();
-                            string[] saveData = XMLtoStringArr(xdoc);
-
-                            if (IsChanged(saveData))
-                            {
-                                btnSave.Visible = true;
-                            }
-                            else
-                            {
-                                btnSave.Visible = false;
-                            }
+                            btnSave.Visible = true;
+                        }
+                        else
+                        {
+                            btnSave.Visible = false;
                         }
                     }
-                }  
+                }
+            }
+        }
+
+        private void ifChangedShowQuestion(TreeNode sNode)
+        {
+            if (sNode != null)
+            {
+                string savePath = string.Empty;
+                // 파일을 선택한 경우에만
+                if (sNode.Level == 2)
+                {
+                    savePath = _repository.GetSavePathForFile(sNode);
+                    FileInfo save = new FileInfo(savePath);
+
+                    if (save.Exists)
+                    {
+                        // 싱글톤 객체를 통한 XML 검사
+                        SingletonXML sXML = SingletonXML.Instance;
+                        XmlDocument xdoc = sXML.GetXML();
+                        string[] saveData = XMLtoStringArr(xdoc);
+
+                        if (IsChanged(saveData))
+                        {
+                            QuestionToSave(savePath);
+                        }
+                    }
+                }
             }
         }
 
@@ -553,9 +575,9 @@ namespace API_Tester
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ///패널 이동 + 상단바
-        private Boolean mouseDown = false;
-        private Point startPos;
-        private Point endPos;
+        public Boolean mouseDown = false;
+        public Point startPos;
+        public Point endPos;
 
 
         ///////////////////////상단바 이동 함수들////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -615,12 +637,31 @@ namespace API_Tester
         {
             mouseDown = false;
         }
+
+        ////////////////////////
+        /// 사이드 창 같이 움직이기
+        private void Form1_Move(object sender, EventArgs e)
+        {
+            if (_repository != null)
+            {
+                _lx = this.Location.X;
+                _ly = this.Location.Y;
+                _repository.Location = new Point(_lx - _repository.Width, _ly);
+            }
+        }
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         //////////// 상단 버튼 함수들 ////////////////////////
         private void btnX_Click(object sender, EventArgs e)
         {
             // 종료 시 저장 묻기
+            if(_repository != null)
+            {
+                TreeNode sNode = _repository.treeView1.SelectedNode;
+                ifChangedShowQuestion(sNode);
+            }
 
             this.Close();
         }
