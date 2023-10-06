@@ -506,33 +506,9 @@ namespace API_Tester
         {
             if (sNode != null)
             {
-                string savePath = string.Empty;
                 // 파일을 선택한 경우에만
                 if (sNode.Level == 2)
                 {
-                    //savePath = _repository.GetSavePathForFile(sNode);
-                    //FileInfo save = new FileInfo(savePath);
-
-                    //if (save.Exists)
-                    //{
-                    //    // 싱글톤 객체를 통한 XML 검사
-                    //    //SingletonXML sXML = SingletonXML.Instance;
-                    //    //XmlDocument xdoc = sXML.GetXML();
-                    //    XmlData xmlData = XmlData.Instance;
-                    //    string key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
-                    //    XmlDocument xdoc = xmlData.ReadData(key);
-                    //    string[] saveData = XMLtoStringArr(xdoc);
-
-                    //    if (IsChanged(saveData))
-                    //    {
-                    //        btnSave.Visible = true;
-                    //    }
-                    //    else
-                    //    {
-                    //        btnSave.Visible = false;
-                    //    }
-                    //}
-
                     // 싱글톤 객체
                     XmlData xmlData = XmlData.Instance;
                     string key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
@@ -572,9 +548,7 @@ namespace API_Tester
 
                     if (save.Exists)
                     {
-                        // 싱글톤 객체를 통한 XML 검사
-                        //SingletonXML sXML = SingletonXML.Instance;
-                        //XmlDocument xdoc = sXML.GetXML();
+                        // 싱글톤 객체
                         XmlData xmlData = XmlData.Instance;
                         string key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
                         XmlDocument xdoc = xmlData.ReadData(key);
@@ -741,41 +715,6 @@ namespace API_Tester
             }
 
             // Method 변경 시 저장 버튼 추가하는 로직 추가
-            //if(_repository != null && _canCheck)
-            //{
-            //    TreeNode sNode = _repository.treeView1.SelectedNode;
-            //    string savePath = string.Empty;
-            //    if (sNode != null)
-            //    {
-            //        savePath = _repository.GetSavePathForFile(sNode);
-            //    }
-
-            //    if (cBoxMethod.Visible)
-            //    {
-            //        // 파일이 있는 경우가 아닌 싱글톤에 저장됐는지 검사를 해야함
-            //        FileInfo save = new FileInfo(savePath);
-            //        if (save.Exists)
-            //        {
-            //            // 싱글톤 객체를 통한 XML 검사
-            //            //SingletonXML sXML = SingletonXML.Instance;
-            //            //XmlDocument xdoc = sXML.GetXML();
-            //            XmlData xmlData = XmlData.Instance;
-            //            string key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
-            //            XmlDocument xdoc = xmlData.ReadData(key);
-            //            string[] saveData = XMLtoStringArr(xdoc);
-
-            //            if (IsChanged(saveData))
-            //            {
-            //                btnSave.Visible = true;
-            //            }
-            //            else
-            //            {
-            //                btnSave.Visible = false;
-            //            }
-            //        }
-            //    }
-            //}
-
             if (_repository != null && _canCheck)
             {
                 TreeNode sNode = _repository.treeView1.SelectedNode;
