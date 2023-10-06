@@ -45,6 +45,7 @@ namespace API_Tester
         int _lx = 0;
         int _ly = 0;
 
+        public static Form1 form1;
 
         public Form1()
         {
@@ -54,6 +55,8 @@ namespace API_Tester
 
             _lx = this.Location.X;
             _ly = this.Location.Y;
+
+            form1 = this;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -146,6 +149,33 @@ namespace API_Tester
         public string GetFileNameFromSavePath(string savePath)
         {
             return savePath.Substring(savePath.LastIndexOf("\\")+1,savePath.IndexOf(".txt") - savePath.LastIndexOf("\\")-1).Trim();
+        }
+
+
+
+        public void Local_Save(string key, XmlDocument value)
+        {
+            string folder = key.Substring(0, key.IndexOf(".")).Trim();
+            string file = key.Substring(key.IndexOf(".")+1).Trim();
+
+            string savePath = string.Format("{0}\\{1}\\{2}.txt", _repository.GetMyDrivePath(),folder,file);  
+
+            // 1. 원본을 해시한다. (value.OuterXml이 스트링 원본이다.)
+            string hashText = SHA256.Hash(value.OuterXml);
+            // 1-1. 해시 문자열에 솔트(파일 + 해시 + 폴더)
+            string hashTextExtension = string.Format("{0}!!!!{1}@@@@{2}", file, hashText, folder);
+
+            // 1-2. 원본 문자열에 솔트(폴더 + 원본 + 파일)
+            string originTextExtension = string.Format("{0}####{1}$$$${2}", folder, value.OuterXml, file);
+
+            // 2. 원본 + 해시 합친다.
+            string originHash = string.Format("{0}%%%%{1}", originTextExtension, hashTextExtension);
+
+            // 3. 원본+해시를 암호화
+            string cipherText = AES256.Encrypt(originHash);
+
+            // 4. 저장
+            File.WriteAllText(savePath, cipherText, Encoding.Default);
         }
 
 
@@ -271,46 +301,50 @@ namespace API_Tester
             string cipherText = File.ReadAllText(loadPath);
             string decrpytText = AES256.Decrypt(cipherText);
 
-            
-            if(decrpytText.Length != 0)
+            // decrpytText의 길이가 0이면 무결성 깨진걸로 간주함
+            if (decrpytText.Length != 0)
             {
                 // 2. 원본와 해시 나누기
                 // 2-1. 원본+솔트와 해시+솔트 나누기
+
+                // decryptText에 %%%%이 없으면 무결성 깨진걸로 간주함
                 if (decrpytText.Contains("%%%%"))
                 {
                     string originTextExtension = decrpytText.Substring(0, decrpytText.IndexOf("%%%%")).Trim();
                     string hashTextExtension = decrpytText.Substring(decrpytText.IndexOf("%%%%") +4).Trim();
 
-                    // 2-2. 원본, 해시 구하기
-                    string originText = originTextExtension.Substring(
-                                            originTextExtension.IndexOf("####")+4,
-                                            originTextExtension.IndexOf("$$$$")- originTextExtension.IndexOf("####")-4
-                                        ).Trim();
-
-                    string hashText = hashTextExtension.Substring(
-                                            hashTextExtension.IndexOf("!!!!") + 4,
-                                            hashTextExtension.IndexOf("@@@@") - hashTextExtension.IndexOf("!!!!")-4
-                                        ).Trim();
-
-                    // 3. 무결성 검사
-                    bool rstIntegrity = SHA256.CheckIntegrity(originText, hashText);
-
-                    if (!rstIntegrity)
+                    // decryptText에 밑 구분자들이 없으면 무결성 깨진걸로 간주함
+                    if (originTextExtension.Contains("####") && originTextExtension.Contains("$$$$") && hashTextExtension.Contains("!!!!") && hashTextExtension.Contains("@@@@"))
                     {
-                        // 무결성 false면 null 반환
-                        return null;
+                        // 2-2. 원본, 해시 구하기
+                        string originText = originTextExtension.Substring(
+                                                originTextExtension.IndexOf("####") + 4,
+                                                originTextExtension.IndexOf("$$$$") - originTextExtension.IndexOf("####") - 4
+                                            ).Trim();
+                        string hashText = hashTextExtension.Substring(
+                                            hashTextExtension.IndexOf("!!!!") + 4,
+                                            hashTextExtension.IndexOf("@@@@") - hashTextExtension.IndexOf("!!!!") - 4
+                                        ).Trim();
+
+                        // 3. 무결성 검사
+                        bool rstIntegrity = SHA256.CheckIntegrity(originText, hashText);
+
+                        if (!rstIntegrity)
+                        {
+                            // 무결성 false면 null 반환
+                            return null;
+                        }
+
+                        // 4. 원본 불러오기
+                        XmlDocument xdoc = new XmlDocument();
+                        xdoc.LoadXml(originText);
+
+                        return xdoc;
                     }
-
-                    // 4. 원본 불러오기
-                    XmlDocument xdoc = new XmlDocument();
-                    xdoc.LoadXml(originText);
-
-                    return xdoc;
                 }
             }
 
-            // decrpytText의 길이가 0이면 무결성 깨진걸로 간주함
-            // decryptText에 \n이 없으면 무결성 깨진걸로 간주함
+            
             return null;
 
         }
@@ -838,6 +872,10 @@ namespace API_Tester
                 ifChangedShowQuestion(sNode);
             }
 
+            // 싱글톤 객체
+            XmlData xmlData = XmlData.Instance;
+            // 싱글톤 로컬에 저장
+            xmlData.SaveAll();
             this.Close();
         }
 

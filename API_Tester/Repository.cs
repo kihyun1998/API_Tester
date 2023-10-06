@@ -418,6 +418,12 @@ namespace API_Tester
             }
         }
 
+        public string GetMyDrivePath()
+        {
+            return string.Format("{0}\\{1}", _rootPath, _repoFolderName);
+        }
+
+
         /////////
         /// 이미 생성된 파일을 수정할 때의 경로를 반환해준다.
         public string GetSavePathForFile(TreeNode sNode)
@@ -434,6 +440,8 @@ namespace API_Tester
             }
             return "";
         }
+
+        
 
         ///////////
         /// 파일 처음 생성 시 사용하는 경로를 반환해준다.

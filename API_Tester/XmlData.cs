@@ -38,22 +38,33 @@ namespace API_Tester
             this.XmlDatas[key] = value;
         }
 
+        // 키를 통해 값 읽기
         public XmlDocument ReadData(string key)
         {
             return this.XmlDatas[key];
         }
 
+        // 값 존재 체크 여부
         public bool IsExist(string key)
         {
             return XmlDatas.ContainsKey(key);
         }
 
+        // 싱글톤 객체 전체 저장
+        public void SaveAll()
+        {
+            foreach (KeyValuePair<string, XmlDocument> data in XmlDatas)
+            {
+                Form1.form1.Local_Save(data.Key, data.Value);
+            }
+        }
+
         // 딕셔너리 값 확인용
         public void ShowData()
         {
-            foreach(KeyValuePair<string,XmlDocument> item in this.XmlDatas)
+            foreach(KeyValuePair<string,XmlDocument> data in this.XmlDatas)
             {
-                CustomMessageBox.ShowMessage(string.Format("{0} : {1}",item.Key,item.Value.OuterXml), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                CustomMessageBox.ShowMessage(string.Format("{0} : {1}", data.Key, data.Value.OuterXml), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
