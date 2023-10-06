@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AES256.cs" />
+    <Compile Include="XmlData.cs" />
     <Compile Include="OKMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>

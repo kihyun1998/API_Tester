@@ -166,6 +166,7 @@ namespace API_Tester
             this.btnMin.TabIndex = 24;
             this.btnMin.TabStop = false;
             this.btnMin.UseVisualStyleBackColor = false;
+            this.btnMin.Click += new System.EventHandler(this.btnMin_Click);
             // 
             // btnRight
             // 

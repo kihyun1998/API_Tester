@@ -66,19 +66,27 @@ namespace API_Tester
         private static TreeNode CreateDirectoryNode(DirectoryInfo repoDirectoryInfo)
         {
             TreeNode directoryNode = new TreeNode(repoDirectoryInfo.Name);
-            
+
+            // 싱글톤 객체에 등록하기 위한 선언
+            XmlData xmlData = XmlData.Instance;
+
             // 폴더 등록
-            foreach (var directory in repoDirectoryInfo.GetDirectories())
+            foreach (DirectoryInfo directory in repoDirectoryInfo.GetDirectories())
             {
                 directoryNode.Nodes.Add(CreateDirectoryNode(directory));
             }
 
-            //파일 등록 (여기서 잘못된 파일 검증해야함) *******
-            foreach (var file in repoDirectoryInfo.GetFiles())
+            int fIdx = 0;
+            //파일 등록
+            foreach (FileInfo file in repoDirectoryInfo.GetFiles())
             {
+                
                 string fileName = file.Name.Substring(0, file.Name.LastIndexOf('.'));
                 directoryNode.Nodes.Add(new TreeNode(fileName));
+                MessageBox.Show(directoryNode.Nodes[fIdx].Text);
+                fIdx += 1;
             }
+            
 
             return directoryNode;
         }
@@ -289,8 +297,11 @@ namespace API_Tester
                     FileInfo createdFile = new FileInfo(savePath);
                     if (!createdFile.Exists)
                     {
-                        _f1.Save_XML(requestXML, savePath);
+                        // 이거 대신 넣어야할 값 해야함 일단 지금은 그대로 둔다.
+                        _f1.Save_XML(requestXML, savePath,sNode);
                         sNode.Nodes.Add(new TreeNode(fileName));
+
+
                         CustomMessageBox.ShowMessage(string.Format("{0}이(가) 추가됐습니다 !", fileName), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
@@ -521,7 +532,7 @@ namespace API_Tester
                                 requestXML._COOKIE = "";
                                 requestXML._MSG = "";
 
-                                _f1.Save_XML(requestXML, savePath);
+                                _f1.Save_XML(requestXML, savePath,sNode);
                             }
                             else
                             {

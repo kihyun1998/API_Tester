@@ -112,7 +112,7 @@ namespace API_Tester
         /// 
 
         // 비밀번호 저장할거냐고 묻는 함수
-        private void QuestionToSave(string savePath)
+        private void QuestionToSave(string savePath, TreeNode sNode)
         {
             if(CustomMessageBox.ShowMessage("변경내용이 있습니다.\n저장 하시겠습니까?","Save",MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -123,7 +123,7 @@ namespace API_Tester
                 requestXML._COOKIE = tBoxCookie.Text;
                 requestXML._MSG = tBoxMsg.Text;
 
-                Save_XML(requestXML, savePath);
+                Save_XML(requestXML, savePath,sNode);
                 CustomMessageBox.ShowMessage("저장되었습니다.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
@@ -136,10 +136,16 @@ namespace API_Tester
             }
         }
 
+        public string GetFileNameFromSavePath(string savePath)
+        {
+            return savePath.Substring(savePath.LastIndexOf("\\")+1,savePath.IndexOf(".txt") - savePath.LastIndexOf("\\")-1).Trim();
+        }
+
 
         // textbox에 있던 파일을 requestXML 객체로 받아서 로컬에 저장하기 직전 함수
         // 프로그램 종료 시에도 저장 하도록 하는 로직 추가해야한다. (아직 안함)
-        public void Save_XML(RequestXML requestXML, string savePath)
+        // sNode를 통해서 레벨에 따른 값을 변경해야 함 ( 아직 안함 )
+        public void Save_XML(RequestXML requestXML, string savePath,TreeNode sNode)
         {
             XmlDocument xdoc = new XmlDocument();
 
@@ -167,12 +173,43 @@ namespace API_Tester
             root.AppendChild(xData);
 
             // 여기서 root.OuterXMl은 원본
+            // sNode.Level에 따라 동작이 달라져야 한다.
 
-            // 1. 원본을 해시한다.
-            string hashText = SHA256.Hash(root.OuterXml);
+            string hashText = string.Empty;
+            string hashTextExtension = string.Empty;
+            string originTextExtension = string.Empty;
 
-            // 2. 원본 + 해시 (개행으로 구분)
-            string originHash = string.Format("{0}\n{1}", root.OuterXml, hashText);
+            switch (sNode.Level)
+            {
+                // 새로 만드는 경우 ( sNode는 폴더임 )
+                // 하지만 싱글톤을 foreach로 돌려가면서 한다면 필요할까
+                case 1:
+                    // sNode가 폴더이기 때문에 filename 구하는 함수 사용해야 한다.
+                    string fileName = GetFileNameFromSavePath(savePath);
+
+                    // 1. 원본을 해시한다.
+                    hashText = SHA256.Hash(root.OuterXml);
+                    // 1-1. 해시 문자열에 솔트(파일 + 해시 + 폴더)
+                    hashTextExtension = string.Format("{0}!!!!{1}@@@@{2}", fileName, hashText, sNode.Text);
+
+                    // 1-2. 원본 문자열에 솔트(폴더 + 원본 + 파일)
+                    originTextExtension = string.Format("{0}####{1}$$$${2}", sNode.Text, root.OuterXml, fileName );
+                    break;
+                // 무결성깨진 경우, 수정하는 경우 ( sNode는 파일임 )
+                case 2:
+                    // 1. 원본을 해시한다.
+                    hashText = SHA256.Hash(root.OuterXml);
+                    // 1-1. 해시 문자열에 솔트(파일 + 해시 + 폴더)
+                    hashTextExtension = string.Format("{0}!!!!{1}@@@@{2}", sNode.Text, hashText, sNode.Parent.Text);
+
+                    // 1-2. 원본 문자열에 솔트(폴더 + 원본 + 파일)
+                    originTextExtension = string.Format("{0}####{1}$$$${2}", sNode.Parent.Text, root.OuterXml, sNode.Text);
+                    break;
+                default:
+                    break;
+            }
+            // 2. 원본 + 해시 합친다.
+            string originHash = string.Format("{0}%%%%{1}", originTextExtension, hashTextExtension);
 
             // 3. 원본+해시를 암호화
             string cipherText = AES256.Encrypt(originHash);
@@ -206,31 +243,56 @@ namespace API_Tester
                 return null;
             }
             
-            // 1. 복호화 하기 > 결과는 (원본\n해시값)
+            // 1. 복호화 하기 > 결과는 originFileText \n hashText(originFolderText)
             string cipherText = File.ReadAllText(loadPath);
             string decrpytText = AES256.Decrypt(cipherText);
 
-            // 2. 원본과 해시 나누기 / 0: 원본, 1: 해시
-            string[] texts = decrpytText.Split('\n');
-
-            // 3. 무결성 검사
-            bool rstIntegrity = SHA256.CheckIntegrity(texts[0], texts[1]);
             
-            if (!rstIntegrity)
+            if(decrpytText.Length != 0)
             {
-                // 무결성 false면 null 반환
-                return null;
+                // 2. 원본와 해시 나누기
+                // 2-1. 원본+솔트와 해시+솔트 나누기
+                if (decrpytText.Contains("%%%%"))
+                {
+                    string originTextExtension = decrpytText.Substring(0, decrpytText.IndexOf("%%%%")).Trim();
+                    string hashTextExtension = decrpytText.Substring(decrpytText.IndexOf("%%%%") +4).Trim();
+
+                    // 2-2. 원본, 해시 구하기
+                    string originText = originTextExtension.Substring(
+                                            originTextExtension.IndexOf("####")+4,
+                                            originTextExtension.IndexOf("$$$$")- originTextExtension.IndexOf("####")-4
+                                        ).Trim();
+
+                    string hashText = hashTextExtension.Substring(
+                                            hashTextExtension.IndexOf("!!!!") + 4,
+                                            hashTextExtension.IndexOf("@@@@") - hashTextExtension.IndexOf("!!!!")-4
+                                        ).Trim();
+
+                    // 3. 무결성 검사
+                    bool rstIntegrity = SHA256.CheckIntegrity(originText, hashText);
+
+                    if (!rstIntegrity)
+                    {
+                        // 무결성 false면 null 반환
+                        return null;
+                    }
+
+                    // 4. 원본 불러오기
+                    XmlDocument xdoc = new XmlDocument();
+                    xdoc.LoadXml(originText);
+
+                    // 5. 불러온 XML 싱글톤으로 등록
+                    SingletonXML sXML = SingletonXML.Instance;
+                    sXML.SetXML(xdoc);
+
+                    return xdoc;
+                }
             }
 
-            // 4. 원본 불러오기
-            XmlDocument xdoc = new XmlDocument();
-            xdoc.LoadXml(texts[0]);
+            // decrpytText의 길이가 0이면 무결성 깨진걸로 간주함
+            // decryptText에 \n이 없으면 무결성 깨진걸로 간주함
+            return null;
 
-            // 5. 불러온 XML 싱글톤으로 등록
-            SingletonXML sXML = SingletonXML.Instance;
-            sXML.SetXML(xdoc);
-
-            return xdoc;
         }
 
         public string[] XMLtoStringArr(XmlDocument xdoc)
@@ -276,7 +338,7 @@ namespace API_Tester
                 requestXML._COOKIE = tBoxCookie.Text;
                 requestXML._MSG = tBoxMsg.Text;
 
-                Save_XML(requestXML, savePath);
+                Save_XML(requestXML, savePath,sNode);
                 CustomMessageBox.ShowMessage("저장이 완료됐습니다!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 btnSave.Visible = false;
             }
@@ -350,7 +412,7 @@ namespace API_Tester
 
                         if (IsChanged(saveData))
                         {
-                            QuestionToSave(savePath);
+                            QuestionToSave(savePath,sNode);
                         }
                     }
                 }
