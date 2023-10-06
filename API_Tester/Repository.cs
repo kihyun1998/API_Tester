@@ -101,7 +101,11 @@ namespace API_Tester
                         // 싱글톤 키
                         string key = string.Format("{0}.{1}", folder.Text, file.Text);
                         XmlDocument value = _f1.Load_XML(file);
-                        xmlData.AddData(key, value);
+                        if (!xmlData.IsExist(key))
+                        {
+                            xmlData.AddData(key, value);
+                            // rename했을 때는 어떻게 처리하지
+                        }
                     }
                 }
             }

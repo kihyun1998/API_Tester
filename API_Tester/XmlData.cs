@@ -32,7 +32,6 @@ namespace API_Tester
             this.XmlDatas.Add(key, value);
         }
 
-
         // "값" 수정하는 경우 저장
         public void UpdateData(string key, XmlDocument value)
         {
@@ -48,7 +47,6 @@ namespace API_Tester
         {
             return XmlDatas.ContainsKey(key);
         }
-
 
         // 딕셔너리 값 확인용
         public void ShowData()

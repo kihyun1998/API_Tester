@@ -151,6 +151,9 @@ namespace API_Tester
 
         // textbox에 있던 파일을 requestXML 객체로 받아서 로컬에 저장하기 직전 함수
         // 프로그램 종료 시에도 저장 하도록 하는 로직 추가해야한다. (아직 안함)
+        // 아에 저장하는 함수로 바뀌어야 한다.
+        // close 시 || repository 닫힐 시(이건 rename 한 폴더나 파일에 대한 처리만 잘 이루어지면 될듯)
+        // 그리고 싱글톤 초기화 해야함
         public void Save_XML(RequestXML requestXML, string savePath,TreeNode sNode)
         {
             XmlDocument xdoc = new XmlDocument();
@@ -248,12 +251,6 @@ namespace API_Tester
                 default:
                     break;
             }
-
-            // 삭제해야함
-            SingletonXML sXML = SingletonXML.Instance;
-            sXML.SetXML(xdoc);
-
-            //xmlData.ShowData();
         }
 
 
@@ -307,10 +304,6 @@ namespace API_Tester
                     // 4. 원본 불러오기
                     XmlDocument xdoc = new XmlDocument();
                     xdoc.LoadXml(originText);
-
-                    // 5. 불러온 XML 싱글톤으로 등록
-                    SingletonXML sXML = SingletonXML.Instance;
-                    sXML.SetXML(xdoc);
 
                     return xdoc;
                 }
