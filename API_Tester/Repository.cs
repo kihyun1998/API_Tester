@@ -40,7 +40,9 @@ namespace API_Tester
             btnFileAdd.Visible = false;
             btnFileDel.Visible = false;
             btnFolderRename.Visible = false;
-            btnFileRename.Visible = false;  
+            btnFileRename.Visible = false;
+
+            //showTreeView(treeView1);
         }
 
         private void ListDirectory(TreeView treeView, string repoPath)
@@ -67,29 +69,48 @@ namespace API_Tester
         {
             TreeNode directoryNode = new TreeNode(repoDirectoryInfo.Name);
 
-            // 싱글톤 객체에 등록하기 위한 선언
-            XmlData xmlData = XmlData.Instance;
-
             // 폴더 등록
             foreach (DirectoryInfo directory in repoDirectoryInfo.GetDirectories())
             {
                 directoryNode.Nodes.Add(CreateDirectoryNode(directory));
             }
 
-            int fIdx = 0;
             //파일 등록
             foreach (FileInfo file in repoDirectoryInfo.GetFiles())
             {
-                
                 string fileName = file.Name.Substring(0, file.Name.LastIndexOf('.'));
                 directoryNode.Nodes.Add(new TreeNode(fileName));
-                MessageBox.Show(directoryNode.Nodes[fIdx].Text);
-                fIdx += 1;
             }
             
 
             return directoryNode;
         }
+
+        public void SetInitialSingleton(TreeView treeView)
+        {
+
+            // 싱글톤 객체에 등록하기 위한 선언
+            XmlData xmlData = XmlData.Instance;
+
+            foreach ( TreeNode myDrive in treeView.Nodes)
+            {
+                foreach(TreeNode folder in myDrive.Nodes)
+                {
+                    foreach (TreeNode file in folder.Nodes)
+                    {
+                        // 싱글톤 키
+                        string key = string.Format("{0}.{1}", folder.Text, file.Text);
+                        XmlDocument value = _f1.Load_XML(file);
+                        xmlData.AddData(key, value);
+                    }
+                }
+            }
+
+            //xmlData.ShowData();
+        }
+
+
+
         public void CreateEtcFolder()
         {
             //// C:\Users\유저\.apitest 폴더 생성
@@ -297,10 +318,14 @@ namespace API_Tester
                     FileInfo createdFile = new FileInfo(savePath);
                     if (!createdFile.Exists)
                     {
-                        // 이거 대신 넣어야할 값 해야함 일단 지금은 그대로 둔다.
-                        _f1.Save_XML(requestXML, savePath,sNode);
-                        sNode.Nodes.Add(new TreeNode(fileName));
+                        // Save_XML은 이제 여기서 안쓸것이다.
+                        // 싱글톤에 임시 저장 후 프로그램 종료 시에만 파일 작성하도록 or Repository 창 닫을 시
 
+                        //_f1.Save_XML(requestXML, savePath,sNode);
+                        // Add_XML > 싱글톤에 현재 새 파일 추가
+                        // 파일 저장은 아직 아니다. Repository창이 닫히거나 프로그램 정상적으로 종료 시 저장
+                        _f1.Create_XML(requestXML, savePath, sNode);
+                        sNode.Nodes.Add(new TreeNode(fileName));
 
                         CustomMessageBox.ShowMessage(string.Format("{0}이(가) 추가됐습니다 !", fileName), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -443,13 +468,14 @@ namespace API_Tester
         /// 추후에 isNotUse()로 막혀있는 화면은 다른 화면으로 대체할 예정
         private void whenClick()
         {
+            _f1._canCheck = false;      // 노드 변경 시 text_changed 이벤트가 발생하는 현상이 있어서 검사
             // 초기 폴더 생성 및 검사 (etc,sec)
             CreateEtcFolder();
 
             // 저장 버튼 안보이게하기
             _f1.btnSave.Visible = false;
 
-            var sNode = treeView1.SelectedNode;
+            TreeNode sNode = treeView1.SelectedNode;
             if (sNode != null)
             {
                 int nLevel = sNode.Level;
@@ -496,6 +522,7 @@ namespace API_Tester
 
                         // 해시 파일 없는 경우 처리 해야함
                     case 2:
+                        
                         btnFolderAdd.Visible = false;    // 폴더 추가 불가능
                         btnFolderDel.Visible = false;    // 폴더 삭제 불가능
                         btnFolderRename.Visible = false; // 폴더 이름 수정 불가능
@@ -503,14 +530,64 @@ namespace API_Tester
                         btnFileDel.Visible = true;       // 파일 삭제 가능
                         btnFileRename.Visible = true;   // 파일 이름 수정 가능
 
-                        _f1._canCheck = false;      // 노드 변경 시 text_changed 이벤트가 발생하는 현상이 있어서 검사
+                       
 
                         string savePath = GetSavePathForFile(sNode);
                         FileInfo saveFile = new FileInfo(savePath);
-                        if (saveFile.Exists)
+
+                        // 파일이 있는 경우 x
+                        // 딕셔너리에 있는 경우 o
+                        //if (saveFile.Exists)
+                        //{
+
+                        //    //XmlDocument xdoc = _f1.Load_XML(sNode);
+                        //    XmlDocument xdoc = _f1.Read_XML(sNode);
+                        //    string[] saveData = _f1.XMLtoStringArr(xdoc);
+
+                        //    // 무결성 깨지면 saveData.Length == 0 임.
+                        //    // 무결성 깨지면 초기화가 이루어진다.
+                        //    if (saveData.Length == 0)
+                        //    {
+                        //        _f1.cBoxMethod.Text = _f1._methods[0];
+                        //        _f1.tBoxURL.Text = "";
+                        //        _f1.tBoxCookie.Text = "";
+                        //        _f1.tBoxMsg.Text = "";
+                        //        _f1.isUse();
+                        //        _f1.lblTitle.Visible = true;
+                        //        _f1.lblTitle.Text = sNode.Text;
+
+                        //        RequestXML requestXML = new RequestXML();
+
+                        //        requestXML._METHOD = _f1._methods[0];
+                        //        requestXML._URL = "";
+                        //        requestXML._COOKIE = "";
+                        //        requestXML._MSG = "";
+
+                        //        _f1.Save_XML(requestXML, savePath,sNode);
+                        //    }
+                        //    else
+                        //    {
+                        //        _f1.cBoxMethod.Text = saveData[0];
+                        //        _f1.tBoxURL.Text = saveData[1];
+                        //        _f1.tBoxCookie.Text = saveData[2];
+                        //        _f1.tBoxMsg.Text = saveData[3];
+                        //        _f1.isUse();
+                        //        _f1.lblTitle.Visible = true;
+                        //        _f1.lblTitle.Text = sNode.Text;
+                        //    }
+
+                        //}
+                        //else
+                        //{
+                        //    //파일이 없는 경우인데 바꿔야할듯
+                        //}
+
+                        // 싱글톤 객체를 통한 XML 검사
+                        XmlData xmlData = XmlData.Instance;
+                        string key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
+                        if (xmlData.IsExist(key))
                         {
-                                
-                            XmlDocument xdoc = _f1.Load_XML(sNode);
+                            XmlDocument xdoc = _f1.Read_XML(sNode);
                             string[] saveData = _f1.XMLtoStringArr(xdoc);
 
                             // 무결성 깨지면 saveData.Length == 0 임.
@@ -532,7 +609,7 @@ namespace API_Tester
                                 requestXML._COOKIE = "";
                                 requestXML._MSG = "";
 
-                                _f1.Save_XML(requestXML, savePath,sNode);
+                                _f1.Save_XML(requestXML, savePath, sNode);
                             }
                             else
                             {
@@ -544,8 +621,8 @@ namespace API_Tester
                                 _f1.lblTitle.Visible = true;
                                 _f1.lblTitle.Text = sNode.Text;
                             }
-                            _f1._canCheck = true;     // 값을 잘 불러왔다면 텍스트 변화 감지 true
                         }
+
                         break;
                     default:
                         break;
@@ -563,7 +640,8 @@ namespace API_Tester
                 _f1.btnSave.Visible = false;
                 _f1.lblTitle.Visible = false;
             }
-         }
+            _f1._canCheck = true;     // 값을 잘 불러왔다면 텍스트 변화 감지 true
+        }
 
 
         //////////////

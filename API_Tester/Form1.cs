@@ -83,6 +83,9 @@ namespace API_Tester
             _repository.StartPosition = FormStartPosition.Manual;
             _repository.Location = new Point(_lx - _repository.Width, _ly);
             _repository.Show();
+
+            // 싱글톤 객체 불러오기
+            _repository.SetInitialSingleton(_repository.treeView1);
         }
 
         /////////////////
@@ -105,6 +108,8 @@ namespace API_Tester
             tBoxMsg.Text = string.Empty;
             tBoxRst.Text = string.Empty;
             isUse();
+
+            // 싱글톤 객체 딕셔너리 로컬 저장 및 초기화 동작 해야한다.
         }
 
         /////////////////
@@ -124,6 +129,8 @@ namespace API_Tester
                 requestXML._MSG = tBoxMsg.Text;
 
                 Save_XML(requestXML, savePath,sNode);
+
+                
                 CustomMessageBox.ShowMessage("저장되었습니다.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
@@ -144,7 +151,6 @@ namespace API_Tester
 
         // textbox에 있던 파일을 requestXML 객체로 받아서 로컬에 저장하기 직전 함수
         // 프로그램 종료 시에도 저장 하도록 하는 로직 추가해야한다. (아직 안함)
-        // sNode를 통해서 레벨에 따른 값을 변경해야 함 ( 아직 안함 )
         public void Save_XML(RequestXML requestXML, string savePath,TreeNode sNode)
         {
             XmlDocument xdoc = new XmlDocument();
@@ -178,6 +184,12 @@ namespace API_Tester
             string hashText = string.Empty;
             string hashTextExtension = string.Empty;
             string originTextExtension = string.Empty;
+            string originHash = string.Empty;
+            string cipherText = string.Empty;
+            string key = string.Empty;
+
+            // 싱글톤 객체에 등록하기 위한 선언
+            XmlData xmlData = XmlData.Instance;
 
             switch (sNode.Level)
             {
@@ -194,6 +206,20 @@ namespace API_Tester
 
                     // 1-2. 원본 문자열에 솔트(폴더 + 원본 + 파일)
                     originTextExtension = string.Format("{0}####{1}$$$${2}", sNode.Text, root.OuterXml, fileName );
+
+                    // 2. 원본 + 해시 합친다.
+                    originHash = string.Format("{0}%%%%{1}", originTextExtension, hashTextExtension);
+
+                    // 3. 원본+해시를 암호화
+                    cipherText = AES256.Encrypt(originHash);
+
+                    // 4. 저장
+                    File.WriteAllText(savePath, cipherText, Encoding.Default);
+
+                    // 5. 싱글톤 등록
+                    key = string.Format("{0}.{1}", sNode.Text, fileName);
+                    //xmlData.AddData(key, xdoc);
+
                     break;
                 // 무결성깨진 경우, 수정하는 경우 ( sNode는 파일임 )
                 case 2:
@@ -204,29 +230,30 @@ namespace API_Tester
 
                     // 1-2. 원본 문자열에 솔트(폴더 + 원본 + 파일)
                     originTextExtension = string.Format("{0}####{1}$$$${2}", sNode.Parent.Text, root.OuterXml, sNode.Text);
+
+                    // 2. 원본 + 해시 합친다.
+                    originHash = string.Format("{0}%%%%{1}", originTextExtension, hashTextExtension);
+
+                    // 3. 원본+해시를 암호화
+                    cipherText = AES256.Encrypt(originHash);
+
+                    // 4. 저장
+                    File.WriteAllText(savePath, cipherText, Encoding.Default);
+
+                    // 5. 싱글톤 등록
+                    key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
+                    //xmlData.AddData(key, xdoc);
+
                     break;
                 default:
                     break;
             }
-            // 2. 원본 + 해시 합친다.
-            string originHash = string.Format("{0}%%%%{1}", originTextExtension, hashTextExtension);
 
-            // 3. 원본+해시를 암호화
-            string cipherText = AES256.Encrypt(originHash);
-
-            // 4. 저장
-            File.WriteAllText(savePath, cipherText, Encoding.Default);
-
-            // 5. 싱글톤 객체에 저장 ( 그래야 값 변경 시 저장 버튼 나오게 할 수 있음 )
-            List<string> returnList = new List<string> { };
-
-            returnList.Add(requestXML._METHOD);
-            returnList.Add(requestXML._URL);
-            returnList.Add(requestXML._COOKIE);
-            returnList.Add(requestXML._MSG);
-
+            // 삭제해야함
             SingletonXML sXML = SingletonXML.Instance;
             sXML.SetXML(xdoc);
+
+            //xmlData.ShowData();
         }
 
 
@@ -323,6 +350,116 @@ namespace API_Tester
             return returnList.ToArray();
         }
 
+        // XML 생성 함수 or 무결성깨질 시 재생성 함수
+        // 싱글톤 저장하는 함수
+        public void Create_XML(RequestXML requestXML, string savePath, TreeNode sNode)
+        {
+            XmlDocument xdoc = new XmlDocument();
+
+            XmlNode root = xdoc.CreateElement("Request");
+            xdoc.AppendChild(root);
+
+            XmlNode xData = xdoc.CreateElement("Request-Data");
+
+            XmlNode xMethod = xdoc.CreateElement("Method");
+            xMethod.InnerText = requestXML._METHOD;
+            xData.AppendChild(xMethod);
+
+            XmlNode xUrl = xdoc.CreateElement("URL");
+            xUrl.InnerText = requestXML._URL;
+            xData.AppendChild(xUrl);
+
+            XmlNode xCookie = xdoc.CreateElement("Cookie");
+            xCookie.InnerText = requestXML._COOKIE;
+            xData.AppendChild(xCookie);
+
+            XmlNode xMsg = xdoc.CreateElement("Msg");
+            xMsg.InnerText = requestXML._MSG;
+            xData.AppendChild(xMsg);
+
+            root.AppendChild(xData);
+
+            // 여기서 root.OuterXMl은 원본
+            // sNode.Level에 따라 동작이 달라져야 한다.
+
+            string key = string.Empty;
+
+            // 싱글톤 객체에 등록하기 위한 선언
+            XmlData xmlData = XmlData.Instance;
+
+            switch (sNode.Level)
+            {
+                // 새로 만드는 경우 ( sNode는 폴더임 )
+                // 하지만 싱글톤을 foreach로 돌려가면서 한다면 필요할까
+                case 1:
+                    // sNode가 폴더이기 때문에 filename 구하는 함수 사용해야 한다.
+                    string fileName = GetFileNameFromSavePath(savePath);
+
+                    // 싱글톤 등록
+                    key = string.Format("{0}.{1}", sNode.Text, fileName);
+                    xmlData.AddData(key, xdoc);
+                    break;
+                // 무결성깨진 경우 ( sNode는 파일임 )
+                case 2:
+                    // 싱글톤 등록
+                    key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
+                    xmlData.AddData(key, xdoc);
+                    break;
+                default:
+                    break;
+            }
+            //xmlData.ShowData();
+        }
+
+        // XML 수정 함수
+        // 수정한 값은 우선 싱글톤에 저장
+        public void Update_XML(RequestXML requestXML, string savePath, TreeNode sNode)
+        {
+            XmlDocument xdoc = new XmlDocument();
+
+            XmlNode root = xdoc.CreateElement("Request");
+            xdoc.AppendChild(root);
+
+            XmlNode xData = xdoc.CreateElement("Request-Data");
+
+            XmlNode xMethod = xdoc.CreateElement("Method");
+            xMethod.InnerText = requestXML._METHOD;
+            xData.AppendChild(xMethod);
+
+            XmlNode xUrl = xdoc.CreateElement("URL");
+            xUrl.InnerText = requestXML._URL;
+            xData.AppendChild(xUrl);
+
+            XmlNode xCookie = xdoc.CreateElement("Cookie");
+            xCookie.InnerText = requestXML._COOKIE;
+            xData.AppendChild(xCookie);
+
+            XmlNode xMsg = xdoc.CreateElement("Msg");
+            xMsg.InnerText = requestXML._MSG;
+            xData.AppendChild(xMsg);
+
+            root.AppendChild(xData);
+
+            // 싱글톤 객체에 등록하기 위한 선언
+            XmlData xmlData = XmlData.Instance;
+
+            // 수정 후 싱글톤 등록
+            string  key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
+            xmlData.UpdateData(key, xdoc);
+            // 테스트를 위한 코드
+            xmlData.ShowData();
+        }
+
+        // XML 불러오기 함수
+        public XmlDocument Read_XML(TreeNode sNode)
+        {
+           // 싱글톤 객체를 읽기 위한 선언
+            XmlData xmlData = XmlData.Instance;
+
+            string key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
+            return xmlData.ReadData(key);
+        }
+
         // 파일 저장 버튼
         private void btnSave_Click(object sender, EventArgs e)
         {
@@ -338,7 +475,10 @@ namespace API_Tester
                 requestXML._COOKIE = tBoxCookie.Text;
                 requestXML._MSG = tBoxMsg.Text;
 
-                Save_XML(requestXML, savePath,sNode);
+                //Save_XML(requestXML, savePath,sNode);
+
+                // 싱글톤 추가 해보는 동작
+                Update_XML(requestXML, savePath, sNode);
                 CustomMessageBox.ShowMessage("저장이 완료됐습니다!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 btnSave.Visible = false;
             }
@@ -361,6 +501,7 @@ namespace API_Tester
             }
         }
 
+        // 버튼을 통한 저장
         private void ifChangedSaveButton(TreeNode sNode)
         {
             if (sNode != null)
@@ -369,14 +510,37 @@ namespace API_Tester
                 // 파일을 선택한 경우에만
                 if (sNode.Level == 2)
                 {
-                    savePath = _repository.GetSavePathForFile(sNode);
-                    FileInfo save = new FileInfo(savePath);
+                    //savePath = _repository.GetSavePathForFile(sNode);
+                    //FileInfo save = new FileInfo(savePath);
 
-                    if (save.Exists)
+                    //if (save.Exists)
+                    //{
+                    //    // 싱글톤 객체를 통한 XML 검사
+                    //    //SingletonXML sXML = SingletonXML.Instance;
+                    //    //XmlDocument xdoc = sXML.GetXML();
+                    //    XmlData xmlData = XmlData.Instance;
+                    //    string key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
+                    //    XmlDocument xdoc = xmlData.ReadData(key);
+                    //    string[] saveData = XMLtoStringArr(xdoc);
+
+                    //    if (IsChanged(saveData))
+                    //    {
+                    //        btnSave.Visible = true;
+                    //    }
+                    //    else
+                    //    {
+                    //        btnSave.Visible = false;
+                    //    }
+                    //}
+
+                    // 싱글톤 객체
+                    XmlData xmlData = XmlData.Instance;
+                    string key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
+
+                    // 싱글톤 딕셔너리에 등록된 키라면 == 저장한 적이 있는 request라면
+                    if (xmlData.IsExist(key))
                     {
-                        // 싱글톤 객체를 통한 XML 검사
-                        SingletonXML sXML = SingletonXML.Instance;
-                        XmlDocument xdoc = sXML.GetXML();
+                        XmlDocument xdoc = xmlData.ReadData(key);
                         string[] saveData = XMLtoStringArr(xdoc);
 
                         if (IsChanged(saveData))
@@ -392,6 +556,9 @@ namespace API_Tester
             }
         }
 
+
+        // 창을 통해서 저장
+        // 싱글톤으로 적용 여부는 다시 생각해봐야함
         private void ifChangedShowQuestion(TreeNode sNode)
         {
             if (sNode != null)
@@ -406,8 +573,11 @@ namespace API_Tester
                     if (save.Exists)
                     {
                         // 싱글톤 객체를 통한 XML 검사
-                        SingletonXML sXML = SingletonXML.Instance;
-                        XmlDocument xdoc = sXML.GetXML();
+                        //SingletonXML sXML = SingletonXML.Instance;
+                        //XmlDocument xdoc = sXML.GetXML();
+                        XmlData xmlData = XmlData.Instance;
+                        string key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
+                        XmlDocument xdoc = xmlData.ReadData(key);
                         string[] saveData = XMLtoStringArr(xdoc);
 
                         if (IsChanged(saveData))
@@ -571,32 +741,70 @@ namespace API_Tester
             }
 
             // Method 변경 시 저장 버튼 추가하는 로직 추가
-            if(_repository != null)
+            //if(_repository != null && _canCheck)
+            //{
+            //    TreeNode sNode = _repository.treeView1.SelectedNode;
+            //    string savePath = string.Empty;
+            //    if (sNode != null)
+            //    {
+            //        savePath = _repository.GetSavePathForFile(sNode);
+            //    }
+
+            //    if (cBoxMethod.Visible)
+            //    {
+            //        // 파일이 있는 경우가 아닌 싱글톤에 저장됐는지 검사를 해야함
+            //        FileInfo save = new FileInfo(savePath);
+            //        if (save.Exists)
+            //        {
+            //            // 싱글톤 객체를 통한 XML 검사
+            //            //SingletonXML sXML = SingletonXML.Instance;
+            //            //XmlDocument xdoc = sXML.GetXML();
+            //            XmlData xmlData = XmlData.Instance;
+            //            string key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
+            //            XmlDocument xdoc = xmlData.ReadData(key);
+            //            string[] saveData = XMLtoStringArr(xdoc);
+
+            //            if (IsChanged(saveData))
+            //            {
+            //                btnSave.Visible = true;
+            //            }
+            //            else
+            //            {
+            //                btnSave.Visible = false;
+            //            }
+            //        }
+            //    }
+            //}
+
+            if (_repository != null && _canCheck)
             {
                 TreeNode sNode = _repository.treeView1.SelectedNode;
-                string savePath = string.Empty;
+
                 if (sNode != null)
                 {
-                    savePath = _repository.GetSavePathForFile(sNode);
-                }
-                
-                FileInfo save = new FileInfo(savePath);
-                if (save.Exists)
-                {
-                    // 싱글톤 객체를 통한 XML 검사
-                    SingletonXML sXML = SingletonXML.Instance;
-                    XmlDocument xdoc = sXML.GetXML();
-                    string[] saveData = XMLtoStringArr(xdoc);
+                    if (cBoxMethod.Visible)
+                    {
+                        // 싱글톤 객체를 통한 XML 검사
+                        XmlData xmlData = XmlData.Instance;
+                        string key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
+                        if (xmlData.IsExist(key))
+                        {
+                            XmlDocument xdoc = xmlData.ReadData(key);
+                            string[] saveData = XMLtoStringArr(xdoc);
 
-                    if (IsChanged(saveData))
-                    {
-                        btnSave.Visible = true;
-                    }
-                    else
-                    {
-                        btnSave.Visible = false;
+                            if (IsChanged(saveData))
+                            {
+                                btnSave.Visible = true;
+                            }
+                            else
+                            {
+                                btnSave.Visible = false;
+                            }
+                        }
                     }
                 }
+
+               
             }
         }
         //////////////////////////////////////

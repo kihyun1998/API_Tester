@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Windows.Forms;
 
 namespace API_Tester
 {
@@ -29,6 +30,33 @@ namespace API_Tester
         public void AddData(string key, XmlDocument value)
         {
             this.XmlDatas.Add(key, value);
+        }
+
+
+        // "값" 수정하는 경우 저장
+        public void UpdateData(string key, XmlDocument value)
+        {
+            this.XmlDatas[key] = value;
+        }
+
+        public XmlDocument ReadData(string key)
+        {
+            return this.XmlDatas[key];
+        }
+
+        public bool IsExist(string key)
+        {
+            return XmlDatas.ContainsKey(key);
+        }
+
+
+        // 딕셔너리 값 확인용
+        public void ShowData()
+        {
+            foreach(KeyValuePair<string,XmlDocument> item in this.XmlDatas)
+            {
+                CustomMessageBox.ShowMessage(string.Format("{0} : {1}",item.Key,item.Value.OuterXml), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
     }
