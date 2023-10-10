@@ -580,6 +580,7 @@ namespace API_Tester
                         break;
 
                         // 해시 파일 없는 경우 처리 해야함
+
                     case 2:
                         
                         btnFolderAdd.Visible = false;    // 폴더 추가 불가능
@@ -589,51 +590,24 @@ namespace API_Tester
                         btnFileDel.Visible = true;       // 파일 삭제 가능
                         btnFileRename.Visible = true;   // 파일 이름 수정 가능
 
-                       
-
-                        string savePath = GetSavePathForFile(sNode);
 
                         // 싱글톤 객체를 통한 XML 검사
                         XmlData xmlData = XmlData.Instance;
                         string key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
+
                         if (xmlData.IsExist(key))
                         {
                             XmlDocument xdoc = _f1.Read_XML(sNode);
                             string[] saveData = _f1.XMLtoStringArr(xdoc);
 
-                            // 무결성 깨지면 saveData.Length == 0 임.
-                            // 무결성 깨지면 초기화가 이루어진다.
-                            if (saveData.Length == 0)
-                            {
-                                _f1.cBoxMethod.Text = _f1._methods[0];
-                                _f1.tBoxURL.Text = "";
-                                _f1.tBoxCookie.Text = "";
-                                _f1.tBoxMsg.Text = "";
-                                _f1.isUse();
-                                _f1.lblTitle.Visible = true;
-                                _f1.lblTitle.Text = sNode.Text;
-
-                                RequestXML requestXML = new RequestXML();
-
-                                requestXML._METHOD = _f1._methods[0];
-                                requestXML._URL = "";
-                                requestXML._COOKIE = "";
-                                requestXML._MSG = "";
-
-                                _f1.Save_XML(requestXML, savePath, sNode);
-                            }
-                            else
-                            {
-                                _f1.cBoxMethod.Text = saveData[0];
-                                _f1.tBoxURL.Text = saveData[1];
-                                _f1.tBoxCookie.Text = saveData[2];
-                                _f1.tBoxMsg.Text = saveData[3];
-                                _f1.isUse();
-                                _f1.lblTitle.Visible = true;
-                                _f1.lblTitle.Text = sNode.Text;
-                            }
+                            _f1.cBoxMethod.Text = saveData[0];
+                            _f1.tBoxURL.Text = saveData[1];
+                            _f1.tBoxCookie.Text = saveData[2];
+                            _f1.tBoxMsg.Text = saveData[3];
+                            _f1.isUse();
+                            _f1.lblTitle.Visible = true;
+                            _f1.lblTitle.Text = sNode.Text;
                         }
-
                         break;
                     default:
                         break;
