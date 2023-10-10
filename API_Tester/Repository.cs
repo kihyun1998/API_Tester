@@ -42,6 +42,8 @@ namespace API_Tester
             btnFolderRename.Visible = false;
             btnFileRename.Visible = false;
 
+            // 레포 닫혀도 저장되도록 my-drive-path 설정
+            _f1._myDrivePath = GetMyDrivePath();
             //showTreeView(treeView1);
         }
 
@@ -109,7 +111,6 @@ namespace API_Tester
                     }
                 }
             }
-
             //xmlData.ShowData();
         }
 
@@ -356,6 +357,9 @@ namespace API_Tester
             TreeNode sNode = treeView1.SelectedNode;
             string newFolderName = _customInputForm._name;
 
+            // 싱글톤 객체
+            XmlData xmlData = XmlData.Instance;
+
             if (newFolderName != "")
             {
                 if (sNode != null)
@@ -366,13 +370,24 @@ namespace API_Tester
                     if (!updateDir.Exists)
                     {
                         Directory.Move(oldPath, newPath);
-                        sNode.Text = newFolderName;
+
+                        foreach (TreeNode childNode in sNode.Nodes)
+                        {
+                            string oldKey = string.Format("{0}.{1}", sNode.Text, childNode.Text);
+                            string newKey = string.Format("{0}.{1}", newFolderName, childNode.Text);
+
+                            xmlData.UpdateKey(oldKey, newKey);
+                        }
+
                         CustomMessageBox.ShowMessage(string.Format("{0}(으)로 변경됐습니다 !", newFolderName), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        sNode.Text = newFolderName;
                     }
                     else
                     {
                         CustomMessageBox.ShowMessage("중복된 폴더명입니다!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
+
+
                 }
             }
             else
@@ -392,24 +407,41 @@ namespace API_Tester
             TreeNode sNode = treeView1.SelectedNode;
             string newFileName = _customInputForm._name;
 
+            // 싱글톤 객체
+            XmlData xmlData = XmlData.Instance;
+
             if (newFileName != "")
             {
                 if (sNode != null)
                 {
                     string oldPath = GetSavePathForFile(sNode);
                     string newPath = GetSavePathForFolder(sNode.Parent, newFileName);
+                    string oldKey = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
+                    string newKey = string.Format("{0}.{1}", sNode.Parent.Text, newFileName);
 
                     FileInfo updateFile = new FileInfo(newPath);
-                    if (!updateFile.Exists)
+
+                    // 실제 저장된 파일이 있는지 && 싱글톤 객체에 저장된 파일명의 키가 존재하는지 
+                    if (!updateFile.Exists && !xmlData.IsExist(newKey))
                     {
-                        File.Move(oldPath, newPath);
-                        sNode.Text = newFileName;
+                        xmlData.UpdateKey(oldKey, newKey);
                         CustomMessageBox.ShowMessage(string.Format("{0}(으)로 변경됐습니다 !", newFileName), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        sNode.Text = newFileName;
+
+                        //// 기존에 파일이 있는 경우에만 local 파일 이름 변경해줌
+                        //// 삭제하고 나중에 다시 저장하기 어려운 이유는 비정상적인 종료를 하면 삭제되버리는 효과가 나타나서
+                        FileInfo oldFile = new FileInfo(oldPath);
+                        if (oldFile.Exists)
+                        {
+                            File.Move(oldPath, newPath);
+                        }
                     }
                     else
                     {
-                        CustomMessageBox.ShowMessage("중복된 폴더명입니다!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        CustomMessageBox.ShowMessage("중복된 파일명입니다!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
+                    
+
                 }
             }
             else
