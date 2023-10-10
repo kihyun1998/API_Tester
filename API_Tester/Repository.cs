@@ -103,15 +103,21 @@ namespace API_Tester
                         // 싱글톤 키
                         string key = string.Format("{0}.{1}", folder.Text, file.Text);
                         XmlDocument value = _f1.Load_XML(file);
-                        if (!xmlData.IsExist(key))
+
+                        if (value == null)
+                        {
+                            // 무결성 깨진 경우
+                            value = _f1.Init_XML();
+                        }
+
+                        // 무결성 안 깨진 경우
+                        if (!xmlData.IsExist(key)) // 중복등록 방지를 위해서
                         {
                             xmlData.AddData(key, value);
-                            // rename했을 때는 어떻게 처리하지
                         }
                     }
                 }
             }
-            //xmlData.ShowData();
         }
 
 
@@ -119,7 +125,6 @@ namespace API_Tester
         public void CreateEtcFolder()
         {
             //// C:\Users\유저\.apitest 폴더 생성
-            //string etcFolder = string.Format("{0}\\..\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), _etcFolderName);
             DirectoryInfo etcDir = new DirectoryInfo(_rootPath);
             if (!etcDir.Exists)
             {
@@ -187,7 +192,7 @@ namespace API_Tester
 
 
         //////////////////////
-        /// 폴더 삭제 버튼 클릭 시 (동작 포함) 존재안하면 딕셔너리에서만 삭제하기
+        /// 폴더 삭제 버튼 클릭 시 (동작 포함)
         private void btnFolderDel_Click(object sender, EventArgs e)
         {
             var sNode = treeView1.SelectedNode;
@@ -220,7 +225,7 @@ namespace API_Tester
             showWindow(type);
         }
 
-        // 파일 삭제 버튼 클릭 시 (동작 포함) 파일 존재안하면 딕셔너리에서만 삭제하기
+        // 파일 삭제 버튼 클릭 시 (동작 포함)
         private void btnFileDel_Click(object sender, EventArgs e)
         {
             CreateEtcFolder();
@@ -239,7 +244,6 @@ namespace API_Tester
                     File.Delete(deletePath);
                     treeView1.Nodes.Remove(sNode);
 
-                    xmlData.ShowData();
                     CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -259,7 +263,6 @@ namespace API_Tester
             string type = TypeEnum.Type.RenameFile.ToString();
             showWindow(type); 
         }
-
 
 
         ///////////////////////

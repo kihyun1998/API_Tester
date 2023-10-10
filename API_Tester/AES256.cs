@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Security.Cryptography;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -68,11 +68,13 @@ namespace API_Tester
         {
             IntPtr pRst;
 
+            // 암호문 type error가 나면 값이 없는 string 반환
             pRst = AesDecrypt(
                 Encoding.UTF8.GetBytes(cypherText),
                 Encoding.UTF8.GetBytes(aes_key),
                 Encoding.UTF8.GetBytes(aes_iv)
             );
+
             string resText = Form1.MarshalUtf8ToUnicode(pRst);
 
             CryptFree(pRst);

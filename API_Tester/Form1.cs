@@ -151,7 +151,6 @@ namespace API_Tester
             string folder = key.Substring(0, key.IndexOf(".")).Trim();
             string file = key.Substring(key.IndexOf(".")+1).Trim();
 
-            //string savePath = string.Format("{0}\\{1}\\{2}.txt", _repository.GetMyDrivePath(),folder,file);
             string savePath = string.Format("{0}\\{1}\\{2}.txt", _myDrivePath, folder, file);
 
             // 1. 원본을 해시한다. (value.OuterXml이 스트링 원본이다.)
@@ -174,7 +173,6 @@ namespace API_Tester
 
 
         // textbox에 있던 파일을 requestXML 객체로 받아서 로컬에 저장하기 직전 함수
-        // 프로그램 종료 시에도 저장 하도록 하는 로직 추가해야한다. (아직 안함)
         // 아에 저장하는 함수로 바뀌어야 한다.
         // close 시 || repository 닫힐 시(이건 rename 한 폴더나 파일에 대한 처리만 잘 이루어지면 될듯)
         // 그리고 싱글톤 초기화 해야함
@@ -337,8 +335,6 @@ namespace API_Tester
                     }
                 }
             }
-
-            
             return null;
 
         }
@@ -371,7 +367,7 @@ namespace API_Tester
             return returnList.ToArray();
         }
 
-        // XML 생성 함수 or 무결성깨질 시 재생성 함수
+        // XML 생성 함수
         // 싱글톤 저장하는 함수
         public void Create_XML(RequestXML requestXML, string savePath, TreeNode sNode)
         {
@@ -403,33 +399,56 @@ namespace API_Tester
             // 여기서 root.OuterXMl은 원본
             // sNode.Level에 따라 동작이 달라져야 한다.
 
-            string key = string.Empty;
 
             // 싱글톤 객체에 등록하기 위한 선언
             XmlData xmlData = XmlData.Instance;
 
-            switch (sNode.Level)
-            {
-                // 새로 만드는 경우 ( sNode는 폴더임 )
-                // 하지만 싱글톤을 foreach로 돌려가면서 한다면 필요할까
-                case 1:
-                    // sNode가 폴더이기 때문에 filename 구하는 함수 사용해야 한다.
-                    string fileName = GetFileNameFromSavePath(savePath);
+            // sNode가 폴더이기 때문에 filename 구하는 함수 사용해야 한다.
+            string fileName = GetFileNameFromSavePath(savePath);
 
-                    // 싱글톤 등록
-                    key = string.Format("{0}.{1}", sNode.Text, fileName);
-                    xmlData.AddData(key, xdoc);
-                    break;
-                // 무결성깨진 경우 ( sNode는 파일임 )
-                case 2:
-                    // 싱글톤 등록
-                    key = string.Format("{0}.{1}", sNode.Parent.Text, sNode.Text);
-                    xmlData.AddData(key, xdoc);
-                    break;
-                default:
-                    break;
-            }
-            //xmlData.ShowData();
+            // 싱글톤 등록
+            string key = string.Format("{0}.{1}", sNode.Text, fileName);
+            xmlData.AddData(key, xdoc);
+        }
+
+        public XmlDocument Init_XML()
+        {
+            // requestXML 초기값 설정
+            RequestXML requestXML = new RequestXML();
+
+            requestXML._METHOD = _methods[0];
+            requestXML._URL = "";
+            requestXML._COOKIE = "";
+            requestXML._MSG = "";
+
+            // XML 생성
+            XmlDocument xdoc = new XmlDocument();
+
+            XmlNode root = xdoc.CreateElement("Request");
+            xdoc.AppendChild(root);
+
+            XmlNode xData = xdoc.CreateElement("Request-Data");
+
+            XmlNode xMethod = xdoc.CreateElement("Method");
+            xMethod.InnerText = requestXML._METHOD;
+            xData.AppendChild(xMethod);
+
+            XmlNode xUrl = xdoc.CreateElement("URL");
+            xUrl.InnerText = requestXML._URL;
+            xData.AppendChild(xUrl);
+
+            XmlNode xCookie = xdoc.CreateElement("Cookie");
+            xCookie.InnerText = requestXML._COOKIE;
+            xData.AppendChild(xCookie);
+
+            XmlNode xMsg = xdoc.CreateElement("Msg");
+            xMsg.InnerText = requestXML._MSG;
+            xData.AppendChild(xMsg);
+
+            root.AppendChild(xData);
+
+            return xdoc;
+
         }
 
         // XML 수정 함수
@@ -496,8 +515,6 @@ namespace API_Tester
                 requestXML._COOKIE = tBoxCookie.Text;
                 requestXML._MSG = tBoxMsg.Text;
 
-                //Save_XML(requestXML, savePath,sNode);
-
                 // 싱글톤 추가 해보는 동작
                 Update_XML(requestXML, savePath, sNode);
                 CustomMessageBox.ShowMessage("저장이 완료됐습니다!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -520,8 +537,6 @@ namespace API_Tester
                 requestXML._URL = tBoxURL.Text;
                 requestXML._COOKIE = tBoxCookie.Text;
                 requestXML._MSG = tBoxMsg.Text;
-
-                //Save_XML(requestXML, savePath, sNode);
 
                 // 싱글톤 추가 해보는 동작
                 Update_XML(requestXML, savePath, sNode);
