@@ -35,6 +35,8 @@ namespace API_Tester
         string _cookie = string.Empty;
         string _postData = string.Empty;
         string _err = string.Empty;
+        public string _myDrivePath = string.Empty;
+
         public bool _canCheck = true;
   
         public string[] _methods = { "GET", "POST", "PUT", "DELETE" };
@@ -87,8 +89,18 @@ namespace API_Tester
             _repository.Location = new Point(_lx - _repository.Width, _ly);
             _repository.Show();
 
+
             // 싱글톤 객체 불러오기
-            _repository.SetInitialSingleton(_repository.treeView1);
+            XmlData xmlData = XmlData.Instance;
+            if (xmlData.Length()==0)
+            {
+                _repository.SetInitialSingleton(_repository.treeView1);
+            }
+            else
+            {
+                _repository.SetInitialSingleton(_repository.treeView1);
+            }
+            
         }
 
         /////////////////
@@ -113,38 +125,19 @@ namespace API_Tester
             isUse();
 
             // 싱글톤 객체 딕셔너리 로컬 저장 및 초기화 동작 해야한다.
+            // 싱글톤 객체
+            XmlData xmlData = XmlData.Instance;
+            // 싱글톤 로컬에 저장
+            xmlData.SaveAll();
+            // 저장 후 초기화
+            xmlData.Clear();
         }
 
         /////////////////
         /// 잡다한 함수
         /// 
 
-        // 비밀번호 저장할거냐고 묻는 함수
-        private void QuestionToSave(string savePath, TreeNode sNode)
-        {
-            if(CustomMessageBox.ShowMessage("변경내용이 있습니다.\n저장 하시겠습니까?","Save",MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                RequestXML requestXML = new RequestXML();
-
-                requestXML._METHOD = cBoxMethod.Text;
-                requestXML._URL = tBoxURL.Text;
-                requestXML._COOKIE = tBoxCookie.Text;
-                requestXML._MSG = tBoxMsg.Text;
-
-                Save_XML(requestXML, savePath,sNode);
-
-                
-                CustomMessageBox.ShowMessage("저장되었습니다.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                cBoxMethod.Text = _methods[0];
-                tBoxURL.Text = string.Empty;
-                tBoxCookie.Text = string.Empty;
-                tBoxMsg.Text = string.Empty;
-                tBoxRst.Text = string.Empty;
-            }
-        }
+        
 
         public string GetFileNameFromSavePath(string savePath)
         {
@@ -158,7 +151,8 @@ namespace API_Tester
             string folder = key.Substring(0, key.IndexOf(".")).Trim();
             string file = key.Substring(key.IndexOf(".")+1).Trim();
 
-            string savePath = string.Format("{0}\\{1}\\{2}.txt", _repository.GetMyDrivePath(),folder,file);  
+            //string savePath = string.Format("{0}\\{1}\\{2}.txt", _repository.GetMyDrivePath(),folder,file);
+            string savePath = string.Format("{0}\\{1}\\{2}.txt", _myDrivePath, folder, file);
 
             // 1. 원본을 해시한다. (value.OuterXml이 스트링 원본이다.)
             string hashText = SHA256.Hash(value.OuterXml);
@@ -515,6 +509,35 @@ namespace API_Tester
             }
         }
 
+        // 비밀번호 저장할거냐고 묻는 함수
+        private void QuestionToSave(string savePath, TreeNode sNode)
+        {
+            if (CustomMessageBox.ShowMessage("변경내용이 있습니다.\n저장 하시겠습니까?", "Save", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                RequestXML requestXML = new RequestXML();
+
+                requestXML._METHOD = cBoxMethod.Text;
+                requestXML._URL = tBoxURL.Text;
+                requestXML._COOKIE = tBoxCookie.Text;
+                requestXML._MSG = tBoxMsg.Text;
+
+                //Save_XML(requestXML, savePath, sNode);
+
+                // 싱글톤 추가 해보는 동작
+                Update_XML(requestXML, savePath, sNode);
+
+
+                CustomMessageBox.ShowMessage("저장되었습니다.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                cBoxMethod.Text = _methods[0];
+                tBoxURL.Text = string.Empty;
+                tBoxCookie.Text = string.Empty;
+                tBoxMsg.Text = string.Empty;
+                tBoxRst.Text = string.Empty;
+            }
+        }
 
         //////////////////
         ///텍스트 변경 시 저장버튼 visible
@@ -876,6 +899,8 @@ namespace API_Tester
             XmlData xmlData = XmlData.Instance;
             // 싱글톤 로컬에 저장
             xmlData.SaveAll();
+            // 저장 후 초기화
+            xmlData.Clear();
             this.Close();
         }
 
