@@ -104,7 +104,7 @@ namespace API_Tester
                 }
             }
 
-            // 실제 제거 동작
+            // 실제 폴더 삭제
             foreach(string removeKey in removeList)
             {
                 XmlDatas.Remove(removeKey);
@@ -112,23 +112,24 @@ namespace API_Tester
         }
 
         // 파일 제거
-        public void RemoveFile(string fileName)
+        public void RemoveFile(string folderName, string fileName)
         {
             // 삭제할 키 저장
             string removeKey = string.Empty;
             // 제거할 키 탐색
             foreach (KeyValuePair<string, XmlDocument> data in this.XmlDatas)
             {
-                if (data.Key.Contains(fileName))
+                if (data.Key.Equals(string.Format("{0}.{1}",folderName,fileName)))
                 {
                     // 제거할 키 저장
-                    removeList.Add(data.Key);
+                    removeKey = data.Key;
+                    break;
                 }
             }
+
+            // 실제 파일 삭제
+            XmlDatas.Remove(removeKey);
         }
-
-        
-
 
         // 딕셔너리 값 확인용
         public void ShowData()

@@ -187,7 +187,7 @@ namespace API_Tester
 
 
         //////////////////////
-        /// 폴더 삭제 버튼 클릭 시 (동작 포함)
+        /// 폴더 삭제 버튼 클릭 시 (동작 포함) 존재안하면 딕셔너리에서만 삭제하기
         private void btnFolderDel_Click(object sender, EventArgs e)
         {
             var sNode = treeView1.SelectedNode;
@@ -220,7 +220,7 @@ namespace API_Tester
             showWindow(type);
         }
 
-        // 파일 삭제 버튼 클릭 시 (동작 포함)
+        // 파일 삭제 버튼 클릭 시 (동작 포함) 파일 존재안하면 딕셔너리에서만 삭제하기
         private void btnFileDel_Click(object sender, EventArgs e)
         {
             CreateEtcFolder();
@@ -231,11 +231,15 @@ namespace API_Tester
             {
                 if (CustomMessageBox.ShowMessage("파일를 삭제하시겠습니까?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
+                    XmlData xmlData = XmlData.Instance;
+                    xmlData.RemoveFile(sNode.Parent.Text,sNode.Text);
+
                     string deletePath = GetSavePathForFile(sNode);
 
                     File.Delete(deletePath);
                     treeView1.Nodes.Remove(sNode);
 
+                    xmlData.ShowData();
                     CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
