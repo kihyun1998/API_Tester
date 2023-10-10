@@ -185,6 +185,7 @@ namespace API_Tester
             showWindow(type);
         }
 
+
         //////////////////////
         /// 폴더 삭제 버튼 클릭 시 (동작 포함)
         private void btnFolderDel_Click(object sender, EventArgs e)
@@ -197,7 +198,14 @@ namespace API_Tester
                 {
                     string deletePath = string.Format("{0}\\{1}\\{2}", _rootPath, _repoFolderName, sNode.Text);
 
+                    // 싱글톤 객체에서 삭제
+                    XmlData xmlData = XmlData.Instance;
+                    xmlData.RemoveFolder(sNode.Text);
+
+                    // 로컬에서 삭제
                     Directory.Delete(deletePath, recursive: true);
+
+                    // 트리뷰에서 삭제
                     treeView1.Nodes.Remove(sNode);
 
                     CustomMessageBox.ShowMessage(string.Format("{0}이(가) 삭제됐습니다 !", sNode.Text), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);

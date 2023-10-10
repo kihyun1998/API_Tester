@@ -88,6 +88,29 @@ namespace API_Tester
             this.XmlDatas.Clear();
         }
 
+        // 폴더 제거
+        public void RemoveFolder(string folderName)
+        {
+            // 삭제할 키 저장 리스트
+            List<string> removeList = new List<string>();
+
+            // 제거할 키 탐색
+            foreach(KeyValuePair<string,XmlDocument> data in this.XmlDatas)
+            {
+                if (data.Key.Contains(folderName))
+                {
+                    // 제거할 키 저장
+                    removeList.Add(data.Key);
+                }
+            }
+
+            // 실제 제거 동작
+            foreach(string removeKey in removeList)
+            {
+                XmlDatas.Remove(removeKey);
+            }
+        }
+
         
 
 
