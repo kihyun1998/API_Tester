@@ -38,26 +38,58 @@ namespace API_Tester
             this.XmlDatas[key] = value;
         }
 
+        // 싱글톤 키 업데이트 함수
+        // 폴더, 파일 이름 변경 시 사용
+        public void UpdateKey(string oldKey, string newKey)
+        {
+            if (this.XmlDatas.ContainsKey(newKey))
+            {
+                CustomMessageBox.ShowMessage("중복된 폴더명입니다!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                XmlDocument tempValue = this.XmlDatas[oldKey];
+                this.XmlDatas.Remove(oldKey);
+                this.XmlDatas[newKey] = tempValue;
+            }
+        }
+
         // 키를 통해 값 읽기
         public XmlDocument ReadData(string key)
         {
             return this.XmlDatas[key];
         }
 
+
         // 값 존재 체크 여부
         public bool IsExist(string key)
         {
-            return XmlDatas.ContainsKey(key);
+            return this.XmlDatas.ContainsKey(key);
+        }
+
+        // 길이 반환하기
+        public int Length()
+        {
+            return this.XmlDatas.Count;
         }
 
         // 싱글톤 객체 전체 저장
         public void SaveAll()
         {
-            foreach (KeyValuePair<string, XmlDocument> data in XmlDatas)
+            foreach (KeyValuePair<string, XmlDocument> data in this.XmlDatas)
             {
                 Form1.form1.Local_Save(data.Key, data.Value);
             }
         }
+        
+        // 값 초기화
+        public void Clear()
+        {
+            this.XmlDatas.Clear();
+        }
+
+        
+
 
         // 딕셔너리 값 확인용
         public void ShowData()
