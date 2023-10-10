@@ -97,7 +97,7 @@ namespace API_Tester
             // 제거할 키 탐색
             foreach(KeyValuePair<string,XmlDocument> data in this.XmlDatas)
             {
-                if (data.Key.Contains(folderName))
+                if (data.Key.Contains(string.Format("{0}.",folderName)))
                 {
                     // 제거할 키 저장
                     removeList.Add(data.Key);
@@ -108,6 +108,22 @@ namespace API_Tester
             foreach(string removeKey in removeList)
             {
                 XmlDatas.Remove(removeKey);
+            }
+        }
+
+        // 파일 제거
+        public void RemoveFile(string fileName)
+        {
+            // 삭제할 키 저장
+            string removeKey = string.Empty;
+            // 제거할 키 탐색
+            foreach (KeyValuePair<string, XmlDocument> data in this.XmlDatas)
+            {
+                if (data.Key.Contains(fileName))
+                {
+                    // 제거할 키 저장
+                    removeList.Add(data.Key);
+                }
             }
         }
 
